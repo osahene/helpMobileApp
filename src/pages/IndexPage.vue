@@ -54,10 +54,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { fabAdversal, fasBookBible, fasTruckFast } from '@quasar/extras/fontawesome-v6'
-import router from 'src/router'
+import { useRouter } from 'vue-router'
 import { useSwipe } from '@vueuse/core'
 
-// Onboarding steps data
+const router = useRouter()
 const onBoardSteps = [
   {
     id: 1,
@@ -88,7 +88,7 @@ const nextStep = () => {
   if (currentStep.value < onBoardSteps.length - 1) {
     currentStep.value++
   } else {
-    router.push('/')
+    router.push({ path: '/auth/register' })
   }
 }
 
