@@ -63,6 +63,7 @@
       </q-card-section>
       <q-card-section class="text-center">
         <q-btn
+          to="/auth/email-verify"
           outline
           class="text-subtitle1 q-px-xl q-ma-none shadow-2 text-weight-light"
           style="color: dark"

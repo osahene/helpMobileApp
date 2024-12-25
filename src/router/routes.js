@@ -10,6 +10,7 @@ const routes = [
     children: [
       { path: '/auth/register', component: () => import('pages/Auth/RegisterPage.vue') },
       { path: '/auth/login', component: () => import('pages/Auth/LoginPage.vue') },
+      { path: '/auth/email-verify', component: () => import('pages/Auth/EmailVerify.vue') },
     ],
   },
   // Always leave this as last one,
