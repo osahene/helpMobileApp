@@ -22,7 +22,7 @@
           label="Facebook"
         />
       </q-card-section>
-      <hr class="q-mt-md border-b-1 border-blueGray-300" />
+      <q-separator class="q-ma-md" inset />
       <q-card-section class="q-pa-sm text-center">
         <div class="text-grey-8 text-weight-light text-h6 q-ma-none">
           or login with custom credentials

@@ -27,6 +27,7 @@
           style="color: dark"
           icon="fa-regular fa-paper-plane"
           label="Submit"
+          to="/pages/home"
         />
       </q-card-section>
     </q-card>
