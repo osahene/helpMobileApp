@@ -1,5 +1,9 @@
 <template>
-  <q-card flat class="q-pb-none q-ma-sm shadow-10 q-px-lg shadow-10 backdrop-blur my_card_2">
+  <q-card
+    v-ripple
+    round
+    class="q-pb-none q-ma-sm shadow-10 q-px-lg shadow-10 backdrop-blur my_card_2"
+  >
     <q-card-section class="q-pa-none">
       <div class="head-title">{{ cardTitle }}</div>
     </q-card-section>
@@ -37,6 +41,7 @@ watchEffect(() => props)
   position: relative;
 }
 .head-title {
+  font-weight: 600;
   font-size: 4.5rem;
   font-stretch: expanded;
   letter-spacing: 0.2rem;
@@ -47,5 +52,7 @@ watchEffect(() => props)
 }
 .my_card_2 {
   width: 26rem;
+  border-color: #0b76e0;
+  border-width: 3rem;
 }
 </style>
