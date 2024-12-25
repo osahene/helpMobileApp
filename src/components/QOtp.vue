@@ -40,7 +40,6 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-// Refs and Computed Properties
 const fields = ref([])
 const fieldValues = ref(Array(props.inputLength).fill(''))
 
@@ -86,21 +85,21 @@ const focus = (index) => {
 }
 
 const onUpdate = (value, index) => {
-  fieldValues.value[index] = value // Update the specific field value
-  emit('update:modelValue', fieldValues.value.join('')) // Emit the partial or full value
+  fieldValues.value[index] = value
+  emit('update:modelValue', fieldValues.value.join(''))
   if (value) {
-    focus(index + 1) // Focus the next input
+    focus(index + 1)
   }
 }
 
 const onPaste = (event) => {
-  const pastedData = event.clipboardData.getData('text').slice(0, length.value) // Limit to input length
+  const pastedData = event.clipboardData.getData('text').slice(0, length.value)
   fieldValues.value = Array.from(pastedData).concat(
     Array(length.value - pastedData.length).fill(''),
   )
-  emit('update:modelValue', fieldValues.value.join('')) // Emit the full value
+  emit('update:modelValue', fieldValues.value.join(''))
   nextTick(() => {
-    focus(pastedData.length) // Focus the next empty input field
+    focus(pastedData.length)
   })
 }
 

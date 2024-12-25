@@ -69,6 +69,7 @@
           class="text-subtitle1 q-ma-none text-weight-light"
           style="color: blue"
           label="Forgotten Password"
+          to="/auth/forgotten-password"
         />
       </q-card-section>
       <q-card-section class="text-center">
@@ -97,32 +98,3 @@ const email = ref('')
 const password = ref('')
 const isPwd = ref(true)
 </script>
-
-<style>
-.max-out {
-  width: max-content;
-}
-.container {
-  width: 100%;
-}
-.h-full {
-  height: 100%;
-}
-hr {
-  border-top-width: 0.5px;
-  border-color: 'red';
-  opacity: 1;
-}
-.backdrop-blur {
-  backdrop-filter: blur(5px);
-  /* background-color: rgba(204, 199, 199, 0.4); */
-  /* opacity: 5; */
-}
-.my_card {
-  width: 25rem;
-  border-radius: 8px;
-  box-shadow:
-    0 20px 25px -5px rgb(0 0 0 / 0.1),
-    0 8px 10px -6px rgb(0 0 0 / 0.1);
-}
-</style>

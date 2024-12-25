@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-card class="q-pa-md shadow-10 backdrop-blur my_card" rounded>
       <q-card-section class="text-center text-h5">
-        <div class="text-grey-9 text-weight-light">Email Verification</div>
+        <div class="text-grey-9 text-weight-light">Phone Number Verification</div>
       </q-card-section>
 
       <q-card-section class="q-gutter-xs">
@@ -26,7 +26,6 @@
           style="color: dark"
           icon="fa-regular fa-paper-plane"
           label="Submit"
-          to="/auth/phone-number"
         />
       </q-card-section>
     </q-card>
