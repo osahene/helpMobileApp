@@ -1,6 +1,6 @@
 <template>
   <q-layout>
-    <q-page-container class="bg-accent fullscreen">
+    <q-page-container class="bg-accent">
       <router-view />
     </q-page-container>
   </q-layout>
