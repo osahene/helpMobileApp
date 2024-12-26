@@ -1,5 +1,5 @@
 <template>
-  <q-layout style="height: 1000px">
+  <q-layout view="lHh Lpr lFf">
     <q-page-container class="bg-primary fullscreen">
       <router-view />
     </q-page-container>
