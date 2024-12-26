@@ -10,7 +10,7 @@
       <q-icon :name="item.logo" class="logo" />
       <div class="text-content">
         <h4 class="title q-ma-none">{{ item.title }}</h4>
-        <h4 v-if="item.title2" class="title2 q-ma-none">{{ item.title2 }}</h4>
+        <h4 v-if="item.title2" class="title q-ma-none">{{ item.title2 }}</h4>
       </div>
       <h5 class="messages text-weight-light">{{ item.message }}</h5>
     </div>
@@ -109,75 +109,3 @@ onMounted(() => {
   footer.classList.add('punch-in')
 })
 </script>
-
-<style scoped>
-.onboard-content {
-  animation: fadeIn 2s ease-in-out;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 900px;
-  opacity: 0;
-  transition: opacity 0.5s;
-}
-.onboard-content.fade {
-  opacity: 1;
-}
-
-.logo {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 20px;
-}
-
-.messages {
-  text-align: center;
-}
-
-.indicators {
-  margin-top: 20px;
-}
-
-.indicator {
-  width: 12px;
-  height: 12px;
-  margin: 0 4px;
-  border-radius: 50%;
-  background-color: #ddd;
-  transition: background-color 0.3s;
-}
-
-.indicator.active {
-  background-color: #03a9f4;
-}
-
-.footer-animate {
-  opacity: 0;
-  animation: punchIn 0.5s ease-in-out forwards;
-}
-
-@keyframes punchIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
