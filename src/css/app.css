@@ -40,8 +40,10 @@ hr {
   flex: 1;
 }
 .card-img {
-  width: 10rem;
-  height: 10rem;
+  width: 8rem;
+  height: 8rem;
+  top: 2rem;
+  position: relative;
 }
 .head-title {
   font-weight: 400;
