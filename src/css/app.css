@@ -40,16 +40,12 @@ hr {
   flex: 1;
 }
 .card-img {
-  width: 2rem;
-  height: 3rem;
-  /* top: -1.8rem;
-  right: 1rem; */
-  position: relative;
-  flex: 1;
+  width: 10rem;
+  height: 10rem;
 }
 .head-title {
-  font-weight: 300;
-  font-size: 1.25rem;
+  font-weight: 600;
+  font-size: 6rem;
   font-stretch: expanded;
   letter-spacing: 0.2rem;
 }

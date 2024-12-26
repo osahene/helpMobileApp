@@ -20,12 +20,10 @@
   >
     <div class="p-1 flex flex-col justify-center items-start content-fit">
       <div class="ml-3 flex flex-col items-start">
-        <p
-          class="font-bold text-[24px] xs:text-[40px] sm:text-[50px] text-gray-700 dark:text-white"
-        >
+        <p class="head-title text-gray-700 dark:text-white">
           {{ cardTitle }}
         </p>
-        <p class="font-bold text-[24px] xs:text-[40px] sm:text-[50px] text-white dark:text-white">
+        <p class="head-title text-white dark:text-white">
           {{ cardTitle2 }}
         </p>
       </div>
@@ -33,7 +31,7 @@
     <div
       class="ml-3 relative flex top-[10px] xs:top-[10px] sm:top-[30px] md:top-[50px] xs:z-[2] justify-start"
     >
-      <img class="rounded-t-lg h-[10px] xs:h-[100px] sm:h-[150px]" :src="cardImg" />
+      <img class="card-img rounded-t-lg h-[10px] xs:h-[100px] sm:h-[150px]" :src="cardImg" />
     </div>
   </div>
 </template>

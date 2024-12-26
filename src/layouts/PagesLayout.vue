@@ -1,5 +1,5 @@
 <template>
-  <q-layout style="height: 1000px">
+  <q-layout class="h-screen">
     <q-page-container class="bg-accent">
       <router-view />
     </q-page-container>
