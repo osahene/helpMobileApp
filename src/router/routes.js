@@ -7,7 +7,10 @@ const routes = [
   {
     path: '/pages',
     component: () => import('layouts/PagesLayout.vue'),
-    children: [{ path: '/pages/home', component: () => import('pages/Main/HomePage.vue') }],
+    children: [
+      { path: '/pages/home', component: () => import('pages/Main/HomePage.vue') },
+      { path: '/pages/edit', component: () => import('pages/Main/RegisterContacts.vue') },
+    ],
   },
   {
     path: '/auth',
