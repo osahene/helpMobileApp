@@ -9,10 +9,10 @@
     >
       <q-icon :name="item.logo" class="logo" />
       <div class="text-content">
-        <h1 class="title q-ma-none">{{ item.title }}</h1>
-        <h1 v-if="item.title2" class="title2 q-ma-none">{{ item.title2 }}</h1>
+        <h4 class="title q-ma-none">{{ item.title }}</h4>
+        <h4 v-if="item.title2" class="title2 q-ma-none">{{ item.title2 }}</h4>
       </div>
-      <h3 class="messages">{{ item.message }}</h3>
+      <h5 class="messages text-weight-light">{{ item.message }}</h5>
     </div>
 
     <!-- Footer with indicators and navigation -->
@@ -128,8 +128,8 @@ onMounted(() => {
 }
 
 .logo {
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   margin-bottom: 20px;
 }
 

@@ -79,6 +79,7 @@
           style="color: dark"
           icon="fa-solid fa-arrow-right-to-bracket"
           label="Sign In"
+          to="/pages/home"
         />
       </q-card-section>
       <q-card-section class="text-center q-pt-none">
