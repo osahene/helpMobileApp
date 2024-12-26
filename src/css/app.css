@@ -37,6 +37,7 @@ hr {
 
 .flex-grow {
   flex-grow: 1;
+  flex: 1;
 }
 .card-img {
   width: 2rem;
@@ -44,6 +45,7 @@ hr {
   /* top: -1.8rem;
   right: 1rem; */
   position: relative;
+  flex: 1;
 }
 .head-title {
   font-weight: 300;

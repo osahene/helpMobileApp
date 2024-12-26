@@ -1,6 +1,8 @@
 <template>
-  <q-page class="flex flex-grow col-12 col-sm-6 col-md-4 q-gutter-lg flex-center">
-    <div v-for="(item, key) in cardInfo" :key="key" class="flex h-50 w-50 justify-center">
+  <q-page
+    class="m-5 h-full top-0 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3"
+  >
+    <div v-for="(item, key) in cardInfo" :key="key">
       <HomeCard
         :card-title="item.cardTitle"
         :card-title2="item.cardTitle2"
