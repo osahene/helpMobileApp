@@ -7,11 +7,11 @@
     <q-card-section class="q-pa-none">
       <div class="head-title">{{ cardTitle }}</div>
     </q-card-section>
-    <q-card-section class="q-pa-none move">
+    <q-card-section class="q-pa-none">
       <div class="head-title">{{ cardTitle2 }}</div>
     </q-card-section>
 
-    <q-card-section class="q-py-none">
+    <q-card-section class="q-py-none flex items-start justify-start">
       <img class="card-img" :src="cardImg" />
     </q-card-section>
   </q-card>

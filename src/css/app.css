@@ -39,15 +39,15 @@ hr {
   flex-grow: 1;
 }
 .card-img {
-  width: 5rem;
-  height: 5rem;
-  top: -1.8rem;
-  right: 1rem;
+  width: 2rem;
+  height: 3rem;
+  /* top: -1.8rem;
+  right: 1rem; */
   position: relative;
 }
 .head-title {
-  font-weight: 400;
-  font-size: 4.5rem;
+  font-weight: 300;
+  font-size: 1.25rem;
   font-stretch: expanded;
   letter-spacing: 0.2rem;
 }
@@ -56,8 +56,8 @@ hr {
   top: -2.5rem;
 }
 .my_card_2 {
-  width: 26rem;
-  height: 17rem;
+  width: auto;
+  height: auto;
   border-color: #0b76e0;
   border-width: 3rem;
 }
