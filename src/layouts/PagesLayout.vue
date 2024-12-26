@@ -1,11 +1,26 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="fullscreen">
+  <!-- <q-layout view="lHh Lpr lFf"> -->
+  <q-layout view="hHh LpR fFf">
     <q-page-container class="bg-accent q-pa-sm">
       <router-view />
     </q-page-container>
+    <!-- <q-footer>
+      <q-tabs v-model="tab" align="justify" dense class="bg-teal text-yellow shadow-2">
+        <q-route-tab name="home" icon="home" class="q-pa-sm" />
+        <q-route-tab name="edit" icon="edit" />
+        <q-route-tab name="lists" icon="list">
+          <q-badge color="purple" text-color="white" floating>5+</q-badge>
+        </q-route-tab>
+        <q-route-tab name="more" icon="more" />
+      </q-tabs>
+    </q-footer> -->
   </q-layout>
 </template>
 
-<script setup></script>
+<!-- <script setup>
+import { ref } from 'vue'
+
+const tab = ref('home')
+</script> -->
 
 <style></style>
