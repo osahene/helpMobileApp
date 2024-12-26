@@ -20,7 +20,7 @@
       class="q-px-lg transparent q-py-sm flex justify-between items-center w-full bottom-0 footer-animate"
     >
       <div>
-        <q-btn push color="primary" size="lg" label="Skip" />
+        <q-btn push color="primary" size="md" label="Skip" />
       </div>
       <div>
         <div class="indicators row justify-center">
@@ -36,9 +36,9 @@
           :label="currentStep === onBoardSteps.length - 1 ? 'Get Started' : ''"
           @click="nextStep"
           rounded
-          class="flex items-center"
+          class="flex items-center text-weight-light"
           color="primary"
-          size="lg"
+          size="md"
         >
           <q-icon
             v-if="currentStep < onBoardSteps.length - 1"
