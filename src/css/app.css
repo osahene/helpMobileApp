@@ -34,3 +34,36 @@ hr {
   background-color: rgb(30, 69, 153);
   color: aliceblue;
 }
+
+.flex-grow {
+  flex-grow: 1;
+}
+.card-img {
+  width: 5rem;
+  height: 5rem;
+  top: -1.8rem;
+  right: 1rem;
+  position: relative;
+}
+.head-title {
+  font-weight: 400;
+  font-size: 4.5rem;
+  font-stretch: expanded;
+  letter-spacing: 0.2rem;
+}
+.move {
+  position: relative;
+  top: -2.5rem;
+}
+.my_card_2 {
+  width: 26rem;
+  height: 17rem;
+  border-color: #0b76e0;
+  border-width: 3rem;
+}
+.h-50 {
+  min-height: 10%;
+}
+.w-50 {
+  min-width: 10%;
+}
