@@ -4,7 +4,7 @@
   >
     <div class="p-1 flex flex-col justify-center items-start content-fit">
       <div class="ml-3 flex flex-col items-start">
-        <p class="head-title text-gray-700 dark:text-white">
+        <p class="head-title text-white dark:text-white">
           {{ cardTitle }}
         </p>
         <p class="head-title text-white dark:text-white">
