@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded"
-    :class="[color === 'light' ? 'bg-white' : 'bg-emerald-900 text-white']"
-  >
+  <div class="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded">
     <div class="rounded-t mb-0 px-4 py-3 border-0">
       <div class="flex flex-wrap items-center">
         <div class="relative w-full px-4 max-w-full flex-grow flex-1">
