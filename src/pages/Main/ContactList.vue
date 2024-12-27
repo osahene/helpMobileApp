@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-card class="q-pa-md q-ma-sm">
       <q-table
-        class="my-sticky-column-table"
+        class="my-sticky-header-column-table"
         flat
         bordered
         title="My Emergency Contact"
@@ -30,7 +30,7 @@
     </q-card>
     <q-card class="q-pa-md q-ma-sm">
       <q-table
-        class="my-sticky-column-table"
+        class="my-sticky-header-column-table"
         flat
         bordered
         title="My Dependents"
@@ -125,3 +125,48 @@ const rows = [
   },
 ]
 </script>
+<style lang="sass">
+.my-sticky-header-column-table
+  /* height or max-height is important */
+  height: 310px
+
+  /* specifying max-width so the example can
+    highlight the sticky column on any browser window */
+  max-width: 600px
+
+  td:first-child
+    /* bg color is important for td; just specify one */
+    // background-color: #00b4ff
+
+  tr th
+    position: sticky
+    /* higher than z-index for td below */
+    z-index: 2
+    /* bg color is important; just specify one */
+    background: #00b4ff
+
+  /* this will be the loading indicator */
+  thead tr:last-child th
+    /* height of all previous header rows */
+    top: 48px
+    /* highest z-index */
+    z-index: 3
+  thead tr:first-child th
+    top: 0
+    z-index: 1
+  tr:first-child th:first-child
+    /* highest z-index */
+    z-index: 3
+
+  td:first-child
+    z-index: 1
+
+  td:first-child, th:first-child
+    position: sticky
+    left: 0
+
+  /* prevent scrolling behind sticky top row on focus */
+  tbody
+    /* height of all previous header rows */
+    scroll-margin-top: 48px
+</style>
