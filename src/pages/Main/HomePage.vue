@@ -1,13 +1,15 @@
 <template>
-  <q-page
-    class="m-5 h-full top-0 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3"
-  >
-    <div v-for="(item, key) in cardInfo" :key="key">
-      <HomeCard
-        :card-title="item.cardTitle"
-        :card-title2="item.cardTitle2"
-        :card-img="item.cardImg"
-      />
+  <q-page class="relative flex flex-col min-w-0 break-words w-full">
+    <div
+      class="m-5 h-full top-0 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3"
+    >
+      <div v-for="(item, key) in cardInfo" :key="key">
+        <HomeCard
+          :card-title="item.cardTitle"
+          :card-title2="item.cardTitle2"
+          :card-img="item.cardImg"
+        />
+      </div>
     </div>
   </q-page>
 </template>

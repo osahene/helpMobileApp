@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-page-container class="bg-accent">
       <div class="relative">
-        <div class="px-4 md:px-10 mx-auto w-full -m-24">
+        <div class="px-4 md:px-10 mx-auto w-full">
           <router-view />
           <q-footer>
             <q-tabs v-model="tab" align="justify" dense class="bg-teal text-yellow shadow-2">
