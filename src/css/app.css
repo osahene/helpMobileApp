@@ -1,17 +1,4 @@
 /* app global css */
-html,
-body,
-#q-app {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.q-page {
-  height: 100%;
-  padding-bottom: env(safe-area-inset-bottom); /* Ensures safe area padding */
-  box-sizing: border-box;
-}
 
 .my_card {
   width: 25rem;

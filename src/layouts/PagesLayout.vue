@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="hHh LpR fFf" style="height: 100%; padding-bottom: env(safe-area-inset-bottom)">
-    <q-page-container class="bg-accent q-pa-sm">
+  <q-layout view="hHh LpR fFf">
+    <q-page-container class="bg-accent q-pa-sm w-full min-w-full">
       <router-view />
     </q-page-container>
     <q-footer>
