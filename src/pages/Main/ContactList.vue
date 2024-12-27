@@ -1,65 +1,95 @@
 <template>
-  <q-page class="flex flex-center">
-    <q-card class="q-pa-md q-ma-sm">
-      <q-table
-        class="my-sticky-header-column-table"
-        flat
-        bordered
-        title="My Emergency Contact"
-        subtitle="List of relations you can count on during an emergency. The information can be updated."
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        style="table-layout: auto"
-      >
-        <template v-slot:body-cell-action="props">
-          <div class="q-px-md row flex-nowrap q-my-xs q-gutter-x-md justify-between">
-            <q-btn color="primary" label="Edit" @click="editRow(props.row)" size="md" />
-            <q-btn color="negative" label="Delete" @click="deleteRow(props.row)" size="md" />
+  <div
+    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded"
+    :class="[color === 'light' ? 'bg-white' : 'bg-emerald-900 text-white']"
+  >
+    <div class="rounded-t mb-0 px-4 py-3 border-0">
+      <div class="flex flex-wrap items-center">
+        <div class="relative w-full px-4 max-w-full flex-grow flex-1">
+          <div class="block w-full overflow-x-auto">
+            <q-table
+              class="my-sticky-header-column-table"
+              flat
+              bordered
+              title="My Emergency Contact"
+              subtitle="List of relations you can count on during an emergency. The information can be updated."
+              :rows="rows"
+              :columns="columns"
+              row-key="name"
+              style="table-layout: auto"
+            >
+              <template v-slot:body-cell-action="props">
+                <div class="q-px-md row flex-nowrap q-my-xs q-gutter-x-md justify-between">
+                  <q-btn color="primary" label="Edit" @click="editRow(props.row)" size="md" />
+                  <q-btn color="negative" label="Delete" @click="deleteRow(props.row)" size="md" />
+                </div>
+              </template>
+              <template v-slot:body-cell-name="props">
+                <div
+                  class="q-px-lg text-center q-my-xs q-gutter-x-md column"
+                  style="
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    min-width: 150px;
+                  "
+                >
+                  <div class="w-auto font-bold">{{ props.row.name }}</div>
+                  <div class="w-auto">{{ props.row.email }}</div>
+                </div>
+              </template>
+            </q-table>
           </div>
-        </template>
-        <template v-slot:body-cell-name="props">
-          <div
-            class="q-px-lg text-center q-my-xs q-gutter-x-md column"
-            style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 150px"
-          >
-            <div class="w-auto font-bold">{{ props.row.name }}</div>
-            <div class="w-auto">{{ props.row.email }}</div>
-          </div>
-        </template>
-      </q-table>
-    </q-card>
-    <q-card class="q-pa-md q-ma-sm">
-      <q-table
-        class="my-sticky-header-column-table"
-        flat
-        bordered
-        title="My Dependents"
-        subtitle="List of relations who count on you during emergency situations. The information can be updated."
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        style="table-layout: auto"
-      >
-        <template v-slot:body-cell-action="props">
-          <div class="q-px-md row flex-nowrap q-my-xs q-gutter-x-md justify-between">
-            <q-btn color="primary" label="Accept" @click="acceptRow(props.row)" size="md" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded"
+    :class="[color === 'light' ? 'bg-white' : 'bg-emerald-900 text-white']"
+  >
+    <div class="rounded-t mb-0 px-4 py-3 border-0">
+      <div class="flex flex-wrap items-center">
+        <div class="relative w-full px-4 max-w-full flex-grow flex-1">
+          <div class="block w-full overflow-x-auto">
+            <q-table
+              class="my-sticky-header-column-table"
+              flat
+              bordered
+              title="My Dependents"
+              subtitle="List of relations who count on you during emergency situations. The information can be updated."
+              :rows="rows"
+              :columns="columns"
+              row-key="name"
+              style="table-layout: auto"
+            >
+              <template v-slot:body-cell-action="props">
+                <div class="q-px-md row flex-nowrap q-my-xs q-gutter-x-md justify-between">
+                  <q-btn color="primary" label="Accept" @click="acceptRow(props.row)" size="md" />
 
-            <q-btn color="negative" label="Reject" @click="rejectRow(props.row)" size="md" />
+                  <q-btn color="negative" label="Reject" @click="rejectRow(props.row)" size="md" />
+                </div>
+              </template>
+              <template v-slot:body-cell-name="props">
+                <div
+                  class="q-px-lg text-center q-my-xs q-gutter-x-md column"
+                  style="
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    min-width: 150px;
+                  "
+                >
+                  <div class="w-auto font-bold">{{ props.row.name }}</div>
+                  <div class="w-auto">{{ props.row.email }}</div>
+                </div>
+              </template>
+            </q-table>
           </div>
-        </template>
-        <template v-slot:body-cell-name="props">
-          <div
-            class="q-px-lg text-center q-my-xs q-gutter-x-md column"
-            style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 150px"
-          >
-            <div class="w-auto font-bold">{{ props.row.name }}</div>
-            <div class="w-auto">{{ props.row.email }}</div>
-          </div>
-        </template>
-      </q-table>
-    </q-card>
-  </q-page>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script setup>
 // import { ref } from 'vue'
@@ -130,22 +160,22 @@ const rows = [
 <style lang="sass">
 .my-sticky-header-column-table
   /* height or max-height is important */
-  height: 310px
+  height: 100%
 
   /* specifying max-width so the example can
     highlight the sticky column on any browser window */
-  max-width: 600px
+  max-width: 100%
 
   td:first-child
     /* bg color is important for td; just specify one */
-    // background-color: #00b4ff
+    background-color: #c1f4cd !important
 
   tr th
     position: sticky
     /* higher than z-index for td below */
     z-index: 2
     /* bg color is important; just specify one */
-    background: #00b4ff
+    background: #fff
 
   /* this will be the loading indicator */
   thead tr:last-child th
@@ -166,9 +196,4 @@ const rows = [
   td:first-child, th:first-child
     position: sticky
     left: 0
-
-  /* prevent scrolling behind sticky top row on focus */
-  tbody
-    /* height of all previous header rows */
-    scroll-margin-top: 48px
 </style>
