@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh lpR fFf">
     <q-page-container class="bg-accent">
       <div class="relative">
         <div class="md:px-10 mx-auto w-full">
