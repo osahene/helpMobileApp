@@ -10,6 +10,7 @@ const routes = [
     children: [
       { path: '/pages/home', component: () => import('pages/Main/HomePage.vue') },
       { path: '/pages/edit', component: () => import('pages/Main/RegisterContacts.vue') },
+      { path: '/pages/list', component: () => import('pages/Main/ContactList.vue') },
     ],
   },
   {
