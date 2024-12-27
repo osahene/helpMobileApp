@@ -10,6 +10,7 @@
         :rows="rows"
         :columns="columns"
         row-key="name"
+        style="table-layout: auto"
       >
         <template v-slot:body-cell-action="props">
           <div class="q-px-md row flex-nowrap q-my-xs q-gutter-x-md justify-between">
@@ -20,7 +21,7 @@
         <template v-slot:body-cell-name="props">
           <div
             class="q-px-lg text-center q-my-xs q-gutter-x-md column"
-            style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+            style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 150px"
           >
             <div class="w-auto font-bold">{{ props.row.name }}</div>
             <div class="w-auto">{{ props.row.email }}</div>
@@ -38,6 +39,7 @@
         :rows="rows"
         :columns="columns"
         row-key="name"
+        style="table-layout: auto"
       >
         <template v-slot:body-cell-action="props">
           <div class="q-px-md row flex-nowrap q-my-xs q-gutter-x-md justify-between">
@@ -49,7 +51,7 @@
         <template v-slot:body-cell-name="props">
           <div
             class="q-px-lg text-center q-my-xs q-gutter-x-md column"
-            style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+            style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 150px"
           >
             <div class="w-auto font-bold">{{ props.row.name }}</div>
             <div class="w-auto">{{ props.row.email }}</div>
