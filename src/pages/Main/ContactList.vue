@@ -2,6 +2,7 @@
   <q-page class="flex flex-center">
     <q-card class="q-pa-md q-ma-sm">
       <q-table
+        class="my-sticky-column-table"
         flat
         bordered
         title="My Emergency Contact"
@@ -29,6 +30,7 @@
     </q-card>
     <q-card class="q-pa-md q-ma-sm">
       <q-table
+        class="my-sticky-column-table"
         flat
         bordered
         title="My Dependents"
