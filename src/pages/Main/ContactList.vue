@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="q-pa-md">
+    <q-card class="q-pa-md q-ma-sm">
       <q-table
         flat
         bordered
@@ -26,8 +26,8 @@
           </div>
         </template>
       </q-table>
-    </div>
-    <div class="q-pa-md">
+    </q-card>
+    <q-card class="q-pa-md q-ma-sm">
       <q-table
         flat
         bordered
@@ -54,7 +54,7 @@
           </div>
         </template>
       </q-table>
-    </div>
+    </q-card>
   </q-page>
 </template>
 <script setup>
