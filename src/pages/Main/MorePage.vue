@@ -16,9 +16,12 @@
           </q-tabs>
 
           <q-tab-panels v-model="tab" animated class="q-pa-none bg-opacity-95 text-white">
-            <q-tab-panel name="tips" class="q-gutter-y-sm">
+            <q-tab-panel v-show="tab === 'tips'" name="tips" class="q-gutter-y-sm">
               <!-- cards -->
+
               <Tips :card-title="healthTips[0].mTitle" :tips="healthTips.slice(1)" />
+              <Tips :card-title="floodTips[0].mTitle" :tips="floodTips.slice(1)" />
+              <Tips :card-title="fireTips[0].mTitle" :tips="fireTips.slice(1)" />
               <!-- cardsEnd -->
             </q-tab-panel>
 
@@ -63,6 +66,36 @@ const healthTips = [
   {
     vidLink: 'https://www.youtube.com/watch?v=lLkw4BXa7pQ',
     title: 'Snake bite - First aid',
+  },
+]
+const floodTips = [
+  { mTitle: 'Flood Tips' },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=43M5mZuzHF8',
+    title: 'Flood management',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=Hlrbio-NpxQ',
+    title: 'Drowning - First aid',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=luTRnCoeD4c',
+    title: 'Electrocution - First aid',
+  },
+]
+const fireTips = [
+  { mTitle: 'Flood Tips' },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=IHswAPDhVyU',
+    title: 'Fire Safety',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=dtyl3u3R8wM',
+    title: 'Extinguisher Usage - First aid',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=NOvnZRzFthg',
+    title: 'Burns - First aid',
   },
 ]
 </script>
