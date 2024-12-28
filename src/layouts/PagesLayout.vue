@@ -11,7 +11,7 @@
               <q-route-tab to="/pages/list" name="lists" icon="list">
                 <q-badge color="purple" text-color="white" floating>5+</q-badge>
               </q-route-tab>
-              <q-route-tab name="more" icon="more" />
+              <q-route-tab to="/pages/more" name="more" icon="more" />
             </q-tabs>
           </q-footer>
         </div>

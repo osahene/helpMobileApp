@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="q-pa-md">
+  <div class="h-screen">
+    <div class="q-pa-xs">
       <div class="q-gutter-y-md" style="max-width: 600px">
         <q-card>
           <q-tabs
@@ -11,24 +11,19 @@
             indicator-color="purple"
             align="justify"
           >
-            <q-tab name="mails" label="Mails" />
-            <q-tab name="alarms" label="Alarms" />
-            <q-tab name="movies" label="Movies" />
+            <q-tab name="tips" label="Safety Tips" />
+            <q-tab name="emergency" label="Emergency Lines" />
           </q-tabs>
 
-          <q-tab-panels v-model="tab" animated class="bg-primary text-white">
-            <q-tab-panel name="mails">
-              <div class="text-h6">Mails</div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          <q-tab-panels v-model="tab" animated class="q-pa-none bg-opacity-95 text-white">
+            <q-tab-panel name="tips" class="q-gutter-y-sm">
+              <!-- cards -->
+              <Tips :card-title="healthTips[0].mTitle" :tips="healthTips.slice(1)" />
+              <!-- cardsEnd -->
             </q-tab-panel>
 
-            <q-tab-panel name="alarms">
+            <q-tab-panel name="emergency">
               <div class="text-h6">Alarms</div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </q-tab-panel>
-
-            <q-tab-panel name="movies">
-              <div class="text-h6">Movies</div>
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </q-tab-panel>
           </q-tab-panels>
@@ -40,7 +35,34 @@
 
 <script setup>
 import { ref } from 'vue'
-const tab = ref('mails')
-</script>
+import Tips from 'src/components/TipsCard.vue'
+const tab = ref('tips')
 
-<style lang="scss" scoped></style>
+const healthTips = [
+  { mTitle: 'Emergency Tips' },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=qvf_74DM880',
+    title: 'Cardia Arrest management',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=Ovsw7tdneqE',
+    title: 'Seizure management',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=2v8vlXgGXwE',
+    title: 'Bone fracture - First aid',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=hdVKpUR513M',
+    title: 'Asthma attack - First aid',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=-hnyxw5k-c0',
+    title: 'Deep cut - First aid',
+  },
+  {
+    vidLink: 'https://www.youtube.com/watch?v=lLkw4BXa7pQ',
+    title: 'Snake bite - First aid',
+  },
+]
+</script>
