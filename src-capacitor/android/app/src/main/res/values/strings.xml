@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Help Mobile App</string>
+    <string name="title_activity_main">Help Mobile App</string>
+    <string name="package_name">org.capacitor.helpmobile.app</string>
+    <string name="custom_url_scheme">org.capacitor.helpmobile.app</string>
+</resources>
