@@ -25,9 +25,9 @@
               <!-- cardsEnd -->
             </q-tab-panel>
 
-            <q-tab-panel name="emergency">
-              <div class="text-h6">Alarms</div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <q-tab-panel name="emergency" class="q-gutter-y-lg">
+              <InfoCard :titles="EmerTit" :columns="cols" :rows="agents" />
+              <ContactCard :titles="ContactTit" :columns="ContactCols" :rows="ContactAction" />
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -38,7 +38,16 @@
 
 <script setup>
 import { ref } from 'vue'
+
 import Tips from 'src/components/TipsCard.vue'
+import InfoCard from 'src/components/InfoCard.vue'
+import ContactCard from 'src/components/ContactCard.vue'
+import police from '../../assets/emerg/police.png'
+import fire from '../../assets/emerg/GNFS.jpg'
+import nadmo from '../../assets/emerg/nadmo.jpg'
+import amb from '../../assets/emerg/ambulance.jpg'
+import elec from '../../assets/emerg/ecg.jpg'
+import { fabFacebook, fabTwitter, fabWhatsapp, fasPhone } from '@quasar/extras/fontawesome-v6'
 const tab = ref('tips')
 
 const healthTips = [
@@ -84,7 +93,7 @@ const floodTips = [
   },
 ]
 const fireTips = [
-  { mTitle: 'Flood Tips' },
+  { mTitle: 'Fire Tips' },
   {
     vidLink: 'https://www.youtube.com/watch?v=IHswAPDhVyU',
     title: 'Fire Safety',
@@ -96,6 +105,112 @@ const fireTips = [
   {
     vidLink: 'https://www.youtube.com/watch?v=NOvnZRzFthg',
     title: 'Burns - First aid',
+  },
+]
+const EmerTit = 'Emergency Lines'
+const ContactTit = 'Contact Us'
+const ContactCols = [
+  {
+    name: 'name',
+    required: true,
+    label: 'Medium',
+    align: 'left',
+    field: (row) => row.name,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'actions',
+    align: 'center',
+    label: 'Action',
+    field: 'actions',
+  },
+]
+const ContactAction = [
+  {
+    name: 'WhatsApp',
+    iconName: fabWhatsapp,
+    actions: '+233506053020',
+    link: 'https://wa.me/233506053020',
+  },
+  {
+    name: 'Facebook',
+    iconName: fabFacebook,
+    actions: 'Visit Facebook',
+    link: 'https://facebook.com/home',
+  },
+  {
+    name: 'Twitter',
+    iconName: fabTwitter,
+    actions: 'Visit Twitter',
+    link: 'https://twitter.com/home',
+  },
+  {
+    name: 'Phone Call',
+    iconName: fasPhone,
+    actions: '+233546045726',
+  },
+]
+const cols = [
+  {
+    name: 'name',
+    required: true,
+    label: 'Agency',
+    align: 'left',
+    field: (row) => row.name,
+    // field: (row) => row.name,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'cont_1',
+    align: 'center',
+    label: 'Contact 1',
+    field: 'cont_1',
+  },
+  {
+    name: 'cont_2',
+    align: 'center',
+    label: 'Contact 2',
+    field: 'cont_2',
+  },
+  { name: 'cont_3', align: 'center', label: 'Contact 3', field: 'cont_3' },
+]
+const agents = [
+  {
+    name: 'Police Service',
+    image: police,
+    cont_1: '191',
+    cont_2: '18555',
+    cont_3: '+233302773906',
+  },
+  {
+    name: 'Fire Service',
+    image: fire,
+    cont_1: '192',
+    cont_2: '+233302772446',
+    cont_3: '+233299340383',
+  },
+  {
+    name: 'Ambulance',
+    image: amb,
+    cont_1: '+2330501614877',
+    cont_2: '+2330505982870',
+    cont_3: '',
+  },
+  {
+    name: 'NADMO',
+    image: nadmo,
+    cont_1: '112',
+    cont_2: '+233299350030',
+    cont_3: '+233302964884',
+  },
+  {
+    name: 'ECG',
+    image: elec,
+    cont_1: '+233302676727',
+    cont_2: '+233302611611',
+    cont_3: '+233302676728',
   },
 ]
 </script>
