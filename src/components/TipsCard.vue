@@ -8,7 +8,7 @@
       <q-separator dark inset />
 
       <q-card-section>
-        <q-scroll-area style="height: 230px; max-width: 400px">
+        <q-scroll-area style="height: 230px; max-width: auto">
           <div class="row no-wrap">
             <div v-for="(item, index) in tips" :key="index" style="width: 250px" class="q-pa-sm">
               <q-card class="my-card">

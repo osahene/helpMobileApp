@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen">
     <div class="q-pa-xs">
-      <div class="q-gutter-y-md" style="max-width: 600px">
+      <div class="q-gutter-y-md" style="max-width: auto">
         <q-card>
           <q-tabs
             v-model="tab"
@@ -26,8 +26,18 @@
             </q-tab-panel>
 
             <q-tab-panel name="emergency" class="q-gutter-y-lg">
-              <InfoCard :titles="EmerTit" :columns="cols" :rows="agents" />
-              <ContactCard :titles="ContactTit" :columns="ContactCols" :rows="ContactAction" />
+              <InfoCard
+                :titles="EmerTit"
+                :describe="tableDescribe"
+                :columns="cols"
+                :rows="agents"
+              />
+              <InfoCard
+                :titles="ContactTit"
+                :describe="contactDescribe"
+                :columns="ContactCols"
+                :rows="ContactAction"
+              />
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -41,7 +51,6 @@ import { ref } from 'vue'
 
 import Tips from 'src/components/TipsCard.vue'
 import InfoCard from 'src/components/InfoCard.vue'
-import ContactCard from 'src/components/ContactCard.vue'
 import police from '../../assets/emerg/police.png'
 import fire from '../../assets/emerg/GNFS.jpg'
 import nadmo from '../../assets/emerg/nadmo.jpg'
@@ -107,8 +116,8 @@ const fireTips = [
     title: 'Burns - First aid',
   },
 ]
-const EmerTit = 'Emergency Lines'
 const ContactTit = 'Contact Us'
+const contactDescribe = 'Tap on an action to get in touch.'
 const ContactCols = [
   {
     name: 'name',
@@ -132,25 +141,32 @@ const ContactAction = [
     iconName: fabWhatsapp,
     actions: '+233506053020',
     link: 'https://wa.me/233506053020',
+    main: 'action',
   },
   {
     name: 'Facebook',
     iconName: fabFacebook,
     actions: 'Visit Facebook',
     link: 'https://facebook.com/home',
+    main: 'action',
   },
   {
     name: 'Twitter',
     iconName: fabTwitter,
     actions: 'Visit Twitter',
     link: 'https://twitter.com/home',
+    main: 'action',
   },
   {
     name: 'Phone Call',
     iconName: fasPhone,
-    actions: '+233546045726',
+    actions: 'Call us',
+    link: '+233546045726',
+    main: 'action call',
   },
 ]
+const EmerTit = 'Emergency Contacts'
+const tableDescribe = 'Tap on a contact number to initiate a direct call.'
 const cols = [
   {
     name: 'name',
@@ -161,56 +177,70 @@ const cols = [
     // field: (row) => row.name,
     format: (val) => `${val}`,
     sortable: true,
+    style: 'min-width: 150px; max-width: 200px;',
   },
   {
     name: 'cont_1',
     align: 'center',
     label: 'Contact 1',
     field: 'cont_1',
+    style: 'min-width: 150px; max-width: 200px;',
   },
   {
     name: 'cont_2',
     align: 'center',
     label: 'Contact 2',
     field: 'cont_2',
+    style: 'min-width: 150px; max-width: 200px;',
   },
-  { name: 'cont_3', align: 'center', label: 'Contact 3', field: 'cont_3' },
+  {
+    name: 'cont_3',
+    align: 'center',
+    label: 'Contact 3',
+    field: 'cont_3',
+    style: 'min-width: 150px; max-width: 200px;',
+  },
 ]
 const agents = [
   {
-    name: 'Police Service',
+    name: 'Ghana Police Service',
     image: police,
     cont_1: '191',
     cont_2: '18555',
     cont_3: '+233302773906',
+    main: 'agent',
   },
   {
-    name: 'Fire Service',
+    name: 'Ghana National Fire Service',
     image: fire,
     cont_1: '192',
     cont_2: '+233302772446',
     cont_3: '+233299340383',
+    main: 'agent',
   },
   {
-    name: 'Ambulance',
+    name: 'National Ambulance Service',
     image: amb,
     cont_1: '+2330501614877',
     cont_2: '+2330505982870',
     cont_3: '',
+    main: 'agent',
   },
   {
-    name: 'NADMO',
+    name: 'National Disaster Management Organisation',
     image: nadmo,
     cont_1: '112',
     cont_2: '+233299350030',
     cont_3: '+233302964884',
+    main: 'agent',
   },
   {
-    name: 'ECG',
+    name: 'Electricity Company of Ghana',
     image: elec,
     cont_1: '+233302676727',
     cont_2: '+233302611611',
     cont_3: '+233302676728',
+    main: 'agent',
   },
 ]
 </script>
