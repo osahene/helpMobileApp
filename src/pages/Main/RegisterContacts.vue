@@ -32,7 +32,9 @@
             <q-icon name="fa-regular fa-envelope" />
           </template>
         </q-input>
-        <h6 class="q-ma-none q-mt-md text-weight-light">Relation (Who are you to them? Ex: Their friend)</h6>
+        <h6 class="q-ma-none q-mt-md text-weight-light">
+          Relation (Who are you to them? Ex: Their son)
+        </h6>
         <q-input filled v-model="relation" placeholder="Son" type="text">
           <template v-slot:before>
             <q-icon name="fa-solid fa-people-arrows" />
