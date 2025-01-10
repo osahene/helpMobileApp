@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-dialog v-model="dialogOpen" persistent>
+    <q-dialog v-model="localDialogOpen" @hide="closeDialog">
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
@@ -25,8 +25,8 @@
           <q-btn
             v-for="(button, index) in buttons"
             :key="index"
+            @click="handleButtonClick(button)"
             flat
-            @click="TriggerAction(button)"
           >
             {{ button.label }}
           </q-btn>
@@ -37,73 +37,40 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { fasExclamation } from '@quasar/extras/fontawesome-v6'
-import axios from 'src/boot/axios'
-const dialogOpen = ref(false)
-console.log('trig', dialogOpen)
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
 const props = defineProps({
-  card: Boolean,
+  modelValue: Boolean,
   cardName1: String,
   cardName2: String,
   cardImage: String,
   message: String,
-  notAuth: Boolean,
+  buttons: Array,
 })
 
-const emit = defineEmits(['close'])
+const localDialogOpen = ref(props.modelValue)
 
-const TriggerAction = async () => {
-  try {
-    const geolocation = await getGeolocation()
-    await axios({ alertType: props.cardName1, location: geolocation })
-  } catch (error) {
-    emit('close')
-    console.log(error)
+const emit = defineEmits(['update:modelValue', 'close'])
+
+const handleButtonClick = (button) => {
+  if (button.route) {
+    router.push(button.route)
+  } else if (button.action) {
+    button.action()
   }
 }
 
-const getGeolocation = () => {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      reject('Geolocation is not supported by your browser')
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          })
-        },
-        (error) => {
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              reject('User denied the request for Geolocation.')
-              break
-            case error.POSITION_UNAVAILABLE:
-              reject('Location information is unavailable.')
-              break
-            case error.TIMEOUT:
-              reject('The request to get user location timed out.')
-              break
-            default:
-              reject('An unknown error occurred while retrieving location.')
-          }
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 },
-      )
-    }
-  })
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    localDialogOpen.value = newValue
+  },
+)
+const closeDialog = () => {
+  localDialogOpen.value = false
+  emit('update:modelValue', false)
 }
-
-// watch(
-//   () => props.card,
-//   (newVal) => {
-//     trigger.value = newVal
-//     console.log('trig val', trigger.value)
-//     console.log('new val', newVal)
-//   },
-// )
 </script>
-
-<style lang="scss" scoped></style>

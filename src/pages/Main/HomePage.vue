@@ -11,10 +11,10 @@
       </div>
       <TriggerCard
         v-if="selectedCard"
-        :card="dialogOpen"
-        :card-name1="selectedCard.cardTitle"
-        :card-name2="selectedCard.cardTitle2"
-        :card-image="selectedCard.cardImg"
+        v-model="dialogOpen"
+        :card-name1="CardName1"
+        :card-name2="CardName2"
+        :card-image="CardImage"
         :message="triggerMessage"
         :buttons="triggerButtons"
       />
@@ -32,15 +32,39 @@ import fireImg from '../../assets/img/fire.svg'
 import floodImg from '../../assets/img/flood.svg'
 import callImg from '../../assets/img/callss.svg'
 import nonviolenceImg from '../../assets/img/nonviolence.svg'
+import userssolid from '../../assets/img/userssolid.svg'
+import usersolid from '../../assets/img/usersolid.svg'
+import axios from 'axios'
+
 const dialogOpen = ref(false)
 const selectedCard = ref(null)
 const isAuthenticated = ref(false)
+const notRegisteredImg = usersolid
+const noContactsImg = userssolid
 const contacts = ref([])
 const notAuthMessage = 'This service is only available to authenticated users.'
 const Message = 'All approved contacts on your emergency list would receive this message.'
-// const noContacts = 'Zero Contacts'
 const noContactsMessage =
   'You do not have any contacts in your emergency list. To use this service, you ought to register at least one person to your emergency list, and they must approve of it before they can receive alerts from you.'
+
+const CardName1 = computed(() => {
+  if (!isAuthenticated.value) return 'Not'
+  if (contacts.value.length < 1) return 'No'
+  return selectedCard.value?.cardTitle || ''
+})
+
+const CardName2 = computed(() => {
+  if (!isAuthenticated.value) return 'Registered'
+  if (contacts.value.length < 1) return 'Approved Contacts'
+  return selectedCard.value?.cardTitle2 || ''
+})
+
+const CardImage = computed(() => {
+  if (!isAuthenticated.value) return notRegisteredImg
+  if (contacts.value.length < 1) return noContactsImg
+  return selectedCard.value?.cardImg || ''
+})
+
 const triggerMessage = computed(() => {
   if (!isAuthenticated.value) return notAuthMessage
   if (contacts.value.length < 1) return noContactsMessage
@@ -50,19 +74,17 @@ const triggerMessage = computed(() => {
 const triggerButtons = computed(() => {
   if (!isAuthenticated.value)
     return [
-      { label: 'Register', route: '/register' },
-      { label: 'Login', route: '/login' },
+      { label: 'Register', route: '/auth/register' },
+      { label: 'Login', route: '/auth/login' },
     ]
   if (contacts.value.length < 1)
-    return [{ label: 'Register Contacts', route: '/contacts/register' }, { label: 'Cancel' }]
-  return [{ label: 'Trigger Alert' }, { label: 'Cancel' }]
+    return [{ label: 'Register Contacts', route: '/pages/edit' }, { label: 'Cancel' }]
+  return [{ label: 'Trigger Alert', action: TriggerAction }, { label: 'Cancel' }]
 })
 
 const openTrigger = (item) => {
   selectedCard.value = item
-  console.log('opens', selectedCard.value)
   dialogOpen.value = true
-  console.log('opens_2', dialogOpen.value)
 }
 const cardInfo = [
   {
@@ -102,4 +124,54 @@ const cardInfo = [
     cardImg: nonviolenceImg,
   },
 ]
+
+const TriggerAction = async () => {
+  // Check for the authenticated and contact conditions
+  if (!isAuthenticated.value && contacts && contacts.value?.length > 0) {
+    try {
+      const geolocation = await getGeolocation()
+      await axios.post('/api/trigger-alert', {
+        alertType: selectedCard.value?.cardName1,
+        location: geolocation,
+      })
+    } catch (error) {
+      console.error('Error triggering alert:', error)
+    }
+  } else {
+    console.warn('Cannot trigger action: User not authenticated or no contacts available.')
+  }
+}
+
+const getGeolocation = () => {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject('Geolocation is not supported by your browser')
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          })
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              reject('User denied the request for Geolocation.')
+              break
+            case error.POSITION_UNAVAILABLE:
+              reject('Location information is unavailable.')
+              break
+            case error.TIMEOUT:
+              reject('The request to get user location timed out.')
+              break
+            default:
+              reject('An unknown error occurred while retrieving location.')
+          }
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 },
+      )
+    }
+  })
+}
 </script>
