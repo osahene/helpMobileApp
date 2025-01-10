@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-dialog v-model="localDialogOpen" @hide="closeDialog">
+    <q-dialog v-model="localDialogOpen" persistent>
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
@@ -53,7 +53,7 @@ const props = defineProps({
 
 const localDialogOpen = ref(props.modelValue)
 
-const emit = defineEmits(['update:modelValue', 'close'])
+defineEmits(['update:modelValue', 'close'])
 
 const handleButtonClick = (button) => {
   if (button.route) {
@@ -69,8 +69,8 @@ watch(
     localDialogOpen.value = newValue
   },
 )
-const closeDialog = () => {
-  localDialogOpen.value = false
-  emit('update:modelValue', false)
-}
+// const closeDialog = () => {
+//   localDialogOpen.value = false
+//   emit('update:modelValue', false)
+// }
 </script>

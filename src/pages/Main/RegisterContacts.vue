@@ -29,7 +29,7 @@
         <h6 class="q-ma-none q-mt-md text-weight-light">Phone Number</h6>
         <q-input filled v-model="phone_number" placeholder="+233240123456" type="text">
           <template v-slot:before>
-            <q-icon name="fa-regular fa-envelope" />
+            <q-icon name="fa-solid fa-phone" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">

@@ -38,7 +38,7 @@ import axios from 'axios'
 
 const dialogOpen = ref(false)
 const selectedCard = ref(null)
-const isAuthenticated = ref(false)
+const isAuthenticated = ref(true)
 const notRegisteredImg = usersolid
 const noContactsImg = userssolid
 const contacts = ref([])
@@ -78,7 +78,10 @@ const triggerButtons = computed(() => {
       { label: 'Login', route: '/auth/login' },
     ]
   if (contacts.value.length < 1)
-    return [{ label: 'Register Contacts', route: '/pages/edit' }, { label: 'Cancel' }]
+    return [
+      { label: 'Register Contacts', route: '/pages/edit' },
+      { label: 'Cancel', action: onClose },
+    ]
   return [{ label: 'Trigger Alert', action: TriggerAction }, { label: 'Cancel' }]
 })
 
@@ -124,6 +127,10 @@ const cardInfo = [
     cardImg: nonviolenceImg,
   },
 ]
+
+const onClose = () => {
+  dialogOpen.value = false
+}
 
 const TriggerAction = async () => {
   // Check for the authenticated and contact conditions
