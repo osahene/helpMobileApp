@@ -30,7 +30,9 @@
       </q-card-section>
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">Email Address or Phone Number</h6>
-        <q-input filled v-model="email" placeholder="sam@example.com or +233241123456" type="email">
+        <q-input filled v-model.trim="user.email_address"  placeholder="sam@example.com or +233241123456" type="email" lazy-rules
+              :error="$v.user.email_address.$error"
+              :error-message="'A valid email is required'">
           <template v-slot:before>
             <q-icon name="fa-regular fa-envelope" />
           </template>
@@ -38,9 +40,11 @@
         <h6 class="q-ma-none q-mt-md text-weight-light">Password</h6>
         <q-input
           filled
-          v-model="password"
+          v-model="$v.user.password.$model"
           placeholder="*********"
           :type="isPwd ? 'password' : 'text'"
+              @keydown.enter.prevent="onSubmit"
+
         >
           <template v-slot:before>
             <q-icon name="fa-solid fa-key" />
@@ -49,7 +53,7 @@
             <q-icon
               :name="isPwd ? 'visibility_off' : 'visibility'"
               class="cursor-pointer"
-              @click="isPwd = !isPwd"
+              @click.prevent="isPwd = !isPwd"
             />
           </template>
         </q-input>
@@ -93,9 +97,45 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
+import {useAuthStore} from'src/stores/auth.js'
+import useVuelidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+import { useQuasar } from "quasar";
+
+
+const $q = useQuasar();
+const $v = useVuelidate(rules, { user });
+const AuthStore = useAuthStore()
+const user = reactive({ email: computed(() => AuthStore.email_address), password: "" });
+
+const rules = {
+  user: {
+    email_address: { required, email },
+    password: { required },
+  },
+};
+
 const rem = ref(false)
-const email = ref('')
-const password = ref('')
 const isPwd = ref(true)
+const onSubmit = async () => {
+  $v.value.$touch();
+  if ($v.value.$invalid) {
+    $q.notify({
+      type: "warning",
+      message: "Validation error. Please check your inputs.",
+    });
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("email", user.email_address.toLowerCase());
+  formData.append("password", user.password);
+ 
+  if (!AuthStore.isLoading) {
+    await AuthStore.logins(formData);
+  }
+};
+
+
 </script>

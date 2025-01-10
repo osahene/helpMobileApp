@@ -30,25 +30,35 @@
       </q-card-section>
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none text-weight-light">First Name</h6>
-        <q-input filled v-model="first_name" type="text">
+        <q-input filled v-model.trim="$v.user.first_name.$model" type="text" :error="!$v.user.first_name.required && $v.user.first_name.$dirty"
+              :error-message="'First name is required'">
           <template v-slot:before>
             <q-icon name="fa-regular fa-user" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Last Name</h6>
-        <q-input filled v-model="last_name" type="text">
+        <q-input filled v-model.trim="$v.user.last_name.$model" type="text" :error="!$v.user.last_name.required && $v.user.last_name.$dirty"
+              :error-message="'First name is required'">
           <template v-slot:before>
             <q-icon name="fa-regular fa-user" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Email Address</h6>
-        <q-input filled v-model="email" type="email">
+        <q-input filled v-model.trim="$v.user.email_address.$model" type="email" :error="
+                (!$v.user.email_address.required && $v.user.email_address.$dirty) ||
+                (!$v.user.email_address.email && $v.user.email_address.$dirty)
+              "
+              :error-message="'A valid email is required'">
           <template v-slot:before>
             <q-icon name="fa-regular fa-envelope" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Password</h6>
-        <q-input filled v-model="password" :type="isPwd ? 'password' : 'text'">
+        <q-input filled v-model.trim="$v.user.password.$model" :type="isPwd ? 'password' : 'text'" :error="
+                (!$v.user.password.required && $v.user.password.$dirty) ||
+                (!validPassword() && $v.user.password.$dirty)
+              "
+              :error-message="'Password is invalid'">
           <template v-slot:before>
             <q-icon name="fa-solid fa-key" />
           </template>
@@ -62,13 +72,15 @@
         </q-input>
       </q-card-section>
       <q-card-section class="text-center">
+        <!-- to="/auth/email-verify" -->
         <q-btn
-          to="/auth/email-verify"
           outline
+          @click.prevent="onSubmit"
           class="text-subtitle1 q-px-xl q-ma-none shadow-2 text-weight-light"
           style="color: dark"
           icon="fa-solid fa-file-signature"
           label="Register"
+          :disable="!$v.$anyDirty || $v.$invalid"
         />
       </q-card-section>
       <q-card-section class="text-center q-pt-none">
@@ -82,10 +94,65 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const first_name = ref('')
-const last_name = ref('')
-const email = ref('')
-const password = ref('')
+import { ref, reactive } from 'vue'
+import {useAuthStore} from'src/stores/auth.js'
+import useVuelidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar()
+const RegAuth = useAuthStore()
+const user = reactive({
+  first_name: "",
+  last_name: "",
+  email_address: "",
+  password: "",
+});
+
 const isPwd = ref(true)
+const wrongPass = ref(false);
+
+const $v = useVuelidate(rules, { user });
+const validPassword = () => {
+  const pwd = user.password;
+  return (
+    pwd.length >= 5 &&
+    /[A-Z]/.test(pwd) 
+    // /\d/.test(pwd) &&
+    // /[!@#$%^&*()-_+=]/.test(pwd)
+  );
+};
+
+const rules = {
+  user: {
+    first_name: { required },
+    last_name: { required },
+    email_address: { required, email },
+    password: { required },
+  },
+};
+
+const onSubmit = async () => {
+  $v.value.$touch();
+  if ($v.value.$pending || $v.value.$invalid) {
+    $q.notify({
+      color: "red-5",
+      textColor: "white",
+      icon: "warning",
+      message: "Please correct the errors in the form",
+    });
+    return;
+  }
+
+  if (validPassword()) {
+    const formData = new FormData();
+    formData.append("first_name", user.first_name);
+    formData.append("last_name", user.last_name);
+    formData.append("email", user.email_address);
+    formData.append("password", user.password);
+    await RegAuth.register(formData);
+  } else {
+    wrongPass.value = true;
+  }
+};
 </script>

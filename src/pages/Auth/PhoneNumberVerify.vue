@@ -26,6 +26,7 @@
           style="color: dark"
           icon="fa-regular fa-paper-plane"
           label="Submit"
+          @click.prevent="onSubmit"
         />
       </q-card-section>
     </q-card>
@@ -34,11 +35,14 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import {useAuthStore} from'src/stores/auth.js'
 import QOtp from 'src/components/QOtp.vue'
 const otpVal = ref(null)
 const timer = ref(30)
 const isDisabled = ref(true)
 let intervalId = null
+const PhoneOTPAuth = useAuthStore()
+const phone_number = localStorage.getItem('phone_number')
 
 const startCountdown = () => {
   timer.value = 30
@@ -54,9 +58,18 @@ const startCountdown = () => {
   }, 1000)
 }
 
-const handleResend = () => {
+const handleResend = async () => {
+  const formData = new FormData();
+  formData.append("phone_number", phone_number);
+  await PhoneOTPAuth.PhoneOTPResend(formData)
   startCountdown()
-  // put axios
+}
+
+const onSubmit = async () => {
+    const formData = new FormData();
+    formData.append("phone_number", phone_number);
+    formData.append("otp", otpVal);
+    await PhoneOTPAuth.PhoneOTP(formData)
 }
 
 onMounted(() => {

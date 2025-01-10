@@ -7,7 +7,7 @@
 
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">Enter your Email</h6>
-        <q-input filled v-model="email" placeholder="sam@example.com" type="email">
+        <q-input filled v-model.trim="email_address" placeholder="sam@example.com" type="email">
           <template v-slot:before>
             <q-icon name="fa-regular fa-envelope" />
           </template>
@@ -21,7 +21,7 @@
           style="color: dark"
           icon="fa-regular fa-paper-plane"
           label="Submit"
-          to="/auth/confirm-password"
+          @click.prevent="onSubmit"
         />
       </q-card-section>
     </q-card>
@@ -30,5 +30,32 @@
 
 <script setup>
 import { ref } from 'vue'
-const email = ref('')
+import { useAuthStore } from 'src/stores/auth.js'
+import useVuelidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+import { useQuasar } from "quasar";
+
+const ForgotEmail = useAuthStore()
+const email_address = ref('')
+const rules = {
+    email_address: { required, email },
+};
+const $q = useQuasar();
+const $v = useVuelidate(rules, { email_address });
+
+const onSubmit = async () => {
+  $v.value.$touch();
+  if ($v.value.$invalid) {
+    $q.notify({
+      type: "warning",
+      message: "Email is incorrect. Please check your inputs.",
+    });
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("email", email_address.value?.toLowerCase());
+  await ForgotEmail.forgotEmail(formData);
+};
+
 </script>

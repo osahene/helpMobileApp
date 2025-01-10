@@ -7,13 +7,13 @@
 
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">New Password</h6>
-        <q-input filled v-model="new_password" placeholder="********" type="password">
+        <q-input filled v-model.trim="new_password" placeholder="********" type="password">
           <template v-slot:before>
             <q-icon name="fa-solid fa-key" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Confirm Password</h6>
-        <q-input filled v-model="confirm_password" placeholder="********" type="password">
+        <q-input filled v-model.trim="confirm_password" placeholder="********" type="password">
           <template v-slot:before>
             <q-icon name="fa-solid fa-key" />
           </template>
@@ -27,7 +27,7 @@
           style="color: dark"
           icon="fa-regular fa-paper-plane"
           label="Submit"
-          to="/pages/home"
+          @click="onSubmit"
         />
       </q-card-section>
     </q-card>
@@ -36,6 +36,34 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useQuasar } from "quasar";
+import {useAuthStore} from'src/stores/auth.js'
+import useVuelidate from "@vuelidate/core";
+import { required, sameAs } from "@vuelidate/validators";
+const ConfirmPassAuth = useAuthStore()
+const $q = useQuasar();
+
+const rules = {
+  password: {
+    new_password: { required, sameAs:sameAs(confirm_password.value) },
+    confirm_password: { required },
+  },
+};
+const $v = useVuelidate(rules, { new_password, confirm_password });
 const new_password = ref('')
 const confirm_password = ref('')
+const onSubmit = async () => {
+  $v.value.$touch();
+  if ($v.value.$invalid) {
+    $q.notify({
+      type: "warning",
+      message: "Passwords do not match. Please check your inputs.",
+    });
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("password", new_password);
+  await ConfirmPassAuth.confirmPassword(formData);
+};
 </script>
