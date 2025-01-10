@@ -34,9 +34,6 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('last_name', userDetails.last_name)
       localStorage.setItem('email', userDetails.email)
     },
-    removeUser() {
-      localStorage.clear()
-    },
 
     async loginsRem(credentials) {
       try {
@@ -72,6 +69,7 @@ export const useAuthStore = defineStore('auth', {
         })
       }
     },
+
     async logins(credentials) {
       try {
         const res = await apiService.login(credentials)
