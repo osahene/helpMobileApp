@@ -55,7 +55,7 @@ const onSubmit = async () => {
     return;
   }
   try {
-    await PhoneAuth.verifyPhone(phone_number)
+    await PhoneAuth.VerifyPhone(phone_number)
   } catch (error) {
     $q.notify({
         color: "red-5",

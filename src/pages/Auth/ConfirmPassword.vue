@@ -64,6 +64,6 @@ const onSubmit = async () => {
 
   const formData = new FormData();
   formData.append("password", new_password);
-  await ConfirmPassAuth.confirmPassword(formData);
+  await ConfirmPassAuth.ConfirmPassword(formData);
 };
 </script>

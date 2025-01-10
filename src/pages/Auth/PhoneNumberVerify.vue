@@ -69,7 +69,7 @@ const onSubmit = async () => {
     const formData = new FormData();
     formData.append("phone_number", phone_number);
     formData.append("otp", otpVal);
-    await PhoneOTPAuth.PhoneOTP(formData)
+    await PhoneOTPAuth.PhoneVerifyOTP(formData)
 }
 
 onMounted(() => {

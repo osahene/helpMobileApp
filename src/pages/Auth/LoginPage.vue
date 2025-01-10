@@ -83,13 +83,13 @@
           style="color: dark"
           icon="fa-solid fa-arrow-right-to-bracket"
           label="Sign In"
-          to="/pages/home"
+          @click="onSubmit"
         />
       </q-card-section>
       <q-card-section class="text-center q-pt-none">
         <div class="text-grey-8 text-weight-light text-h6">
           Don't have an account?
-          <router-link to="/auth/register">Register</router-link>
+          <router-link to="/auth/register"><span class="text-blue-500">Register</span> </router-link>
         </div>
       </q-card-section>
     </q-card>
@@ -102,7 +102,6 @@ import {useAuthStore} from'src/stores/auth.js'
 import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { useQuasar } from "quasar";
-
 
 const $q = useQuasar();
 const $v = useVuelidate(rules, { user });
@@ -132,6 +131,10 @@ const onSubmit = async () => {
   formData.append("email", user.email_address.toLowerCase());
   formData.append("password", user.password);
  
+  if (!AuthStore.isLoading && rem) {
+    await AuthStore.loginsRem(formData);
+  }
+
   if (!AuthStore.isLoading) {
     await AuthStore.logins(formData);
   }
