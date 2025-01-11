@@ -6,6 +6,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     isLoading: false,
     isAuthenticated: false,
+    hasViewed: 0,
     first_name: localStorage.getItem('first_name') || '',
     last_name: localStorage.getItem('last_name') || '',
     email: localStorage.getItem('email') || '',
@@ -26,7 +27,7 @@ export const useAuthStore = defineStore('auth', {
 
     saveUser(token, userDetails) {
       this.setTokens(token)
-
+      this.isAuthenticated = true
       this.first_name = userDetails.first_name
       this.last_name = userDetails.last_name
       this.email = userDetails.email
@@ -77,7 +78,8 @@ export const useAuthStore = defineStore('auth', {
           ;(this.first_name = res.data.first_name),
             (this.last_name = res.data.last_name),
             (this.email = res.data.email),
-            this.setTokens(res.data.tokens)
+            (this.isAuthenticated = true)
+          this.setTokens(res.data.tokens)
 
           Notify.create({
             type: 'positive',
@@ -237,7 +239,8 @@ export const useAuthStore = defineStore('auth', {
           ;(this.first_name = res.data.first_name),
             (this.last_name = res.data.last_name),
             (this.email = res.data.email),
-            this.setTokens(res.data.tokens)
+            (this.isAuthenticated = true)
+          this.setTokens(res.data.tokens)
           this.router.push({ path: '/pages/home' })
           Notify.create({
             type: 'positive',

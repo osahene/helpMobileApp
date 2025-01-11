@@ -7,13 +7,13 @@
 
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">New Password</h6>
-        <q-input filled v-model.trim="new_password" placeholder="********" type="password">
+        <q-input filled v-model.trim="$v.new_password.$model" placeholder="********" type="password">
           <template v-slot:before>
             <q-icon name="fa-solid fa-key" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Confirm Password</h6>
-        <q-input filled v-model.trim="confirm_password" placeholder="********" type="password">
+        <q-input filled v-model.trim="$v.confirm_password.$model" placeholder="********" type="password">
           <template v-slot:before>
             <q-icon name="fa-solid fa-key" />
           </template>
