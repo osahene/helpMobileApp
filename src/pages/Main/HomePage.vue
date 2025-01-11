@@ -34,7 +34,9 @@ import callImg from '../../assets/img/callss.svg'
 import nonviolenceImg from '../../assets/img/nonviolence.svg'
 import userssolid from '../../assets/img/userssolid.svg'
 import usersolid from '../../assets/img/usersolid.svg'
-import axios from 'axios'
+import { useOperations } from 'src/stores/ops'
+
+const TriggerAlert = useOperations()
 
 const dialogOpen = ref(false)
 const selectedCard = ref(null)
@@ -137,7 +139,7 @@ const TriggerAction = async () => {
   if (!isAuthenticated.value && contacts && contacts.value?.length > 0) {
     try {
       const geolocation = await getGeolocation()
-      await axios.post('/api/trigger-alert', {
+      await TriggerAlert.alertTrigger( {
         alertType: selectedCard.value?.cardName1,
         location: geolocation,
       })
