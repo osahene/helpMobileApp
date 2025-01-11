@@ -47,10 +47,12 @@ export default defineConfig((ctx) => {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        VITE_baseURL: process.env.VITE_baseURL,
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
-      // minify: false,
+      minify: false,
       // polyfillModulePreload: true,
       // distDir
 

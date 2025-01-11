@@ -16,7 +16,7 @@ const TakeRefreshToken = async () => {
 
   if (!refreshToken) return null
   try {
-    const response = await axios.post(`${$axios.defaults.baseURL}account/token/refresh/`, {
+    const response = await axios.post(`${$axios.defaults.baseURL}/account/token/refresh/`, {
       refresh: refreshToken,
     })
     const { access, refresh } = response.data
