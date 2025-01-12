@@ -68,7 +68,7 @@ const handleResend = async () => {
 const onSubmit = async () => {
     const formData = new FormData();
     formData.append("phone_number", phone_number);
-    formData.append("otp", otpVal);
+    formData.append("otp", otpVal.value);
     await PhoneOTPAuth.PhoneVerifyOTP(formData)
 }
 

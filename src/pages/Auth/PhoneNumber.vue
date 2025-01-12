@@ -61,6 +61,7 @@ const onSubmit = async () => {
     });
     return;
   }
+  localStorage.setItem('phone_number', phone_number.value)
   const formData = new FormData();
   formData.append("phone_number",phone_number.value);
   await PhoneAuth.VerifyPhone(formData)

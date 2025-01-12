@@ -263,6 +263,8 @@ export const useAuthStore = defineStore('auth', {
       try {
         const res = await apiService.VerifyPhoneNumberOTP(data)
         if (res.status === 200) {
+          localStorage.removeItem('phone_number')
+          localStorage.removeItem('email_address')
           this.first_name = res.data.first_name
           this.last_name = res.data.last_name
           this.isAuthenticated = true
