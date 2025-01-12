@@ -77,6 +77,15 @@ const phone_number = ref('')
 const relation = ref('')
 const phoneRegex = /^[+][0-9]{1,15}$/; 
 
+const resetForm = () => {
+  first_name.value = '';
+  last_name.value = '';
+  email_address.value = '';
+  phone_number.value = '';
+  relation.value = '';
+  $v.value.$reset();
+};
+
 const rules = {
     first_name: { required  },
     last_name: { required },
@@ -107,6 +116,7 @@ const onSubmit = async () => {
   formData.append('phone_number', phone_number.value)
   formData.append('relation', relation.value)
   await RegContacts.createRelations(formData)
+  resetForm();
 }
 </script>
 <style scoped>

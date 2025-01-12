@@ -10,7 +10,7 @@
               bordered
               title="My Emergency Contact"
               subtitle="List of relations you can count on during an emergency. The information can be updated."
-              :rows="rows"
+              :rows="contactsRows"
               :columns="columns"
               row-key="name"
               style="table-layout: auto"
@@ -31,8 +31,8 @@
                     min-width: 150px;
                   "
                 >
-                  <div class="w-auto font-bold">{{ props.row.name }}</div>
-                  <div class="w-auto">{{ props.row.email }}</div>
+                  <div class="w-auto font-bold"><span>{{ props.row.first_name }}</span> <span>{{ props.row.last_name }}</span></div>
+                  <div class="w-auto">{{ props.row.email_address }}</div>
                 </div>
               </template>
             </q-table>
@@ -50,7 +50,7 @@
               bordered
               title="My Dependents"
               subtitle="List of relations who count on you during emergency situations. The information can be updated."
-              :rows="rows"
+              :rows="dependantsRows"
               :columns="columns"
               row-key="name"
               style="table-layout: auto"
@@ -84,7 +84,35 @@
   </div>
 </template>
 <script setup>
-// import { ref } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useOperations } from 'src/stores/ops'
+
+const ops = useOperations()
+
+onMounted(async () => {
+  await ops.getMyContacts()
+  await ops.getMyDependant()
+})
+
+const columns = [
+  {
+    name: 'name',
+    required: true,
+    label: 'NAME & EMAIL',
+    align: 'center',
+    field: (row) => row.first_name,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  { name: 'phone_number', align: 'center', label: 'PHONE NUMBER', field: 'phone_number' },
+  { name: 'relation', label: 'RELATION', align: 'center', field: 'relation' },
+  { name: 'status', label: 'STATUS', align: 'center', field: 'status' },
+  { name: 'action', label: 'ACTION', align: 'center', field: 'action' },
+]
+
+const contactsRows = computed(() => ops.myContacts || []);
+const dependantsRows = computed(() => ops.myDependants || []);
+
 const editRow = (row) => {
   console.log('Edit row', row)
 }
@@ -98,56 +126,7 @@ const acceptRow = (row) => {
 const rejectRow = (row) => {
   console.log('reject row', row)
 }
-const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'NAME',
-    align: 'center',
-    field: (row) => row.name,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
-  { name: 'phone_number', align: 'center', label: 'PHONE NUMBER', field: 'phone_number' },
-  { name: 'relation', label: 'RELATION', align: 'center', field: 'relation' },
-  { name: 'status', label: 'STATUS', align: 'center', field: 'status' },
-  { name: 'action', label: 'ACTION', align: 'center', field: 'action' },
-]
 
-const rows = [
-  {
-    name: 'Frozen Yogurt',
-    email: 'max@gmail.com',
-    phone_number: 159,
-    relation: 6.0,
-    status: 24,
-    action: 4.0,
-  },
-  {
-    name: 'Ice cream sandwich',
-    email: 'cream@yet.com',
-    phone_number: 237,
-    relation: 9.0,
-    status: 37,
-    action: 4.3,
-  },
-  {
-    name: 'Ice cream sandwich',
-    email: 'crea@gmail.com',
-    phone_number: 237,
-    relation: 9.0,
-    status: 37,
-    action: 4.3,
-  },
-  {
-    name: 'Ice cream sandwicsdsdsdsdsh',
-    email: 'creasd@gmail.com',
-    phone_number: 237,
-    relation: 9.0,
-    status: 37,
-    action: 4.3,
-  },
-]
 </script>
 <style lang="sass">
 .my-sticky-header-column-table

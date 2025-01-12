@@ -12,7 +12,9 @@ export const useOperations = defineStore('ops', {
       try {
         const res = await apiService.getMyDependants()
         if (res.status === 200) {
-          this.myDependants = res.data
+          this.myDependants = res.data.results.map((item) => ({
+            ...item,
+          }))
         }
       } catch (error) {
         Notify.create({
@@ -25,7 +27,9 @@ export const useOperations = defineStore('ops', {
       try {
         const res = await apiService.getMyContacts()
         if (res.status === 200) {
-          this.myContacts = res.data
+          this.myContacts = res.data.results.map((item) => ({
+            ...item,
+          }))
         }
       } catch (error) {
         Notify.create({
