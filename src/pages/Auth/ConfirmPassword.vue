@@ -7,13 +7,13 @@
 
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">New Password</h6>
-        <q-input filled v-model.trim="$v.new_password.$model" placeholder="********" type="password">
+        <q-input class="custom-input" filled v-model.trim="$v.new_password.$model" placeholder="********" type="password">
           <template v-slot:before>
             <q-icon name="fa-solid fa-key" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Confirm Password</h6>
-        <q-input filled v-model.trim="$v.confirm_password.$model" placeholder="********" type="password">
+        <q-input class="custom-input" filled v-model.trim="$v.confirm_password.$model" placeholder="********" type="password">
           <template v-slot:before>
             <q-icon name="fa-solid fa-key" />
           </template>
@@ -24,7 +24,8 @@
         <q-btn
           flat
           class="text-subtitle1 q-px-xl q-py-none q-ma-none shadow-2 text-weight-light"
-          style="color: dark"
+          :style="{ backgroundColor: $v.$anyDirty && !$v.$invalid ? '#007bff' : '#d3d3d3' }"
+          :disable="!$v.$anyDirty || $v.$invalid"
           icon="fa-regular fa-paper-plane"
           label="Submit"
           @click="onSubmit"

@@ -7,7 +7,8 @@
 
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">Enter your Email</h6>
-        <q-input filled v-model.trim="email_address" placeholder="sam@example.com" type="email">
+        <q-input class="custom-input" filled v-model.trim="$v.email_address.$model" placeholder="amahenewaa@example.com" type="email" :error="!$v.email_address.required && $v.email_address.$dirty"
+              :error-message="'Email is required'">
           <template v-slot:before>
             <q-icon name="fa-regular fa-envelope" />
           </template>
@@ -16,9 +17,9 @@
 
       <q-card-section class="text-center">
         <q-btn
-          flat
           class="text-subtitle1 q-px-xl q-py-none q-ma-none shadow-2 text-weight-light"
-          style="color: dark"
+          :disable="!$v.$anyDirty || $v.$invalid"
+          :style="{ backgroundColor: $v.$anyDirty && !$v.$invalid ? '#b7d1ed' : '#d3d3d3' }"
           icon="fa-regular fa-paper-plane"
           label="Submit"
           @click.prevent="onSubmit"

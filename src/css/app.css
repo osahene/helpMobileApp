@@ -167,3 +167,9 @@ hr {
   width: 100%;
   height: 100%;
 }
+.custom-input ::placeholder {
+  color: #aaa;
+}
+.custom-input .q-field__control {
+  color: #333;
+}

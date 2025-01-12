@@ -30,7 +30,7 @@
       </q-card-section>
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">Email Address or Phone Number</h6>
-        <q-input filled v-model.trim="user.email_address"  placeholder="sam@example.com or +233241123456" type="email" lazy-rules
+        <q-input class="custom-input" filled v-model.trim="user.email_address"  placeholder="amahenewaa@example.com or +233241123456" type="email" lazy-rules
               :error="$v.user.email_address.$error"
               :error-message="'A valid email is required'">
           <template v-slot:before>
@@ -39,6 +39,7 @@
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Password</h6>
         <q-input
+        class="custom-input"
           filled
           v-model="$v.user.password.$model"
           placeholder="*********"
@@ -78,9 +79,10 @@
       </q-card-section>
       <q-card-section class="text-center">
         <q-btn
+          :disable="!$v.$anyDirty || $v.$invalid"
+          :style="{ backgroundColor: $v.$anyDirty && !$v.$invalid ? '#b7d1ed' : '#d3d3d3' }"
           flat
           class="text-subtitle1 q-px-xl q-py-none q-ma-none shadow-2 text-weight-light"
-          style="color: dark"
           icon="fa-solid fa-arrow-right-to-bracket"
           label="Sign In"
           @click="onSubmit"

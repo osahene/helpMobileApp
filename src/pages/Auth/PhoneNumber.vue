@@ -7,7 +7,7 @@
 
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">Phone Number</h6>
-        <q-input filled v-model.trim="phone_number" placeholder="+233241123456" type="tel">
+        <q-input  class="custom-input" filled v-model.trim="$v.phone_number.$model" placeholder="+233241123456" type="tel">
           <template v-slot:before>
             <q-icon name="fa-solid fa-phone" />
           </template>
@@ -19,7 +19,8 @@
         <q-btn
           flat
           class="text-subtitle1 q-px-xl q-py-none q-ma-none shadow-2 text-weight-light"
-          style="color: dark"
+          :style="{ backgroundColor: $v.$anyDirty && !$v.$invalid ? '#b7d1ed' : '#d3d3d3' }"
+          :disable="!$v.$anyDirty || $v.$invalid"
           icon="fa-regular fa-paper-plane"
           label="Submit"
           @click.prevent="onSubmit"

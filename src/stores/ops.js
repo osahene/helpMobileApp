@@ -37,10 +37,10 @@ export const useOperations = defineStore('ops', {
     async createRelations(data) {
       try {
         const res = await apiService.createRelation(data)
-        if (res.status === 200) {
+        if (res.status === 201) {
           Notify.create({
             type: 'positive',
-            message: 'Contact created successfully',
+            message: res.data.message || 'Contact created successfully',
           })
         }
       } catch (error) {

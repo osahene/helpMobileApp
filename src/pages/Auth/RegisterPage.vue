@@ -30,21 +30,21 @@
       </q-card-section>
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none text-weight-light">First Name</h6>
-        <q-input filled v-model.trim="$v.user.first_name.$model" type="text" :error="!$v.user.first_name.required && $v.user.first_name.$dirty"
+        <q-input class="custom-input" placeholder="Ama" filled v-model.trim="$v.user.first_name.$model" type="text" :error="!$v.user.first_name.required && $v.user.first_name.$dirty"
               :error-message="'First name is required'">
           <template v-slot:before>
             <q-icon name="fa-regular fa-user" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Last Name</h6>
-        <q-input filled v-model.trim="$v.user.last_name.$model" type="text" :error="!$v.user.last_name.required && $v.user.last_name.$dirty"
-              :error-message="'First name is required'">
+        <q-input class="custom-input" placeholder="Henewaa" filled v-model.trim="$v.user.last_name.$model" type="text" :error="!$v.user.last_name.required && $v.user.last_name.$dirty"
+              :error-message="'Last name is required'">
           <template v-slot:before>
             <q-icon name="fa-regular fa-user" />
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Email Address</h6>
-        <q-input filled v-model.trim="$v.user.email_address.$model" type="email" :error="
+        <q-input class="custom-input" placeholder="amahenewaa@example.com" filled v-model.trim="$v.user.email_address.$model" type="email" :error="
                 (!$v.user.email_address.required && $v.user.email_address.$dirty) ||
                 (!$v.user.email_address.email && $v.user.email_address.$dirty)
               "
@@ -54,7 +54,7 @@
           </template>
         </q-input>
         <h6 class="q-ma-none q-mt-md text-weight-light">Password</h6>
-        <q-input filled v-model.trim="$v.user.password.$model" :type="isPwd ? 'password' : 'text'" :error="
+        <q-input class="custom-input" placeholder="********" filled v-model.trim="$v.user.password.$model" :type="isPwd ? 'password' : 'text'" :error="
                 (!$v.user.password.required && $v.user.password.$dirty) ||
                 (!validPassword() && $v.user.password.$dirty)
               "
@@ -74,10 +74,10 @@
       <q-card-section class="text-center">
         <!-- to="/auth/email-verify" -->
         <q-btn
-          outline
+          
           @click.prevent="onSubmit"
           class="text-subtitle1 q-px-xl q-ma-none shadow-2 text-weight-light"
-          style="color: dark"
+          :style="{ backgroundColor: $v.$anyDirty && !$v.$invalid ? '#b7d1ed' : '#d3d3d3' }"
           icon="fa-solid fa-file-signature"
           label="Register"
           :disable="!$v.$anyDirty || $v.$invalid"
@@ -86,7 +86,7 @@
       <q-card-section class="text-center q-pt-none">
         <div class="text-grey-8 text-weight-light text-h6">
           Already have an account?
-          <router-link to="/auth/login">Sign In</router-link>
+          <router-link to="/auth/login"><span class="text-blue-500">Sign In</span> </router-link>
         </div>
       </q-card-section>
     </q-card>
