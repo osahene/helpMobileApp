@@ -61,7 +61,7 @@ const startCountdown = () => {
 const handleResend = async () => {
   const formData = new FormData();
   formData.append("phone_number", phone_number);
-  await PhoneOTPAuth.PhoneOTPResend(formData)
+  await PhoneOTPAuth.OTPResend(formData)
   startCountdown()
 }
 

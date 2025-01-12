@@ -10,6 +10,8 @@ export const useAuthStore = defineStore('auth', {
     first_name: localStorage.getItem('first_name') || '',
     last_name: localStorage.getItem('last_name') || '',
     email: localStorage.getItem('email') || '',
+    phone_number: localStorage.getItem('phone_number') || '',
+    is_phone_verified: localStorage.getItem('is_phone_verified') || '',
   }),
   getters: {
     isLoggedIn(state) {
@@ -30,10 +32,10 @@ export const useAuthStore = defineStore('auth', {
       this.isAuthenticated = true
       this.first_name = userDetails.first_name
       this.last_name = userDetails.last_name
-      this.email = userDetails.email
+      this.is_phone_verified = userDetails.is_phone_verified
       localStorage.setItem('first_name', userDetails.first_name)
       localStorage.setItem('last_name', userDetails.last_name)
-      localStorage.setItem('email', userDetails.email)
+      localStorage.setItem('is_phone_verified', userDetails.is_phone_verified)
     },
 
     async loginsRem(credentials) {
@@ -43,7 +45,7 @@ export const useAuthStore = defineStore('auth', {
           const userDetails = {
             first_name: res.data.first_name,
             last_name: res.data.last_name,
-            email: res.data.email,
+            is_phone_verified: res.data.is_phone_verified,
           }
           this.saveUser(res.data.tokens, userDetails)
 
@@ -54,31 +56,43 @@ export const useAuthStore = defineStore('auth', {
           this.router.push({ path: '/pages/home' })
         }
       } catch (e) {
-        let errorMessage = 'An error occurred during login.'
+        const res = e.response
+        if (res && res.status === 307) {
+          const redirectUrl = res.data.redirect_url
 
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.detail) {
-          errorMessage = e.response.data.detail
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
+          Notify.create({
+            type: 'negative',
+            message: res.data.detail || 'Redirection required.',
+          })
+
+          if (redirectUrl) {
+            this.router.push({ path: redirectUrl })
+          }
+        } else {
+          let errorMessage = 'An error occurred during login.'
+          if (e.response && e.response.data && e.response.data.detail) {
+            errorMessage = e.response.data.detail
+          } else if (e.message) {
+            errorMessage = e.message
+          }
+
+          Notify.create({
+            type: 'negative',
+            message: errorMessage,
+          })
         }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
       }
     },
 
     async logins(credentials) {
       try {
         const res = await apiService.login(credentials)
+
         if (res.status === 200) {
-          ;(this.first_name = res.data.first_name),
-            (this.last_name = res.data.last_name),
-            (this.email = res.data.email),
-            (this.isAuthenticated = true)
+          this.first_name = res.data.first_name
+          this.last_name = res.data.last_name
+          this.is_phone_verified = res.data.is_phone_verified
+          this.isAuthenticated = true
           this.setTokens(res.data.tokens)
 
           Notify.create({
@@ -88,20 +102,31 @@ export const useAuthStore = defineStore('auth', {
           this.router.push({ path: '/pages/home' })
         }
       } catch (e) {
-        let errorMessage = 'An error occurred during login.'
+        const res = e.response
+        if (res && res.status === 307) {
+          const redirectUrl = res.data.redirect_url
 
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.detail) {
-          errorMessage = e.response.data.detail
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
+          Notify.create({
+            type: 'negative',
+            message: res.data.detail || 'Redirection required.',
+          })
+
+          if (redirectUrl) {
+            this.router.push({ path: redirectUrl })
+          }
+        } else {
+          let errorMessage = 'An error occurred during login.'
+          if (e.response && e.response.data && e.response.data.detail) {
+            errorMessage = e.response.data.detail
+          } else if (e.message) {
+            errorMessage = e.message
+          }
+
+          Notify.create({
+            type: 'negative',
+            message: errorMessage,
+          })
         }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
       }
     },
 
@@ -151,11 +176,14 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true
       try {
         const response = await apiService.verifyEmail(data)
-        if (response.status === 201) {
+        console.log('hi')
+        if (response.status === 200) {
+          this.setTokens(response.data.tokens)
+
           this.router.push({ path: '/auth/phone-number' })
           Notify.create({
             type: 'positive',
-            message: 'Enter the One Time Password to verify email',
+            message: response.data.message || 'Proceed to enter phone number',
           })
         }
       } catch (e) {
@@ -193,7 +221,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true
       try {
         const response = await apiService.VerifyPhoneNumber(data)
-        if (response.status === 201) {
+        if (response.status === 200) {
           this.router.push({ path: '/auth/phone-number-verify' })
           Notify.create({
             type: 'positive',
@@ -232,19 +260,18 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async PhoneVerifyOTP(data) {
-      this.isLoading = true
       try {
         const res = await apiService.VerifyPhoneNumberOTP(data)
-        if (res.status === 201) {
-          ;(this.first_name = res.data.first_name),
-            (this.last_name = res.data.last_name),
-            (this.email = res.data.email),
-            (this.isAuthenticated = true)
+        if (res.status === 200) {
+          this.first_name = res.data.first_name
+          this.last_name = res.data.last_name
+          this.isAuthenticated = true
           this.setTokens(res.data.tokens)
           this.router.push({ path: '/pages/home' })
+
           Notify.create({
             type: 'positive',
-            message: 'Registration Successful',
+            message: res.data.message || 'Registration Successful',
           })
         }
       } catch (e) {
@@ -266,6 +293,34 @@ export const useAuthStore = defineStore('auth', {
           } else {
             errorMessage = errorData // Fallback if regex doesn't match
           }
+        } else if (e.message) {
+          // Fallback to error message if no specific error message from server
+          errorMessage = e.message
+        }
+
+        Notify.create({
+          type: 'negative',
+          message: errorMessage,
+        })
+      }
+    },
+
+    async OTPResend(data) {
+      this.isLoading = true
+      try {
+        const response = await apiService.generateRegister(data)
+        if (response.status === 200) {
+          Notify.create({
+            type: 'positive',
+            message: 'OTP has been sent',
+          })
+        }
+      } catch (e) {
+        let errorMessage = 'An error occurred during setup.'
+
+        // Check if error response has data and a specific error message
+        if (e.response && e.response.data && e.response.data.error) {
+          errorMessage = e.response.data.error
         } else if (e.message) {
           // Fallback to error message if no specific error message from server
           errorMessage = e.message
@@ -306,6 +361,7 @@ export const useAuthStore = defineStore('auth', {
         })
       }
     },
+
     async ConfirmPassword(data) {
       this.isLoading = true
       try {

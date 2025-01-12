@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import {useAuthStore} from'src/stores/auth.js'
 import QOtp from 'src/components/QOtp.vue'
 const otpVal = ref(null)
@@ -44,9 +44,7 @@ let intervalId = null
 
 const EmailOTPAuth = useAuthStore()
 
-const email_address = reactive({
-  email_address: computed(()=> EmailOTPAuth.email)})
-
+const email_address = localStorage.getItem('email_address')
 const startCountdown = () => {
   timer.value = 30
   isDisabled.value = true
@@ -64,14 +62,14 @@ const startCountdown = () => {
 const handleResend = async () => {
   const formData = new FormData();
   formData.append("email", email_address);
-  await EmailOTPAuth.EmailOTPResend(formData)
+  await EmailOTPAuth.OTPResend(formData);
   startCountdown()
 }
 
 const onSubmit = async () => {
     const formData = new FormData();
     formData.append("email", email_address);
-    formData.append("otp", otpVal);
+    formData.append("otp", otpVal.value);
     await EmailOTPAuth.EmailOTP(formData)
 }
 

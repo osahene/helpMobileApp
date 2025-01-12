@@ -112,6 +112,14 @@ const user = reactive({
 const isPwd = ref(true)
 const wrongPass = ref(false);
 
+const rules = {
+  user: {
+    first_name: { required },
+    last_name: { required },
+    email_address: { required, email },
+    password: { required },
+  },
+};
 const $v = useVuelidate(rules, { user });
 const validPassword = () => {
   const pwd = user.password;
@@ -123,14 +131,6 @@ const validPassword = () => {
   );
 };
 
-const rules = {
-  user: {
-    first_name: { required },
-    last_name: { required },
-    email_address: { required, email },
-    password: { required },
-  },
-};
 
 const onSubmit = async () => {
   $v.value.$touch();
@@ -143,8 +143,9 @@ const onSubmit = async () => {
     });
     return;
   }
-
+  localStorage.clear()
   if (validPassword()) {
+    localStorage.setItem("email_address",user.email_address.toLowerCase())
     const formData = new FormData();
     formData.append("first_name", user.first_name);
     formData.append("last_name", user.last_name);

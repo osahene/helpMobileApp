@@ -33,14 +33,21 @@
 import { ref } from 'vue'
 import {useAuthStore} from'src/stores/auth.js'
 import useVuelidate from "@vuelidate/core";
-import { required, numeric } from "@vuelidate/validators";
+import { required, helpers } from "@vuelidate/validators";
 import { useQuasar } from "quasar";
 
 const PhoneAuth = useAuthStore()
 const $q = useQuasar()
+const phoneRegex = /^[+][0-9]{1,15}$/; 
 const phone_number = ref('')
 const rules = {
-    phone_number: { required, numeric },  
+     phone_number: {
+    required,
+    validFormat: helpers.withMessage(
+      "Enter a valid phone number",
+      (value) => phoneRegex.test(value)
+    ),
+  },  
 };
 const $v = useVuelidate(rules, { phone_number });
 const onSubmit = async () => {
@@ -54,15 +61,9 @@ const onSubmit = async () => {
     });
     return;
   }
-  try {
-    await PhoneAuth.VerifyPhone(phone_number)
-  } catch (error) {
-    $q.notify({
-        color: "red-5",
-        textColor: "white",
-        icon: "warning",
-        message: error ||"Error submitting form" ,
-      });
-  }
+  const formData = new FormData();
+  formData.append("phone_number",phone_number.value);
+  await PhoneAuth.VerifyPhone(formData)
+
 }
 </script>

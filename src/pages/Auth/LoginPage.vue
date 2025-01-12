@@ -103,10 +103,6 @@ import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { useQuasar } from "quasar";
 
-const $q = useQuasar();
-const $v = useVuelidate(rules, { user });
-const AuthStore = useAuthStore()
-const user = reactive({ email: computed(() => AuthStore.email_address), password: "" });
 
 const rules = {
   user: {
@@ -114,6 +110,12 @@ const rules = {
     password: { required },
   },
 };
+const user = reactive({ email: computed(() => AuthStore.email_address), password: "" });
+
+const $q = useQuasar();
+const $v = useVuelidate(rules, { user });
+const AuthStore = useAuthStore()
+
 
 const rem = ref(false)
 const isPwd = ref(true)
@@ -126,19 +128,11 @@ const onSubmit = async () => {
     });
     return;
   }
-
   const formData = new FormData();
   formData.append("email", user.email_address.toLowerCase());
   formData.append("password", user.password);
- 
-  if (!AuthStore.isLoading && rem) {
-    await AuthStore.loginsRem(formData);
-  }
-
-  if (!AuthStore.isLoading) {
-    await AuthStore.logins(formData);
-  }
+  localStorage.setItem('email_address', user.email_address.toLowerCase())
+  await AuthStore.logins(formData);
+  
 };
-
-
 </script>
