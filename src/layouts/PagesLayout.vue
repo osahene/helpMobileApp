@@ -9,7 +9,7 @@
               <q-route-tab to="/pages/home" name="home" icon="home" class="q-pa-sm" />
               <q-route-tab to="/pages/edit" name="edit" icon="edit" />
               <q-route-tab to="/pages/list" name="lists" icon="list">
-                <q-badge color="purple" text-color="white" floating>5+</q-badge>
+                <q-badge v-if="countLeng > 0" color="purple" text-color="white" floating>{{ countLeng }}</q-badge>
               </q-route-tab>
               <q-route-tab to="/pages/more" name="more" icon="more" />
             </q-tabs>
@@ -21,9 +21,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
+import { ref, computed } from 'vue'
+import { useOperations } from 'src/stores/ops';
 const tab = ref('home')
+const ops = useOperations()
+
+const countDeps = computed(() => ops.myDependants.status === 'pending' || [])
+
+const countLeng = () => {
+  return countDeps.value.length
+}
 </script>
 
-<style></style>

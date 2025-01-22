@@ -90,6 +90,7 @@
     :phone_number="cardInfo.phone_number" 
     :relation="cardInfo.relation" 
     :buttons="buttonAction"
+    @update-field="editCardInfo"
     />
     <MoreActions
     v-if="cardInfo"
@@ -207,19 +208,18 @@ const buttonAction = computed(() => {
   ]
 })
 
-const editCardInfo = async () => {
-  const editForm = new FormData
-  editForm.append('first_name', cardInfo.value.first_name)
-  editForm.append('last_name', cardInfo.value.last_name)
-  editForm.append('email_address', cardInfo.value.email_address)
-  editForm.append('phone_number', cardInfo.value.phone_number)
-  editForm.append('relation', cardInfo.value.relation)
-  await ops.contactUpdate(editForm)
+const editCardInfo = async (updatedData) => {
+  if (cardInfo.value) {
+    Object.assign(cardInfo.value, updatedData)
+    await ops.contactUpdate(cardInfo.value)
+    openEdit.value = false
+  }
 }
 const deleteCardInfo = async () => {
   const deleteForm = new FormData
-  deleteForm.append('id', cardInfo.value.id)
+  deleteForm.append('pk', cardInfo.value.pk)
   await ops.contactDelete(deleteForm)
+  mainAction.value = false
 }
 const approveCardInfo = async () => {
   const approveForm = new FormData
@@ -255,8 +255,6 @@ const rejectRow = (row) => {
   cardInfo.value = row
   console.log('reject row', row)
 }
-
-
 </script>
 <style lang="sass">
 .my-sticky-header-column-table
