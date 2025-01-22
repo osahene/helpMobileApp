@@ -41,13 +41,14 @@ export const useAuthStore = defineStore('auth', {
     async loginsRem(credentials) {
       try {
         const res = await apiService.login(credentials)
+        console.log('res log rem', res)
         if (res.status === 200) {
           const userDetails = {
             first_name: res.data.first_name,
             last_name: res.data.last_name,
             is_phone_verified: res.data.is_phone_verified,
           }
-          this.saveUser(res.data.tokens, userDetails)
+          this.saveUser(res.data.tokens.tokens, userDetails)
 
           Notify.create({
             type: 'positive',
@@ -87,13 +88,13 @@ export const useAuthStore = defineStore('auth', {
     async logins(credentials) {
       try {
         const res = await apiService.login(credentials)
-
+        console.log('res log', res)
         if (res.status === 200) {
           this.first_name = res.data.first_name
           this.last_name = res.data.last_name
           this.is_phone_verified = res.data.is_phone_verified
           this.isAuthenticated = true
-          this.setTokens(res.data.tokens)
+          this.setTokens(res.data.tokens.tokens)
 
           Notify.create({
             type: 'positive',

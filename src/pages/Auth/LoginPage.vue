@@ -133,8 +133,12 @@ const onSubmit = async () => {
   const formData = new FormData();
   formData.append("email", user.email_address.toLowerCase());
   formData.append("password", user.password);
-  localStorage.setItem('email_address', user.email_address.toLowerCase())
-  await AuthStore.logins(formData);
+  localStorage.setItem('email_address', user.email_address.toLowerCase());
+  if (rem.value) {
+    await AuthStore.loginsRem(formData);
+  } else {
+    await AuthStore.logins(formData);
+    };
   
 };
 </script>

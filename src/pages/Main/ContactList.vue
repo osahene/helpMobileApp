@@ -81,13 +81,43 @@
         </div>
       </div>
     </div>
+    <EditInfo 
+    v-if="cardInfo" 
+    v-model="openEdit" 
+    :first_name="cardInfo.first_name" 
+    :last_name="cardInfo.last_name" 
+    :email_address="cardInfo.email_address" 
+    :phone_number="cardInfo.phone_number" 
+    :relation="cardInfo.relation" 
+    :buttons="buttonAction"
+    />
+    <MoreActions
+    v-if="cardInfo"
+    v-model="mainAction"
+    :action-icon="actionIcons"
+    :action-type="toDoTask"
+    :message="actionMessage"
+    :buttons="actionButtons"
+    />
   </div>
 </template>
 <script setup>
-import { computed, onMounted } from 'vue'
-import { useOperations } from 'src/stores/ops'
-
+import { computed, onMounted, ref } from 'vue'
+import { useOperations } from 'src/stores/ops';
+import EditInfo from 'src/components/EditInfo.vue'
+import MoreActions from 'src/components/moreActions.vue';
+import { farPenToSquare, fasXmark, fasCircleCheck, farTrashCan, farCircleXmark } from '@quasar/extras/fontawesome-v6';
+const cancel = fasXmark
+const edit = farPenToSquare
+const approve = fasCircleCheck
+const del = farTrashCan
+const rej = farCircleXmark
 const ops = useOperations()
+const toDoTask = ref('')
+const openEdit = ref(false)
+const mainAction =  ref(false)
+const cardInfo = ref(null)
+
 
 onMounted(async () => {
   await ops.getMyContacts()
@@ -113,19 +143,119 @@ const columns = [
 const contactsRows = computed(() => ops.myContacts || []);
 const dependantsRows = computed(() => ops.myDependants || []);
 
+const actionMessage = computed(() => {
+ if (!cardInfo.value) {
+    return { text: 'No action selected' };
+  }
+  const name = `${cardInfo.value.first_name} ${cardInfo.value.last_name}`;
+  switch (toDoTask.value) {
+    case 'delete':
+      return { text: `Do you want to delete ${name} from your emergency list?`, highlight: name };
+    case 'approve':
+      return { text: `Do you want to approve ${name} as your dependant?`, highlight: name };
+    case 'reject':
+      return { text: `Do you want to reject ${name} as your dependant?`, highlight: name };
+    default:
+      return { text: 'No action selected' };
+  }
+})
+
+
+const actionButtons = computed(() => {
+   switch (toDoTask.value) {
+    case 'delete':
+      return [
+        { label: 'Delete', icon: del, color: 'deep-orange', action: deleteCardInfo },
+        { label: 'Cancel', icon: cancel, action: onClose },
+      ]
+    case 'approve':
+      return [
+        { label: 'Approve', icon: approve, color: 'secondary', action: approveCardInfo },
+        { label: 'Cancel', icon: cancel, action: onClose },
+      ]
+    case 'reject':
+      return [
+        { label: 'Reject', icon: rej, color: 'deep-orange', action: rejectCardInfo },
+        { label: 'Cancel', icon: cancel, action: onClose },
+      ]
+    default:
+      return []
+  }
+})
+
+const actionIcons = computed(() => {
+ switch (toDoTask.value) {
+    case 'delete':
+      return [{ name: del, color: 'deep-orange' }]
+    case 'approve':
+      return [{ name: approve, color: 'secondary' }]
+    case 'reject':
+      return [{ name: rej, color: 'deep-orange' }]
+    default:
+      return []
+  }
+})
+
+const onClose = () => {
+  openEdit.value = false
+  mainAction.value = false
+}
+
+const buttonAction = computed(() => {
+  return [
+    { label: 'Edit Info', icon: edit, action: editCardInfo }, { label: 'Cancel', icon: cancel, action: onClose }
+  ]
+})
+
+const editCardInfo = async () => {
+  const editForm = new FormData
+  editForm.append('first_name', cardInfo.value.first_name)
+  editForm.append('last_name', cardInfo.value.last_name)
+  editForm.append('email_address', cardInfo.value.email_address)
+  editForm.append('phone_number', cardInfo.value.phone_number)
+  editForm.append('relation', cardInfo.value.relation)
+  await ops.contactUpdate(editForm)
+}
+const deleteCardInfo = async () => {
+  const deleteForm = new FormData
+  deleteForm.append('id', cardInfo.value.id)
+  await ops.contactDelete(deleteForm)
+}
+const approveCardInfo = async () => {
+  const approveForm = new FormData
+  approveForm.append('id', cardInfo.value.id)
+  await ops.dependantApproval(approveForm)
+}
+const rejectCardInfo = async () => {
+  const rejectForm = new FormData
+  rejectForm.append('id', cardInfo.value.id)
+  await ops.dependantReject(rejectForm)
+}
+
 const editRow = (row) => {
-  console.log('Edit row', row)
+  openEdit.value = true
+  cardInfo.value = row
 }
+
 const deleteRow = (row) => {
-  console.log('delete row', row)
+  toDoTask.value = 'delete'
+  mainAction.value = true
+  cardInfo.value = row
 }
-// import { ref } from 'vue'
+
 const acceptRow = (row) => {
+  toDoTask.value = 'approve'
+  mainAction.value = true
+  cardInfo.value = row
   console.log('accept row', row)
 }
 const rejectRow = (row) => {
+  toDoTask.value= 'reject'
+  mainAction.value = true
+  cardInfo.value = row
   console.log('reject row', row)
 }
+
 
 </script>
 <style lang="sass">
