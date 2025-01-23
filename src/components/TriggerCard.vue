@@ -3,19 +3,19 @@
     <q-dialog v-model="localDialogOpen" persistent>
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
-          <q-card-section class="q-pt-xs">
-            <div><q-icon :name="fasExclamation" /> <span>Heads Up</span></div>
-            <div class="text-h5 q-mt-sm q-mb-xs">
+          <q-card-section class="q-pt-xs text-center">
+            <div class="mt-5 text-xl font-bold text-red-400"><span>Heads Up</span><q-icon :name="fasExclamation" /> </div>
+            <div class="text-h5 font-bold q-mt-sm q-mb-xs">
               <span>{{ cardName1 }}</span
               ><span>{{ cardName2 }}</span>
             </div>
-            <div class="text-caption text-grey">
+            <div class="text-lg pt-5 text-black">
               {{ message }}
             </div>
           </q-card-section>
 
           <q-card-section class="col-5 flex flex-center">
-            <q-img class="rounded-borders" :src="cardImage" />
+            <q-img class="rounded-borders h-32 w-32" :src="cardImage" />
           </q-card-section>
         </q-card-section>
 
@@ -69,8 +69,4 @@ watch(
     localDialogOpen.value = newValue
   },
 )
-// const closeDialog = () => {
-//   localDialogOpen.value = false
-//   emit('update:modelValue', false)
-// }
 </script>

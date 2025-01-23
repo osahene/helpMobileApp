@@ -25,7 +25,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import TriggerCard from 'src/components/TriggerCard.vue'
+import { useOperations } from 'src/stores/ops'
 import HomeCard from 'src/components/HomeCard.vue'
+
 import healthImg from '../../assets/img/health.svg'
 import handcuffsImg from '../../assets/img/handcuffs.svg'
 import fireImg from '../../assets/img/fire.svg'
@@ -34,57 +36,59 @@ import callImg from '../../assets/img/callss.svg'
 import nonviolenceImg from '../../assets/img/nonviolence.svg'
 import userssolid from '../../assets/img/userssolid.svg'
 import usersolid from '../../assets/img/usersolid.svg'
-import { useOperations } from 'src/stores/ops'
 
 const TriggerAlert = useOperations()
 
 const dialogOpen = ref(false)
 const selectedCard = ref(null)
-const isAuthenticated = ref(true)
 const notRegisteredImg = usersolid
 const noContactsImg = userssolid
-const contacts = ref([])
-const notAuthMessage = 'This service is only available to authenticated users.'
 const Message = 'All approved contacts on your emergency list would receive this message.'
-const noContactsMessage =
-  'You do not have any contacts in your emergency list. To use this service, you ought to register at least one person to your emergency list, and they must approve of it before they can receive alerts from you.'
+const noContactsMessage = 'You do not have any contacts in your emergency list. To use this service, register at least one person, and they must approve your request before receiving alerts.'
+const noApprovedMessage = 'None of your contacts have approved your request. Alert them to approve your request.'
+
+const contacts = computed(() => TriggerAlert.myContacts || [])
+const approveCont = computed(() => 
+  contacts.value.filter((contact) => contact.status === 'approve').length
+)
 
 const CardName1 = computed(() => {
-  if (!isAuthenticated.value) return 'Not'
-  if (contacts.value.length < 1) return 'No'
+  if (contacts.value.length === 0) return 'No'
+  if (approveCont.value === 0) return 'No'
   return selectedCard.value?.cardTitle || ''
 })
 
 const CardName2 = computed(() => {
-  if (!isAuthenticated.value) return 'Registered'
-  if (contacts.value.length < 1) return 'Approved Contacts'
+   if (contacts.value.length === 0) return ' Contacts'
+  if (approveCont.value === 0) return ' Approved Contacts'
   return selectedCard.value?.cardTitle2 || ''
 })
 
 const CardImage = computed(() => {
-  if (!isAuthenticated.value) return notRegisteredImg
-  if (contacts.value.length < 1) return noContactsImg
+  if (contacts.value.length === 0) return notRegisteredImg
+  if(approveCont.value === 0) return noContactsImg
   return selectedCard.value?.cardImg || ''
 })
 
 const triggerMessage = computed(() => {
-  if (!isAuthenticated.value) return notAuthMessage
-  if (contacts.value.length < 1) return noContactsMessage
+  if (contacts.value.length === 0) return noContactsMessage
+  if(approveCont.value === 0)return noApprovedMessage
   return Message
 })
 
 const triggerButtons = computed(() => {
-  if (!isAuthenticated.value)
-    return [
-      { label: 'Register', route: '/auth/register' },
-      { label: 'Login', route: '/auth/login' },
-    ]
-  if (contacts.value.length < 1)
+  
+  if (contacts.value.length === 0)
     return [
       { label: 'Register Contacts', route: '/pages/edit' },
       { label: 'Cancel', action: onClose },
     ]
-  return [{ label: 'Trigger Alert', action: TriggerAction }, { label: 'Cancel' }]
+  if (approveCont.value === 0)
+    return [
+      { label: 'Contact List', route: '/pages/list' },
+      { label: 'Cancel', action: onClose },
+    ]
+  return [{ label: 'Trigger Alert', action: TriggerAction }, { label: 'Cancel', action: onClose }]
 })
 
 const openTrigger = (item) => {
@@ -136,7 +140,7 @@ const onClose = () => {
 
 const TriggerAction = async () => {
   // Check for the authenticated and contact conditions
-  if (!isAuthenticated.value && contacts && contacts.value?.length > 0) {
+  if (contacts.value.length > 0 && approveCont.value > 0) {
     try {
       const geolocation = await getGeolocation()
       await TriggerAlert.alertTrigger( {
