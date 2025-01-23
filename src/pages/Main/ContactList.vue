@@ -72,7 +72,7 @@
                     min-width: 150px;
                   "
                 >
-                  <div class="w-auto font-bold">{{ props.row.name }}</div>
+                  <div class="w-auto font-bold"><span>{{ props.row.first_name }}</span> <span>{{ props.row.last_name }}</span></div>
                   <div class="w-auto">{{ props.row.email }}</div>
                 </div>
               </template>
@@ -103,7 +103,7 @@
   </div>
 </template>
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useOperations } from 'src/stores/ops';
 import EditInfo from 'src/components/EditInfo.vue'
 import MoreActions from 'src/components/moreActions.vue';
@@ -120,10 +120,6 @@ const mainAction =  ref(false)
 const cardInfo = ref(null)
 
 
-onMounted(async () => {
-  await ops.getMyContacts()
-  await ops.getMyDependant()
-})
 
 const columns = [
   {
@@ -160,7 +156,6 @@ const actionMessage = computed(() => {
       return { text: 'No action selected' };
   }
 })
-
 
 const actionButtons = computed(() => {
    switch (toDoTask.value) {
@@ -223,13 +218,15 @@ const deleteCardInfo = async () => {
 }
 const approveCardInfo = async () => {
   const approveForm = new FormData
-  approveForm.append('id', cardInfo.value.id)
+  approveForm.append('id', cardInfo.value.pk)
   await ops.dependantApproval(approveForm)
+  mainAction.value = false
 }
 const rejectCardInfo = async () => {
   const rejectForm = new FormData
-  rejectForm.append('id', cardInfo.value.id)
+  rejectForm.append('id', cardInfo.value.pk)
   await ops.dependantReject(rejectForm)
+  mainAction.value = false
 }
 
 const editRow = (row) => {
@@ -247,13 +244,12 @@ const acceptRow = (row) => {
   toDoTask.value = 'approve'
   mainAction.value = true
   cardInfo.value = row
-  console.log('accept row', row)
 }
+
 const rejectRow = (row) => {
   toDoTask.value= 'reject'
   mainAction.value = true
   cardInfo.value = row
-  console.log('reject row', row)
 }
 </script>
 <style lang="sass">

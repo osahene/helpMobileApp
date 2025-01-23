@@ -9,7 +9,7 @@
               <q-route-tab to="/pages/home" name="home" icon="home" class="q-pa-sm" />
               <q-route-tab to="/pages/edit" name="edit" icon="edit" />
               <q-route-tab to="/pages/list" name="lists" icon="list">
-                <q-badge v-if="countLeng > 0" color="purple" text-color="white" floating>{{ countLeng }}</q-badge>
+                <q-badge v-if="pendingCount > 0" color="purple" text-color="white" floating>{{ pendingCount }}</q-badge>
               </q-route-tab>
               <q-route-tab to="/pages/more" name="more" icon="more" />
             </q-tabs>
@@ -21,15 +21,21 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useOperations } from 'src/stores/ops';
 const tab = ref('home')
 const ops = useOperations()
 
-const countDeps = computed(() => ops.myDependants.status === 'pending' || [])
+onMounted(async () => {
+  await ops.getMyContacts()
+  await ops.getMyDependant()
+})
 
-const countLeng = () => {
-  return countDeps.value.length
-}
+
+const countDeps = computed(() => ops.myDependants || [])
+
+const pendingCount = computed(() => {
+  return countDeps.value.filter(dep => dep.status === 'pending').length
+})
 </script>
 

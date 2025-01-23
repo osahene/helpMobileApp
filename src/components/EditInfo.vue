@@ -7,7 +7,7 @@
           </h5>
         <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-xs text-weight-light">First Name</h6>
-        <q-input class="custom-input" v-model="FirstName" placeholder="Ama" filled type="text">
+        <q-input class="custom-input" v-model="FirstName" placeholder="Ama" filled type="text" required>
           
           <template v-slot:before>
             <q-icon name="fa-regular fa-user" />
@@ -52,6 +52,8 @@
             flat
             :icon="button.icon"
             :label="button.label"
+            :disable="button.label === 'Edit Info' && !isFormValid"
+            :style="{backgroundColor: !isFormValid && button.label === 'Edit Info'  ? '#d3d3d3' : '#b7d1ed' }"
           />
         </q-card-actions>
       </q-card>
@@ -60,7 +62,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 const props = defineProps({
   modelValue: Boolean,
@@ -80,14 +82,27 @@ const Relation = ref(props.relation);
 
 const emit = defineEmits(['update:modelValue', 'updateField', 'close'])
 
+const isFormValid = computed(() => {
+  return (
+    FirstName.value.trim() !== '' &&
+    LastName.value.trim() !== '' &&
+    EmailAddress.value.trim() !== '' &&
+    PhoneNumber.value.trim() !== '' &&
+    Relation.value.trim() !== '' 
+  );
+})
+
 const handleButton = (button) => {
-  emit('updateField', {
-      first_name: FirstName.value,
-      last_name: LastName.value,
-      email_address: EmailAddress.value,
-      phone_number: PhoneNumber.value,
-      relation: Relation.value,
-    });
+  if (button.label === 'Edit Info') {
+    
+    emit('updateField', {
+        first_name: FirstName.value,
+        last_name: LastName.value,
+        email_address: EmailAddress.value,
+        phone_number: PhoneNumber.value,
+        relation: Relation.value,
+      });
+  }
   button.action()
 }
 
