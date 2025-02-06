@@ -1,6 +1,7 @@
 import { $axios } from 'src/boot/axios'
 
 const apiService = {
+  googleLogin: (credentials) => $axios.post('/social/google/', credentials),
   register: (data) => $axios.post('/account/user-register/', data),
   verifyEmail: (data) => $axios.post('/account/verify-email/', data),
   VerifyPhoneNumber: (data) => $axios.post('/account/verify-phone-number/', data),

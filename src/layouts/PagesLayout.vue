@@ -31,7 +31,6 @@ onMounted(async () => {
   await ops.getMyDependant()
 })
 
-
 const countDeps = computed(() => ops.myDependants || [])
 
 const pendingCount = computed(() => {

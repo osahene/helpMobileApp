@@ -11,6 +11,8 @@
           style="color: teal"
           icon="fa-brands fa-google"
           label="Google"
+          :disabled="!isReady"
+          @click.prevent="() => login()"
         />
 
         <q-separator vertical />
@@ -99,6 +101,7 @@ import {useAuthStore} from'src/stores/auth.js'
 import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { useQuasar } from "quasar";
+import { useTokenClient } from "vue3-google-signin";
 
 const $q = useQuasar()
 const RegAuth = useAuthStore()
@@ -156,4 +159,22 @@ const onSubmit = async () => {
     wrongPass.value = true;
   }
 };
+
+const handleOnSuccess = async (response) => {
+  await RegAuth.sendCodeToBackend(response);
+};
+
+const handleOnError = (errorResponse) => {
+  $q.notify({
+    color: "red-5",
+    textColor: "white",
+    icon: "warning",
+    message: errorResponse.message || "Login not successful",
+  });
+};
+const { isReady, login } = useTokenClient({
+  onSuccess: handleOnSuccess,
+  onError: handleOnError,
+});
+
 </script>

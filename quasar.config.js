@@ -12,7 +12,7 @@ export default defineConfig((ctx) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['i18n', 'axios'],
+    boot: ['i18n', 'axios', 'guards', 'googleCred'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: ['app.css', 'tailwind.min.css'],
@@ -49,6 +49,8 @@ export default defineConfig((ctx) => {
       // analyze: true,
       env: {
         VITE_baseURL: process.env.VITE_baseURL,
+        VITE_clientId: process.env.VITE_clientId,
+        VITE_twitter_client_id: process.env.VITE_twitter_client_id,
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

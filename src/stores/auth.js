@@ -38,6 +38,45 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('is_phone_verified', userDetails.is_phone_verified)
     },
 
+    async sendCodeToBackend(response) {
+      try {
+        const res = await apiService.googleLogin({
+          access_token: response.access_token,
+        })
+        if (res.status === 200) {
+          const userDetails = {
+            first_name: res.data.first_name,
+            last_name: res.data.last_name,
+            email: res.data.email,
+            phone_number: res.data.phone_number,
+          }
+          this.saveUser(res.data.tokens.access, userDetails)
+          this.refreshToken = res.data.tokens.refresh
+          localStorage.setItem('refreshToken', this.refreshToken)
+          Notify.create({
+            type: 'positive',
+            message: 'Login successful',
+          })
+          this.router.push({ path: '/' })
+        }
+      } catch (e) {
+        let errorMessage = 'An error occurred during login.'
+
+        // Check if error response has data and a specific error message
+        if (e.response && e.response.data && e.response.data.detail) {
+          errorMessage = e.response.data.detail
+        } else if (e.message) {
+          // Fallback to error message if no specific error message from server
+          errorMessage = e.message
+        }
+
+        Notify.create({
+          type: 'negative',
+          message: errorMessage,
+        })
+      }
+    },
+
     async loginsRem(credentials) {
       try {
         const res = await apiService.login(credentials)
