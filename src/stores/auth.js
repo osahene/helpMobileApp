@@ -40,6 +40,7 @@ export const useAuthStore = defineStore('auth', {
 
     async sendCodeToBackend(response) {
       try {
+        console.log('send_res', response)
         const res = await apiService.googleLogin({
           access_token: response.access_token,
         })
@@ -60,20 +61,30 @@ export const useAuthStore = defineStore('auth', {
           this.router.push({ path: '/' })
         }
       } catch (e) {
-        let errorMessage = 'An error occurred during login.'
+        const res = e.response
+        if (res && res.status === 307) {
+          console.log('err res', res)
+          const redirectUrl = res.data.redirect_url
+          this.setTokens(res.data.data)
+          this.router.push({ path: redirectUrl })
 
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.detail) {
-          errorMessage = e.response.data.detail
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
+          Notify.create({
+            type: 'negative',
+            message: res.data.message || 'Redirection required.',
+          })
+        } else {
+          let errorMessage = 'An error occurred during login.'
+          if (e.response && e.response.data && e.response.data.detail) {
+            errorMessage = e.response.data.detail
+          } else if (e.message) {
+            errorMessage = e.message
+          }
+
+          Notify.create({
+            type: 'negative',
+            message: errorMessage,
+          })
         }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
       }
     },
 

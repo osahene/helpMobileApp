@@ -11,14 +11,20 @@ export default boot(({ store, router }) => {
   router.beforeEach((to, from, next) => {
     const isAuthenticated = auth.accessToken
     const isPublic = to.matched.some((record) => record.meta.public)
+    const isPhoneVerified = auth.is_phone_verified === 'true'
+    const isPhoneVerificationPage = to.path === '/auth/phone-number'
 
     // If not authenticated and trying to access a private route, redirect to Login
     if (!isAuthenticated && !isPublic) {
       return next({ path: '/auth/login' })
     }
 
+    if (isAuthenticated && !isPhoneVerified && !isPhoneVerificationPage) {
+      return next({ path: '/auth/phone-number' })
+    }
+
     // If authenticated and trying to access a public page, redirect to Dashboard
-    if (isAuthenticated && isPublic && to.name !== 'home') {
+    if (isAuthenticated && isPhoneVerified && isPhoneVerificationPage) {
       return next({ name: 'home' })
     }
 
