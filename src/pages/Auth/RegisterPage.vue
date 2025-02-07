@@ -15,14 +15,15 @@
           @click.prevent="() => login()"
         />
 
-        <q-separator vertical />
+        <!-- <q-separator vertical />
         <q-btn
           outline
           class="text-subtitle1 q-ma-none shadow-2 text-weight-light"
           style="color: blue"
           icon="fa-brands fa-facebook"
           label="Facebook"
-        />
+          @click.prevent="loginWithFacebook"
+        /> -->
       </q-card-section>
       <q-separator class="q-ma-md" inset />
       <q-card-section class="q-pa-sm text-center">
@@ -96,12 +97,17 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import {
+  ref, reactive,
+  // onMounted
+} from 'vue'
 import {useAuthStore} from'src/stores/auth.js'
 import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { useQuasar } from "quasar";
 import { useTokenClient } from "vue3-google-signin";
+// import hello from "hellojs"
+
 
 const $q = useQuasar()
 const RegAuth = useAuthStore()
@@ -176,5 +182,50 @@ const { isReady, login } = useTokenClient({
   onSuccess: handleOnSuccess,
   onError: handleOnError,
 });
+
+// onMounted(() => {
+//   hello.init({
+//     facebook:"1381114733266178"
+//   }, {
+//     scope: 'email',
+//     redirect_uri: 'http://localhost:9000'
+//   })
+// })
+
+// const loginWithFacebook = () => {
+//   hello("facebook")
+//     .login()
+//     .then(() => {
+//       return hello("facebook").api("me?fields=id,name,email");
+//     })
+//     .then((profile) => {
+//       console.log("Facebook Profile:", profile);
+
+//       // Send the Facebook profile data to the backend
+//       RegAuth.socialLogin({
+//         provider: "facebook",
+//         email: profile.email,
+//         name: profile.name,
+//         id: profile.id,
+//       });
+
+//       $q.notify({
+//         color: "green-5",
+//         textColor: "white",
+//         icon: "check_circle",
+//         message: "Facebook Login Successful",
+//       });
+//     })
+//     .catch((err) => {
+//       console.error("Facebook Login Error:", err);
+//       $q.notify({
+//         color: "red-5",
+//         textColor: "white",
+//         icon: "warning",
+//         message: "Facebook Login Failed",
+//       });
+//     });
+// };
+
 
 </script>

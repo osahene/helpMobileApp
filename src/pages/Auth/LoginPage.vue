@@ -11,16 +11,18 @@
           style="color: teal"
           icon="fa-brands fa-google"
           label="Google"
+          :disabled="!isReady"
+          @click.prevent="() => login()"
         />
 
-        <q-separator vertical />
+        <!-- <q-separator vertical />
         <q-btn
           outline
           class="text-subtitle1 q-ma-none shadow-2 text-weight-light"
           style="color: blue"
           icon="fa-brands fa-facebook"
           label="Facebook"
-        />
+        /> -->
       </q-card-section>
       <q-separator class="q-ma-md" inset />
       <q-card-section class="q-pa-sm text-center">
@@ -104,7 +106,7 @@ import {useAuthStore} from'src/stores/auth.js'
 import useVuelidate from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { useQuasar } from "quasar";
-
+import { useTokenClient } from "vue3-google-signin";
 
 const rules = {
   user: {
@@ -141,4 +143,21 @@ const onSubmit = async () => {
     };
   
 };
+const handleOnSuccess = async (response) => {
+  await AuthStore.socialLogin(response);
+};
+
+const handleOnError = (errorResponse) => {
+  $q.notify({
+    color: "red-5",
+    textColor: "white",
+    icon: "warning",
+    message: errorResponse.message || "Login not successful",
+  });
+};
+const { isReady, login } = useTokenClient({
+  onSuccess: handleOnSuccess,
+  onError: handleOnError,
+});
+
 </script>
