@@ -161,7 +161,7 @@ const onSubmit = async () => {
 };
 
 const handleOnSuccess = async (response) => {
-  await RegAuth.sendCodeToBackend(response);
+  await RegAuth.socialLogin(response);
 };
 
 const handleOnError = (errorResponse) => {

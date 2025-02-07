@@ -20,7 +20,7 @@
       class="q-px-lg transparent q-py-sm flex justify-between items-center w-full bottom-0 footer-animate"
     >
       <div>
-        <q-btn push color="primary" size="md" label="Skip" />
+        <q-btn push color="primary" @click.prevent="SkipOnboard" size="md" label="Skip" />
       </div>
       <div>
         <div class="indicators row justify-center">
@@ -34,7 +34,7 @@
       <div>
         <q-btn
           :label="currentStep === onBoardSteps.length - 1 ? 'Get Started' : ''"
-          @click="nextStep"
+          @click.prevent="nextStep"
           rounded
           class="flex items-center text-weight-light"
           color="primary"
@@ -83,15 +83,30 @@ const onBoardSteps = [
 
 const currentStep = ref(0)
 
+const completeOnboaard = () => {
+    const countView = parseInt(localStorage.getItem('onBoardCount') || '0', 10)
+
+  if (countView < 2) {
+    localStorage.setItem('onBoardCount', countView + 1)
+    router.push({path : '/auth/login'})
+  } else {
+    router.push({path : '/auth/login'})
+    }
+}
 // Navigation logic
 const nextStep = () => {
   if (currentStep.value < onBoardSteps.length - 1) {
     currentStep.value++
   } else {
-    router.push({ path: '/auth/register' })
+    // router.push({ path: '/auth/login' })
+    completeOnboaard()
   }
 }
 
+const SkipOnboard = () => {
+  completeOnboaard()
+  // router.push({ path: '/auth/login' })
+}
 // Swipe functionality
 const swipeArea = ref(null)
 useSwipe(swipeArea, {

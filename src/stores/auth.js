@@ -38,7 +38,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('is_phone_verified', userDetails.is_phone_verified)
     },
 
-    async sendCodeToBackend(response) {
+    async socialLogin(response) {
       try {
         console.log('send_res', response)
         const res = await apiService.googleLogin({
@@ -230,7 +230,7 @@ export const useAuthStore = defineStore('auth', {
         console.log('hi')
         if (response.status === 200) {
           this.setTokens(response.data.tokens)
-
+          localStorage.setItem('is_phone_verified', 'false')
           this.router.push({ path: '/auth/phone-number' })
           Notify.create({
             type: 'positive',

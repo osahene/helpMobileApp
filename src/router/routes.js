@@ -3,7 +3,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     meta: { public: true },
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [{ path: '', name: 'onboard', component: () => import('pages/IndexPage.vue') }],
   },
   {
     path: '/pages',
@@ -27,36 +27,43 @@ const routes = [
     children: [
       {
         path: '/auth/register',
+        name: 'register',
         component: () => import('pages/Auth/RegisterPage.vue'),
         meta: { public: true },
       },
       {
         path: '/auth/email-verify',
+        name: 'email-verify',
         component: () => import('pages/Auth/EmailVerify.vue'),
         meta: { public: true },
       },
       {
         path: '/auth/phone-number',
+        name: 'phone-number',
         component: () => import('pages/Auth/PhoneNumber.vue'),
         meta: { public: true },
       },
       {
         path: '/auth/phone-number-verify',
+        name: 'phone-number-verify',
         component: () => import('pages/Auth/PhoneNumberVerify.vue'),
         meta: { public: true },
       },
       {
         path: '/auth/forgotten-password',
+        name: 'forgotten-password',
         component: () => import('pages/Auth/ForgottenPassword.vue'),
         meta: { public: true },
       },
       {
         path: '/auth/confirm-password',
+        name: 'confirm-password',
         component: () => import('pages/Auth/ConfirmPassword.vue'),
         meta: { public: true },
       },
       {
         path: '/auth/login',
+        name: 'login',
         component: () => import('pages/Auth/LoginPage.vue'),
         meta: { public: true },
       },
