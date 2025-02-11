@@ -34,7 +34,7 @@
         <h6 class="q-ma-none q-mt-md text-weight-light">Email Address or Phone Number</h6>
         <q-input class="custom-input" filled v-model.trim="user.email_address"  placeholder="amahenewaa@example.com or +233241123456" type="email" lazy-rules
               :error="$v.user.email_address.$error"
-              :error-message="'A valid email is required'">
+              :error-message="'Enter a valid email or phone number'">
           <template v-slot:before>
             <q-icon name="fa-regular fa-envelope" />
           </template>
@@ -81,8 +81,8 @@
       </q-card-section>
       <q-card-section class="text-center">
         <q-btn
-          :disable="!$v.$anyDirty || $v.$invalid"
-          :style="{ backgroundColor: $v.$anyDirty && !$v.$invalid ? '#b7d1ed' : '#d3d3d3' }"
+          :disable="$v.$invalid"
+          :style="{ backgroundColor:  !$v.$invalid ? '#b7d1ed' : '#d3d3d3' }"
           flat
           class="text-subtitle1 q-px-xl q-py-none q-ma-none shadow-2 text-weight-light"
           icon="fa-solid fa-arrow-right-to-bracket"
@@ -104,13 +104,21 @@
 import { ref, reactive, computed } from 'vue'
 import {useAuthStore} from'src/stores/auth.js'
 import useVuelidate from "@vuelidate/core";
-import { required, email } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 import { useQuasar } from "quasar";
 import { useTokenClient } from "vue3-google-signin";
 
+const isValidEmailOrPhone = (value) => {
+  if (!value) return false;
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phonePattern = /^\+?[0-9]{7,15}$/;
+
+  return emailPattern.test(value) || phonePattern.test(value);
+}
+
 const rules = {
   user: {
-    email_address: { required, email },
+    email_address: { required, isValidEmailOrPhone },
     password: { required },
   },
 };
@@ -133,9 +141,9 @@ const onSubmit = async () => {
     return;
   }
   const formData = new FormData();
-  formData.append("email", user.email_address.toLowerCase());
+  formData.append("email", typeof user.email_address === "string" && user.email_address.includes("@") ? user.email_address.toLowerCase() : user.email_address);
   formData.append("password", user.password);
-  localStorage.setItem('email_address', user.email_address.toLowerCase());
+  localStorage.setItem('email_address', user.email_address);
   if (rem.value) {
     await AuthStore.loginsRem(formData);
   } else {
