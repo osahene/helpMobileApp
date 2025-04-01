@@ -173,3 +173,19 @@ hr {
 .custom-input .q-field__control {
   color: #333;
 }
+
+
+.bg-cust-dark {
+  background-image: url("../assets/img/main/back.svg");
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.bg-cust-white {
+  background-image: url("../assets/img/main/back-light.svg");
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

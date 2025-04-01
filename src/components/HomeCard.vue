@@ -1,13 +1,17 @@
 <template>
   <div
-    class="flex flex-col justify-between backdrop-filter backdrop-blur-sm bg-opacity-10 bg-slate-200 overflow-hidden border border-gray-200 rounded-xl shadow shadow-2xl"
+    class="flex flex-col border-gray-900 justify-between backdrop-filter backdrop-blur-sm bg-opacity-10 bg-slate-200 overflow-hidden border-4 border-gray-200 rounded-xl shadow shadow-2xl"
   >
     <div class="py-10 flex flex-col justify-center items-start content-fit">
       <div class="ml-3 flex flex-col items-start">
-        <p class="head-title text-white dark:text-white">
+        <p
+          class="head-title font-bold text-black text-[20px] xs:text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px]"
+        >
           {{ cardTitle }}
         </p>
-        <p class="head-title text-white dark:text-white">
+        <p
+          class="head-title font-bold text-black text-[20px] xs:text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px]"
+        >
           {{ cardTitle2 }}
         </p>
       </div>
