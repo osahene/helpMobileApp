@@ -5,7 +5,7 @@ import { Loading, QSpinnerBall, Notify } from 'quasar'
 
 // Creating Axios instance with default configuration
 const $axios = axios.create({
-  baseURL: process.env.VITE_baseURL ? `https://${process.env.VITE_baseURL}` : 'http://127.0.0.1:8000',
+  baseURL: process.env.VITE_baseURL ? process.env.VITE_baseURL : 'http://127.0.0.1:8000',
   withCredentials: true,
   'Content-type': 'application/json',
 })
