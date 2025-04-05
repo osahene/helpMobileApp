@@ -11,45 +11,64 @@ export default boot(({ store, router }) => {
   })
 
   router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!auth.accessToken
-  const isEmailVerified = !!auth.email
-  const isPhoneVerified = localStorage.getItem('is_phone_verified') === 'true'
-  const onboardCount = parseInt(localStorage.getItem('onBoardCount') || '0', 10)
+    const isAuthenticated = !!auth.accessToken
+    const isEmailVerified = !!auth.email
+    const isPhoneVerified = localStorage.getItem('is_phone_verified') === 'true'
+    const onboardingCompleted = localStorage.getItem('onboardingCompleted') === 'true'
 
-  const isPublic = to.matched.some((record) => record.meta.public)
-  const isLoginOrRegister = ['/auth/login', '/reg/register'].includes(to.path)
-  const isEmailVerifyPage = to.path === '/reg/email-verify'
-  const isPhoneVerifyPage = to.path === '/reg/phone-number-verify'
-  const isOnboardPage = to.name === 'onboard'
+    const publicRoutes = ['/auth/login', '/reg/register', '/reg/email-verify', '/reg/phone-number-verify']
+    const isPublic = publicRoutes.includes(to.path) || to.matched.some(record => record.meta.public)
+    const isOnboardPage = to.name === 'onboard'
 
-  // Unauthenticated users
-  if (!isAuthenticated) {
-    if (onboardCount < 2 && !isOnboardPage) {
-      return next({ name: 'onboard' })
+    // Debugging logs (remove in production)
+    console.log('Route guard check:')
+    console.log('- Authenticated:', isAuthenticated)
+    console.log('- Onboarding completed:', onboardingCompleted)
+    console.log('- Current route:', to.path)
+
+    // Unauthenticated users
+    if (!isAuthenticated) {
+      // If onboarding not completed and not on onboard page
+      if (!onboardingCompleted && !isOnboardPage) {
+        console.log('Redirecting to onboarding (not completed)')
+        return next({ name: 'onboard' })
+      }
+      
+      // If onboarding completed but on onboard page
+      if (onboardingCompleted && isOnboardPage) {
+        console.log('Redirecting to login (onboarding already completed)')
+        return next({ path: '/auth/login' })
+      }
+
+      // If trying to access non-public page
+      if (!isPublic && !isOnboardPage) {
+        console.log('Redirecting to login (unauthorized access)')
+        return next({ path: '/auth/login' })
+      }
+
+      // Allow access to public routes or login if onboarding completed
+      console.log('Allowing access (public route or completed onboarding)')
+      return next()
     }
-    if (onboardCount >= 2 && isOnboardPage) {
-      return next({ name: 'login' })
+
+    // Authenticated but not verified
+    if (!isEmailVerified && to.path !== '/reg/email-verify') {
+      console.log('Redirecting to email verification')
+      return next({ path: '/reg/email-verify' })
     }
-    if (!isPublic && !isOnboardPage) {
-      return next({ path: '/auth/login' })
+    
+    if (isEmailVerified && !isPhoneVerified && to.path !== '/reg/phone-number-verify') {
+      console.log('Redirecting to phone verification')
+      return next({ path: '/reg/phone-number-verify' })
     }
-    return next()
-  }
 
-  // Authenticated but not verified
-  if (!isEmailVerified && !isEmailVerifyPage) {
-    return next({ path: '/reg/email-verify' })
-  }
-  if (isEmailVerified && !isPhoneVerified && !isPhoneVerifyPage) {
-    return next({ path: '/reg/phone-number-verify' })
-  }
+    // Authenticated but trying to access auth/onboarding pages
+    if (isPublic || isOnboardPage) {
+      console.log('Redirecting to home (already authenticated)')
+      return next({ name: 'home' })
+    }
 
-  // Authenticated but trying to access auth/onboarding pages
-  if (isLoginOrRegister || isEmailVerifyPage || isPhoneVerifyPage || isOnboardPage) {
-    return next({ name: 'home' })
-  }
-
-  next()
-})
-
+    console.log('Allowing access to protected route')
+    next()
+  })
 })
