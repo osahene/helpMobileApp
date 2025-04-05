@@ -64,7 +64,7 @@ const onBoardSteps = [
     id: 1,
     title: 'Welcome to',
     title2: 'Help OO Help',
-    logo: mainLogo,
+    logo: 'img:' + mainLogo,
     message:
       'Use our system to swiftly get in touch with loved ones in serious moments of crisis with just 2 taps.',
   },
