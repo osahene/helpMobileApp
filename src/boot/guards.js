@@ -14,13 +14,26 @@ export default boot(({ store, router }) => {
     const isAuthenticated = !!auth.accessToken
     const isEmailVerified = !!auth.email
     const isPhoneVerified = localStorage.getItem('is_phone_verified') === 'true'
+    const onBoardCount = parseInt(localStorage.getItem('onBoardCount') || '0', 10)
 
     const isPublic = to.matched.some((record) => record.meta.public)
     const isLoginOrRegisterPage = ['/auth/login', '/reg/register'].includes(to.path)
     const isEmailVerificationPage = to.path === '/reg/email-verify'
     const isPhoneVerificationPage = to.path === '/reg/phone-number-verify'
+    const isOnboardingPage = to.name === 'onboard'
 
-    // If not authenticated and trying to access a private route, redirect to Login
+    // Handle onboarding first
+    if (!isAuthenticated) {
+      if (onBoardCount < 2 && !isOnboardingPage) {
+        return next({ name: 'onboard' })
+      }
+
+      if (onBoardCount >= 2 && isOnboardingPage) {
+        return next({ name: 'login' })
+      }
+    }
+
+    // Authenticated route handling
     if (!isAuthenticated && !isPublic) {
       return next({ path: '/auth/login' })
     }
@@ -33,10 +46,9 @@ export default boot(({ store, router }) => {
       return next({ path: '/reg/phone-number-verify' })
     }
 
-    // If authenticated and trying to access a public page, redirect to Dashboard
     if (
       isAuthenticated &&
-      (isLoginOrRegisterPage || isEmailVerificationPage || isPhoneVerificationPage)
+      (isLoginOrRegisterPage || isEmailVerificationPage || isPhoneVerificationPage || isOnboardingPage)
     ) {
       return next({ name: 'home' })
     }

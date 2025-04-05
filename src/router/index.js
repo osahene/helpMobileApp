@@ -6,7 +6,6 @@ import {
   createWebHashHistory,
 } from 'vue-router'
 import routes from './routes'
-import { useAuthStore } from 'stores/auth'
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -32,34 +31,6 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   })
-  // Router.beforeEach((to, from, next) => {
-  //   const authStore = useAuthStore()
-  //   const onBaoardCount = parseInt(localStorage.getItem('onBoardCount') || '0', 10)
-  //   if (!authStore.isAuthenticated) {
-  //     if (onBaoardCount < 2) {
-  //       if (to.name !== 'onboard') {
-  //         return next({ name: 'onboard' })
-  //       }
-  //     } else {
-  //       if (to.name === 'onboard') {
-  //         return next({ name: 'login' })
-  //       }
-  //     }
-  //   } else {
-  //     if (to.name === 'onboard' || (to.path && to.path.startsWith('/auth'))) {
-  //       return next({ name: 'home' })
-  //     }
-  //   }
-  //   return next()
-  // })
-  Router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  if (!authStore.isAuthenticated) {
-    if (to.name === 'home') {
-      return next({ name: 'login' })  // Redirect to login instead
-    }
-  }
-  return next()
-})
+  
   return Router
 })
