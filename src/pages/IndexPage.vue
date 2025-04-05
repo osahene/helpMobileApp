@@ -53,9 +53,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { fabAdversal, fasBookBible, fasTruckFast } from '@quasar/extras/fontawesome-v6'
+import { fasBookBible, fasTruckFast } from '@quasar/extras/fontawesome-v6'
 import { useRouter } from 'vue-router'
 import { useSwipe } from '@vueuse/core'
+import mainLogo from '../assets/img/main/Help Logo.svg'
 
 const router = useRouter()
 const onBoardSteps = [
@@ -63,7 +64,7 @@ const onBoardSteps = [
     id: 1,
     title: 'Welcome to',
     title2: 'Help OO Help',
-    logo: fabAdversal,
+    logo: mainLogo,
     message:
       'Use our system to swiftly get in touch with loved ones in serious moments of crisis with just 2 taps.',
   },
@@ -84,14 +85,14 @@ const onBoardSteps = [
 const currentStep = ref(0)
 
 const completeOnboaard = () => {
-    const countView = parseInt(localStorage.getItem('onBoardCount') || '0', 10)
+  const countView = parseInt(localStorage.getItem('onBoardCount') || '0', 10)
 
   if (countView < 2) {
     localStorage.setItem('onBoardCount', countView + 1)
-    router.push({path : '/auth/login'})
+    router.push({ path: '/auth/login' })
   } else {
-    router.push({path : '/auth/login'})
-    }
+    router.push({ path: '/auth/login' })
+  }
 }
 // Navigation logic
 const nextStep = () => {

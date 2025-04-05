@@ -186,7 +186,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await apiService.register(data)
         if (response.status === 201) {
-          this.router.push({ path: '/auth/email-verify' })
+          this.router.push({ path: '/reg/email-verify' })
           Notify.create({
             type: 'positive',
             message: 'Enter the One Time Password to verify email',
@@ -231,7 +231,7 @@ export const useAuthStore = defineStore('auth', {
         if (response.status === 200) {
           this.setTokens(response.data.tokens)
           localStorage.setItem('is_phone_verified', 'false')
-          this.router.push({ path: '/auth/phone-number' })
+          this.router.push({ path: '/reg/phone-number' })
           Notify.create({
             type: 'positive',
             message: response.data.message || 'Proceed to enter phone number',
@@ -273,7 +273,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await apiService.VerifyPhoneNumber(data)
         if (response.status === 200) {
-          this.router.push({ path: '/auth/phone-number-verify' })
+          this.router.push({ path: '/reg/phone-number-verify' })
           Notify.create({
             type: 'positive',
             message: 'Enter the One Time Password to verify email',
@@ -391,7 +391,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await apiService.forgottenEmail(data)
         if (response.status == 200) {
-          this.router.push({ path: '/auth/confirm-password' })
+          this.router.push({ path: '/reg/confirm-password' })
           Notify.create({
             type: 'positive',
             message: 'Password reset successful',

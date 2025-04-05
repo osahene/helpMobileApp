@@ -16,9 +16,9 @@ export default boot(({ store, router }) => {
     const isPhoneVerified = localStorage.getItem('is_phone_verified') === 'true'
 
     const isPublic = to.matched.some((record) => record.meta.public)
-    const isLoginOrRegisterPage = ['/auth/login', '/auth/register'].includes(to.path)
-    const isEmailVerificationPage = to.path === '/auth/email-verify'
-    const isPhoneVerificationPage = to.path === '/auth/phone-number-verify'
+    const isLoginOrRegisterPage = ['/auth/login', '/reg/register'].includes(to.path)
+    const isEmailVerificationPage = to.path === '/reg/email-verify'
+    const isPhoneVerificationPage = to.path === '/reg/phone-number-verify'
 
     // If not authenticated and trying to access a private route, redirect to Login
     if (!isAuthenticated && !isPublic) {
@@ -26,11 +26,11 @@ export default boot(({ store, router }) => {
     }
 
     if (isAuthenticated && !isEmailVerified && !isEmailVerificationPage) {
-      return next({ path: '/auth/email-verify' })
+      return next({ path: '/reg/email-verify' })
     }
 
     if (isAuthenticated && isEmailVerified && !isPhoneVerified && !isPhoneVerificationPage) {
-      return next({ path: '/auth/phone-number-verify' })
+      return next({ path: '/reg/phone-number-verify' })
     }
 
     // If authenticated and trying to access a public page, redirect to Dashboard
