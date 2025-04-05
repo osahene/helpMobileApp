@@ -11,48 +11,45 @@ export default boot(({ store, router }) => {
   })
 
   router.beforeEach((to, from, next) => {
-    const isAuthenticated = !!auth.accessToken
-    const isEmailVerified = !!auth.email
-    const isPhoneVerified = localStorage.getItem('is_phone_verified') === 'true'
-    const onBoardCount = parseInt(localStorage.getItem('onBoardCount') || '0', 10)
+  const isAuthenticated = !!auth.accessToken
+  const isEmailVerified = !!auth.email
+  const isPhoneVerified = localStorage.getItem('is_phone_verified') === 'true'
+  const onboardCount = parseInt(localStorage.getItem('onBoardCount') || '0', 10)
 
-    const isPublic = to.matched.some((record) => record.meta.public)
-    const isLoginOrRegisterPage = ['/auth/login', '/reg/register'].includes(to.path)
-    const isEmailVerificationPage = to.path === '/reg/email-verify'
-    const isPhoneVerificationPage = to.path === '/reg/phone-number-verify'
-    const isOnboardingPage = to.name === 'onboard'
+  const isPublic = to.matched.some((record) => record.meta.public)
+  const isLoginOrRegister = ['/auth/login', '/reg/register'].includes(to.path)
+  const isEmailVerifyPage = to.path === '/reg/email-verify'
+  const isPhoneVerifyPage = to.path === '/reg/phone-number-verify'
+  const isOnboardPage = to.name === 'onboard'
 
-    // Handle onboarding first
-    if (!isAuthenticated) {
-      if (onBoardCount < 2 && !isOnboardingPage) {
-        return next({ name: 'onboard' })
-      }
-
-      if (onBoardCount >= 2 && isOnboardingPage) {
-        return next({ name: 'login' })
-      }
+  // Unauthenticated users
+  if (!isAuthenticated) {
+    if (onboardCount < 2 && !isOnboardPage) {
+      return next({ name: 'onboard' })
     }
-
-    // Authenticated route handling
-    if (!isAuthenticated && !isPublic) {
+    if (onboardCount >= 2 && isOnboardPage) {
+      return next({ name: 'login' })
+    }
+    if (!isPublic && !isOnboardPage) {
       return next({ path: '/auth/login' })
     }
+    return next()
+  }
 
-    if (isAuthenticated && !isEmailVerified && !isEmailVerificationPage) {
-      return next({ path: '/reg/email-verify' })
-    }
+  // Authenticated but not verified
+  if (!isEmailVerified && !isEmailVerifyPage) {
+    return next({ path: '/reg/email-verify' })
+  }
+  if (isEmailVerified && !isPhoneVerified && !isPhoneVerifyPage) {
+    return next({ path: '/reg/phone-number-verify' })
+  }
 
-    if (isAuthenticated && isEmailVerified && !isPhoneVerified && !isPhoneVerificationPage) {
-      return next({ path: '/reg/phone-number-verify' })
-    }
+  // Authenticated but trying to access auth/onboarding pages
+  if (isLoginOrRegister || isEmailVerifyPage || isPhoneVerifyPage || isOnboardPage) {
+    return next({ name: 'home' })
+  }
 
-    if (
-      isAuthenticated &&
-      (isLoginOrRegisterPage || isEmailVerificationPage || isPhoneVerificationPage || isOnboardingPage)
-    ) {
-      return next({ name: 'home' })
-    }
+  next()
+})
 
-    next()
-  })
 })

@@ -57,7 +57,9 @@ import { fasBookBible, fasTruckFast } from '@quasar/extras/fontawesome-v6'
 import { useRouter } from 'vue-router'
 import { useSwipe } from '@vueuse/core'
 import mainLogo from '../assets/img/main/Help Logo.svg'
+import { useAuthStore } from 'src/stores/auth.js'
 
+const authStore = useAuthStore()
 const router = useRouter()
 const onBoardSteps = [
   {
@@ -89,6 +91,7 @@ const completeOnboaard = () => {
 
   if (countView < 2) {
     localStorage.setItem('onBoardCount', countView + 1)
+    authStore.onBoardCount = countView + 1
     router.push({ path: '/auth/login' })
   } else {
     router.push({ path: '/auth/login' })

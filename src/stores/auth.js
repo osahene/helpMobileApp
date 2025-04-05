@@ -6,7 +6,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     isLoading: false,
     isAuthenticated: false,
-    hasViewed: 0,
+    onBoardCount : localStorage.getItem('onBoardCount') || 0, 
     first_name: localStorage.getItem('first_name') || '',
     last_name: localStorage.getItem('last_name') || '',
     email: localStorage.getItem('email') || '',
