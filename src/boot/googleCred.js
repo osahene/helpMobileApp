@@ -7,10 +7,9 @@ export default boot(({ app }) => {
       process.env.NODE_ENV === 'development'
         ? process.env.VITE_googleCred
         : process.env.VITE_clientId,
-    // scope:
-    //   'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly https://www.googleapis.com/auth/user.phonenumbers.read https://www.googleapis.com/auth/user.gender.read',
-    scope: 'profile email', // Simplify scope for testing
-    prompt: 'consent', // Force consent prompt
+    scope: 'profile email',
+    response_type: 'id_token',
+    prompt: 'consent', 
     redirect_uri: 'https://helpmobile.vercel.app',
     onSuccess: (response) => {
       // Optional: Handle successful login globally (e.g., redirect)
