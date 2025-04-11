@@ -41,6 +41,10 @@ export const useAuthStore = defineStore('auth', {
     async socialLogin(response) {
       try {
         console.log('send_res', response)
+        console.log('OAuth configuration:', {
+          clientId: process.env.VITE_clientId,
+          redirectUri: window.location.origin // This shows what's being sent
+        })
         const res = await apiService.googleLogin({
           access_token: response.access_token,
         })
