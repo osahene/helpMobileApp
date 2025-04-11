@@ -46,7 +46,7 @@ export const useAuthStore = defineStore('auth', {
           redirectUri: window.location.origin // This shows what's being sent
         })
         const res = await apiService.googleLogin({
-          access_token: response.access_token,
+          id_token: response.access_token,
         })
         if (res.status === 200) {
           const userDetails = {
