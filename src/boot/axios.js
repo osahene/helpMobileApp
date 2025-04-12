@@ -14,8 +14,8 @@ const $axios = axios.create({
 const TakeRefreshToken = async () => {
   console.log('Refreshing token...')
   const refreshToken = localStorage.getItem('refreshToken')
-  if (!refreshToken) return null
-
+  // if (!refreshToken) return null
+  console.log('Refresh token found:', refreshToken)
   try {
     // Making a POST request to refresh the token
     console.log('Making request to refresh token')
@@ -65,13 +65,13 @@ export default async ({ router }) => {
   console.log('Scheduling token refresh starting ...')
   const scheduleTokenRefresh = () => {
     console.log('Scheduling token refresh...')
-    if (!localStorage.getItem('accessToken') && !localStorage.getItem('refreshToken')) {
-      console.log('No tokens found, redirecting to login')
-      TakeRefreshToken()
-    }
     setInterval(async () => {
       const accessToken = localStorage.getItem('accessToken')
       const refreshToken = localStorage.getItem('refreshToken')
+      if (!accessToken && !refreshToken) {
+        console.log('No tokens found, redirecting to login')
+        await TakeRefreshToken()
+      }
 
       if (accessToken && refreshToken) {
         const now = dayjs()
