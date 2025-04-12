@@ -12,42 +12,39 @@ const $axios = axios.create({
 
 // Function to refresh access token
 const TakeRefreshToken = async () => {
+  console.log('Refreshing token...')
   const refreshToken = localStorage.getItem('refreshToken')
-
   if (!refreshToken) return null
+
   try {
-    const response = await axios.post(`${$axios.defaults.baseURL}/account/token/refresh/`, {
+    const { data } = await axios.post(`${$axios.defaults.baseURL}/account/token/refresh/`, {
       refresh: refreshToken,
     })
-    console.log('Response from refresh token:', response.data)
-    const { access, refresh } = response.data
+    console.log('Token refreshed successfully', data)
+    const { access, refresh } = data
+
     if (access) {
-      $axios.defaults.headers.common['Authorization'] = `Bearer ${access}`
       localStorage.setItem('accessToken', access)
-      // Update refresh token if a new one is provided
-      if (refresh) {
-        localStorage.setItem('refreshToken', refresh)
-      }
-      return { accessToken: access, refreshToken: refresh || refreshToken }
+      $axios.defaults.headers.common['Authorization'] = `Bearer ${access}`
+    }
+
+    if (refresh) {
+      localStorage.setItem('refreshToken', refresh)
+    }
+
+    return {
+      accessToken: access,
+      refreshToken: refresh || refreshToken,
     }
   } catch (e) {
-    let errorMessage = 'Error refreshing token'
-
-    if (e.response && e.response.data && e.response.data.detail) {
-      errorMessage = e.response.data.detail
-    } else if (e.message) {
-      errorMessage = e.message
-    }
-
-    Notify.create({
-      type: 'negative',
-      message: errorMessage,
-    })
+    const errorMessage = e?.response?.data?.detail || e?.message || 'Error refreshing token'
+    Notify.create({ type: 'negative', message: errorMessage })
     return null
   }
 }
 
 export default async ({ router }) => {
+  console.log('Axios boot file loaded')
   let userIsActive = true
 
   const setUserActive = () => {
@@ -55,50 +52,47 @@ export default async ({ router }) => {
     localStorage.setItem('lastActive', new Date().toISOString())
   }
 
-  // Event listeners to track user activity
   window.addEventListener('mousemove', setUserActive)
   window.addEventListener('keydown', setUserActive)
   window.addEventListener('scroll', setUserActive)
 
-  // Function to schedule token refresh checks
+  /**
+   * Periodically checks and refreshes tokens if needed
+   */
+  console.log('Scheduling token refresh starting ...')
   const scheduleTokenRefresh = () => {
+    console.log('Scheduling token refresh...')
     setInterval(async () => {
-      const accessTokens = localStorage.getItem('accessToken')
-      const refreshTokens = localStorage.getItem('refreshToken')
+      const accessToken = localStorage.getItem('accessToken')
+      const refreshToken = localStorage.getItem('refreshToken')
 
-      if (accessTokens && refreshTokens) {
-        const user = jwtDecode(accessTokens)
-        const accessExpTime = dayjs.unix(user.exp)
+      if (accessToken && refreshToken) {
         const now = dayjs()
-
-        const refreshTokenExpTime = dayjs.unix(jwtDecode(refreshTokens).exp)
-
-        // Refresh the access token if it will expire in the next minute and the user is active
-        if (accessExpTime.diff(now, 'minute') <= 1 && userIsActive) {
-          await TakeRefreshToken()
-        }
-
-        // Refresh the refresh token if it will expire in the next minute and the user is active
-        if (refreshTokenExpTime.diff(now, 'minute') <= 1 && userIsActive) {
-          await TakeRefreshToken()
-        }
-
-        // Log out user if the refresh token will expire in the next minute and they are inactive
+        const accessExp = dayjs.unix(jwtDecode(accessToken).exp)
+        const refreshExp = dayjs.unix(jwtDecode(refreshToken).exp)
         const lastActive = dayjs(localStorage.getItem('lastActive'))
-        if (now.diff(lastActive, 'minute') >= 10 && refreshTokenExpTime.diff(now, 'minute') <= 1) {
+
+        const accessAboutToExpire = accessExp.diff(now, 'minute') <= 1
+        const refreshAboutToExpire = refreshExp.diff(now, 'minute') <= 1
+        const userInactive = now.diff(lastActive, 'minute') >= 10
+
+        if ((accessAboutToExpire || refreshAboutToExpire) && userIsActive) {
+          await TakeRefreshToken()
+        }
+
+        if (refreshAboutToExpire && userInactive) {
           localStorage.removeItem('accessToken')
           localStorage.removeItem('refreshToken')
           userIsActive = false
-          router.push('/auth/login') // Or your login route
+          router.push('/auth/login')
         }
       }
-    }, 30000) // Check every minute
+    }, 30000) // every 30 seconds
   }
 
   scheduleTokenRefresh()
 
   $axios.interceptors.request.use(async (req) => {
-    let accessToken = localStorage.getItem('accessToken')
     Loading.show({
       spinner: QSpinnerBall,
       message: 'Loading...',
@@ -107,23 +101,26 @@ export default async ({ router }) => {
       sanitize: true,
     })
 
+    let accessToken = localStorage.getItem('accessToken')
+    console.log('axos access', accessToken)
     if (accessToken) {
       const user = jwtDecode(accessToken)
-      const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1
+      const isExpired = dayjs.unix(user.exp).isBefore(dayjs())
 
-      if (!isExpired) {
-        req.headers.Authorization = `Bearer ${accessToken}`
-      } else {
+      if (isExpired) {
         const tokens = await TakeRefreshToken()
-        if (tokens && tokens.accessToken) {
-          req.headers.Authorization = `Bearer ${tokens.accessToken}`
-        } else {
+        accessToken = tokens?.accessToken
+        if (!accessToken) {
           localStorage.removeItem('accessToken')
           localStorage.removeItem('refreshToken')
           router.push('/auth/login')
+          return req
         }
       }
+
+      req.headers.Authorization = `Bearer ${accessToken}`
     }
+
     return req
   })
 
