@@ -20,14 +20,14 @@ export default async ({ router }) => {
   }
 
   // Function to refresh access token
-  const TakeRefreshToken = async () => {
+  const TakeRefreshToken = () => {
     console.log('Refreshing token...')
     const refreshToken = localStorage.getItem('refreshToken')
     if (!refreshToken) return null
 
     try {
       console.log('Attempting to refresh token...')
-      const { data } = await axios.post(`${$axios.defaults.baseURL}/account/token/refresh/`, {
+      const { data } = axios.post(`${$axios.defaults.baseURL}/account/token/refresh/`, {
         refresh: refreshToken,
       })
       console.log('Token refreshed successfully', data)
