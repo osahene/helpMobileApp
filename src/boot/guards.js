@@ -1,55 +1,74 @@
 import { boot } from 'quasar/wrappers'
 import { useAuthStore } from 'src/stores/auth.js'
 
-export default boot(({ store, router }) => {
-  const auth = useAuthStore(store)
+export default boot(({ router }) => {
+  const auth = useAuthStore()
 
-  // Initialize auth state - consider moving this to store's init
-  auth.$patch({
-    accessToken: localStorage.getItem('accessToken') || null,
-    is_phone_verified: localStorage.getItem('is_phone_verified') === 'true',
-    email: localStorage.getItem('email_address') || null,
-  })
-
-  router.beforeEach((to, from, next) => {
+  router.beforeEach(async (to, from, next) => {
+    // Initialize auth state
     const isAuthenticated = !!auth.accessToken
-    const isPublicRoute = to.matched.some((record) => record.meta.public)
+    const isPhoneVerified = auth.is_phone_verified === true
     const onboardingCompleted = localStorage.getItem('onBoardCount') === 'true'
-    const isOnboardPage = to.name === 'onboard'
 
-    console.log('Navigation guard triggered:', {
-      to: to.name,
+    // Debugging info (remove in production)
+    console.log('[Route Guard]', {
+      route: to.name,
       isAuthenticated,
-      isPublicRoute,
-      onboardingCompleted,
-      isOnboardPage,
+      isPhoneVerified,
+      requiresAuth: to.matched.some((r) => r.meta.requiresAuth),
+      requiresPhone: to.meta.requiresPhoneVerification,
+      isOnboarding: to.meta.isOnboarding,
     })
-    // 1. Handle public routes
-    if (isPublicRoute) {
-      // If user is authenticated and trying to access login/register, redirect home
-      if (isAuthenticated && ['login', 'register'].includes(to.name)) {
-        return next({ name: 'home' })
-      }
-      return next()
+
+    // 1. Check for guest-only routes (login/register)
+    if (to.meta.guestOnly && isAuthenticated) {
+      return next({ name: 'home' }) // Redirect authenticated users away from auth pages
     }
 
-    // 2. Handle unauthenticated users
+    // 2. Handle public routes
+    if (to.meta.public) {
+      // Special handling for onboarding
+      if (to.meta.isOnboarding && onboardingCompleted) {
+        return isAuthenticated ? next({ name: 'home' }) : next({ name: 'login' })
+      }
+      return next() // Allow access to all public routes
+    }
+
+    // 3. Handle unauthenticated users trying to access private routes
     if (!isAuthenticated) {
       // Redirect to onboarding if not completed
-      if (!onboardingCompleted && !isOnboardPage) {
+      if (!onboardingCompleted) {
         return next({ name: 'onboard' })
       }
-      // Otherwise redirect to login
-      return next({ name: 'login' })
+      // Otherwise to login with redirect back
+      return next({
+        name: 'login',
+        query: { redirect: to.fullPath },
+      })
     }
 
-    // 3. Handle authenticated users
-    // Only redirect to home if trying to access auth pages
-    if (['login', 'register', 'onboard'].includes(to.name)) {
+    // 4. Handle temporary auth routes (email/phone verification during registration)
+    if (to.meta.requiresTempAuth && !auth.tempAccessToken) {
+      return next({ name: 'register' }) // Restart registration if temp auth is missing
+    }
+
+    // 5. Check phone verification for protected routes
+    if (to.meta.requiresPhoneVerification && !isPhoneVerified) {
+      return next({ name: 'phone-number' }) // Force phone verification
+    }
+
+    // 6. Final check - if user tries to access onboarding after completion
+    if (to.meta.isOnboarding && onboardingCompleted) {
       return next({ name: 'home' })
     }
 
-    // 4. All other cases - allow navigation
+    // All checks passed - allow navigation
     next()
+  })
+
+  // Optional: Handle navigation errors
+  router.onError((error) => {
+    console.error('[Router Error]', error)
+    // You might want to redirect to error page here
   })
 })

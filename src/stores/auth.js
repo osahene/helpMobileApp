@@ -17,6 +17,11 @@ export const useAuthStore = defineStore('auth', {
     isLoggedIn(state) {
       return !!state.accessToken
     },
+    shouldCompleteOnboarding: () => {
+      return (
+        !localStorage.getItem('onBoardCount') || localStorage.getItem('onBoardCount') !== 'true'
+      )
+    },
   },
 
   actions: {
