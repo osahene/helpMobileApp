@@ -98,7 +98,7 @@ export default async ({ router }) => {
 
   $axios.interceptors.request.use(async (req) => {
     let accessToken = localStorage.getItem('accessToken')
-
+    console.log('Axios request Access Token:', accessToken)
     Loading.show({
       spinner: QSpinnerBall,
       message: 'Loading...',

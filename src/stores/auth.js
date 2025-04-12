@@ -21,9 +21,6 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     setTokens(token) {
-      console.log('token', token)
-      console.log('token access', token.access)
-      console.log('token refresh', token.refresh)
       this.accessToken = token.access
       this.refreshToken = token.refresh
       localStorage.setItem('accessToken', this.accessToken)
