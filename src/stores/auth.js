@@ -48,6 +48,7 @@ export const useAuthStore = defineStore('auth', {
         const res = await apiService.googleLogin({
           id_token: response.credential,
         })
+        console.log('social res', res)
         if (res.status === 200) {
           const userDetails = {
             first_name: res.data.first_name,
@@ -55,9 +56,7 @@ export const useAuthStore = defineStore('auth', {
             email: res.data.email,
             phone_number: res.data.phone_number,
           }
-          this.saveUser(res.data.tokens.access, userDetails)
-          this.refreshToken = res.data.tokens.refresh
-          localStorage.setItem('refreshToken', this.refreshToken)
+          this.saveUser(res.data.data.token, userDetails)
           Notify.create({
             type: 'positive',
             message: 'Login successful',
