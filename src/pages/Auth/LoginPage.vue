@@ -5,16 +5,17 @@
         <div class="text-grey-9 text-weight-light">Login with</div>
       </q-card-section>
       <q-card-section class="flex justify-around">
-        <q-btn
-          outline
+        <GoogleSignInButton
+          @success="handleGoogleLoginSuccess"
+          @error="handleGoogleLoginError"
           class="text-subtitle1 q-ma-none shadow-2 text-weight-light"
           style="color: teal"
-          icon="fa-brands fa-google"
-          label="Google"
-          :disabled="!isReady"
-          @click.prevent="() => login()"
-        />
-
+        >
+          <template #default>
+            <q-icon name="fa-brands fa-google" class="q-mr-sm" />
+            Google
+          </template>
+        </GoogleSignInButton>
         <!-- <q-separator vertical />
         <q-btn
           outline
@@ -112,7 +113,7 @@ import { useAuthStore } from 'src/stores/auth.js'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { useQuasar } from 'quasar'
-import { useTokenClient } from 'vue3-google-signin'
+import { GoogleSignInButton } from 'vue3-google-signin'
 
 const isValidEmailOrPhone = (value) => {
   if (!value) return false
@@ -160,11 +161,13 @@ const onSubmit = async () => {
     await AuthStore.logins(formData)
   }
 }
-const handleOnSuccess = async (response) => {
-  await AuthStore.socialLogin(response)
+const handleGoogleLoginSuccess = async (response) => {
+  const { credential } = response
+  console.log('Google ID Token:', credential)
+  await AuthStore.socialLogin({ credential })
 }
 
-const handleOnError = (errorResponse) => {
+const handleGoogleLoginError = (errorResponse) => {
   $q.notify({
     color: 'red-5',
     textColor: 'white',
@@ -172,8 +175,4 @@ const handleOnError = (errorResponse) => {
     message: errorResponse.message || 'Login not successful',
   })
 }
-const { isReady, login } = useTokenClient({
-  onSuccess: handleOnSuccess,
-  onError: handleOnError,
-})
 </script>
