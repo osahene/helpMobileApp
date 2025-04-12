@@ -10,39 +10,6 @@ const $axios = axios.create({
   'Content-type': 'application/json',
 })
 
-// Function to refresh access token
-const TakeRefreshToken = async () => {
-  console.log('Refreshing token...')
-  const refreshToken = localStorage.getItem('refreshToken')
-  if (!refreshToken) return null
-
-  try {
-    const { data } = await axios.post(`${$axios.defaults.baseURL}/account/token/refresh/`, {
-      refresh: refreshToken,
-    })
-    console.log('Token refreshed successfully', data)
-    const { access, refresh } = data
-
-    if (access) {
-      localStorage.setItem('accessToken', access)
-      $axios.defaults.headers.common['Authorization'] = `Bearer ${access}`
-    }
-
-    if (refresh) {
-      localStorage.setItem('refreshToken', refresh)
-    }
-
-    return {
-      accessToken: access,
-      refreshToken: refresh || refreshToken,
-    }
-  } catch (e) {
-    const errorMessage = e?.response?.data?.detail || e?.message || 'Error refreshing token'
-    Notify.create({ type: 'negative', message: errorMessage })
-    return null
-  }
-}
-
 export default async ({ router }) => {
   console.log('Axios boot file loaded')
   let userIsActive = true
@@ -50,6 +17,40 @@ export default async ({ router }) => {
   const setUserActive = () => {
     userIsActive = true
     localStorage.setItem('lastActive', new Date().toISOString())
+  }
+
+  // Function to refresh access token
+  const TakeRefreshToken = async () => {
+    console.log('Refreshing token...')
+    const refreshToken = localStorage.getItem('refreshToken')
+    if (!refreshToken) return null
+
+    try {
+      console.log('Attempting to refresh token...')
+      const { data } = await axios.post(`${$axios.defaults.baseURL}/account/token/refresh/`, {
+        refresh: refreshToken,
+      })
+      console.log('Token refreshed successfully', data)
+      const { access, refresh } = data
+
+      if (access) {
+        localStorage.setItem('accessToken', access)
+        $axios.defaults.headers.common['Authorization'] = `Bearer ${access}`
+      }
+
+      if (refresh) {
+        localStorage.setItem('refreshToken', refresh)
+      }
+
+      return {
+        accessToken: access,
+        refreshToken: refresh || refreshToken,
+      }
+    } catch (e) {
+      const errorMessage = e?.response?.data?.detail || e?.message || 'Error refreshing token'
+      Notify.create({ type: 'negative', message: errorMessage })
+      return null
+    }
   }
 
   window.addEventListener('mousemove', setUserActive)
@@ -60,8 +61,10 @@ export default async ({ router }) => {
    * Periodically checks and refreshes tokens if needed
    */
   console.log('Scheduling token refresh starting ...')
+
   const scheduleTokenRefresh = () => {
     console.log('Scheduling token refresh...')
+
     setInterval(async () => {
       const accessToken = localStorage.getItem('accessToken')
       const refreshToken = localStorage.getItem('refreshToken')
