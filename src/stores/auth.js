@@ -6,7 +6,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     isLoading: false,
     isAuthenticated: false,
-    onBoardCount : localStorage.getItem('onBoardCount') || 0, 
+    onBoardCount: localStorage.getItem('onBoardCount') || 0,
     first_name: localStorage.getItem('first_name') || '',
     last_name: localStorage.getItem('last_name') || '',
     email: localStorage.getItem('email') || '',
@@ -43,10 +43,10 @@ export const useAuthStore = defineStore('auth', {
         console.log('send_res', response)
         console.log('OAuth configuration:', {
           clientId: process.env.VITE_clientId,
-          redirectUri: window.location.origin // This shows what's being sent
+          redirectUri: window.location.origin, // This shows what's being sent
         })
         const res = await apiService.googleLogin({
-          id_token: response.access_token,
+          id_token: response.credential,
         })
         if (res.status === 200) {
           const userDetails = {
