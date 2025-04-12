@@ -21,6 +21,9 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     setTokens(token) {
+      console.log('token', token)
+      console.log('token access', token.access)
+      console.log('token refresh', token.refresh)
       this.accessToken = token.access
       this.refreshToken = token.refresh
       localStorage.setItem('accessToken', this.accessToken)
@@ -40,11 +43,6 @@ export const useAuthStore = defineStore('auth', {
 
     async socialLogin(response) {
       try {
-        console.log('send_res', response)
-        console.log('OAuth configuration:', {
-          clientId: process.env.VITE_clientId,
-          redirectUri: window.location.origin, // This shows what's being sent
-        })
         const res = await apiService.googleLogin({
           id_token: response.credential,
         })
@@ -67,11 +65,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (e) {
         const res = e.response
         if (res && res.status === 307) {
-          console.log('err res', res)
           const redirectUrl = res.data.redirect_url
-          console.log('tokens', res.data.data.token)
-          console.log('refresh', res.data.data.token.refresh)
-          console.log('access', res.data.data.token.refresh)
           this.setTokens(res.data.data)
           this.router.push({ path: redirectUrl })
 

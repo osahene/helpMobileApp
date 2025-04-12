@@ -163,7 +163,6 @@ const onSubmit = async () => {
 }
 const handleGoogleLoginSuccess = async (response) => {
   const { credential } = response
-  console.log('Google ID Token:', credential)
   await AuthStore.socialLogin({ credential })
 }
 
