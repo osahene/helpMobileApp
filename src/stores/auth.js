@@ -66,7 +66,7 @@ export const useAuthStore = defineStore('auth', {
         const res = e.response
         if (res && res.status === 307) {
           const redirectUrl = res.data.redirect_url
-          this.setTokens(res.data.data)
+          this.setTokens(res.data.data.token)
           this.router.push({ path: redirectUrl })
 
           Notify.create({
