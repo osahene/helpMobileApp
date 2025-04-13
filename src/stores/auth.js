@@ -33,7 +33,8 @@ export const useAuthStore = defineStore('auth', {
     },
 
     saveUser(token, userDetails) {
-      console.log('userDetails', userDetails)
+      console.log('saveUser called')
+      console.log('userDetails in saveUser', userDetails)
       console.log('token', token)
       console.log('save token', token.access)
       this.setTokens(token)
@@ -61,7 +62,6 @@ export const useAuthStore = defineStore('auth', {
           }
           console.log('userDetails', userDetails)
           console.log('tokens_trial', res.data.tokens)
-          console.log('tokens_trials_2', res.data.data.tokens)
           this.saveUser(res.data.tokens, userDetails)
           Notify.create({
             type: 'positive',
