@@ -19,7 +19,6 @@ const TakeRefreshToken = async () => {
     const response = await axios.post(`${$axios.defaults.baseURL}/account/token/refresh/`, {
       refresh: refreshToken,
     })
-    console.log('Response from refresh token:', response.data)
     const { access, refresh } = response.data
     if (access) {
       $axios.defaults.headers.common['Authorization'] = `Bearer ${access}`

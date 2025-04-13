@@ -12,6 +12,8 @@ export const useAuthStore = defineStore('auth', {
     email: localStorage.getItem('email') || '',
     phone_number: localStorage.getItem('phone_number') || '',
     is_phone_verified: localStorage.getItem('is_phone_verified') || '',
+    accessToken: localStorage.getItem('accessToken') || null,
+    refreshToken: localStorage.getItem('refreshToken') || null,
   }),
   getters: {
     isLoggedIn(state) {
@@ -33,10 +35,6 @@ export const useAuthStore = defineStore('auth', {
     },
 
     saveUser(token, userDetails) {
-      console.log('saveUser called')
-      console.log('userDetails in saveUser', userDetails)
-      console.log('token', token)
-      console.log('save token', token.access)
       this.setTokens(token)
       this.isAuthenticated = true
       this.first_name = userDetails.first_name
@@ -60,8 +58,6 @@ export const useAuthStore = defineStore('auth', {
             email: res.data.email,
             phone_number: res.data.phone_number,
           }
-          console.log('userDetails', userDetails)
-          console.log('tokens_trial', res.data.tokens)
           this.saveUser(res.data.tokens, userDetails)
           Notify.create({
             type: 'positive',
