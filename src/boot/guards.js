@@ -5,70 +5,40 @@ export default boot(({ router }) => {
   const auth = useAuthStore()
 
   router.beforeEach(async (to, from, next) => {
-    // Initialize auth state
     const isAuthenticated = !!auth.accessToken
-    const isPhoneVerified = auth.is_phone_verified === true
-    const onboardingCompleted = localStorage.getItem('onBoardCount') === 'true'
+    const hasCompletedOnboarding = localStorage.getItem('onBoardCount') === 'true'
 
-    // Debugging info (remove in production)
-    console.log('[Route Guard]', {
-      route: to.name,
-      isAuthenticated,
-      isPhoneVerified,
-      requiresAuth: to.matched.some((r) => r.meta.requiresAuth),
-      requiresPhone: to.meta.requiresPhoneVerification,
-      isOnboarding: to.meta.isOnboarding,
-    })
-
-    // 1. Check for guest-only routes (login/register)
-    if (to.meta.guestOnly && isAuthenticated) {
-      return next({ name: 'home' }) // Redirect authenticated users away from auth pages
-    }
-
-    // 2. Handle public routes
+    // 1. Handle public routes (like login, register)
     if (to.meta.public) {
-      // Special handling for onboarding
-      if (to.meta.isOnboarding && onboardingCompleted) {
-        return isAuthenticated ? next({ name: 'home' }) : next({ name: 'login' })
+      // If it's the onboarding route
+      if (to.meta.isOnboarding) {
+        // If user already completed onboarding, redirect appropriately
+        if (hasCompletedOnboarding) {
+          return isAuthenticated ? next({ name: 'home' }) : next({ name: 'login' })
+        }
+        // Otherwise allow access to onboarding
+        return next()
       }
-      return next() // Allow access to all public routes
+      // Allow access to other public routes
+      return next()
     }
 
-    // 3. Handle unauthenticated users trying to access private routes
+    // 2. Handle unauthenticated users
     if (!isAuthenticated) {
-      // Redirect to onboarding if not completed
-      if (!onboardingCompleted) {
+      // If onboarding not completed, redirect to onboarding
+      if (!hasCompletedOnboarding) {
         return next({ name: 'onboard' })
       }
-      // Otherwise to login with redirect back
-      return next({
-        name: 'login',
-        query: { redirect: to.fullPath },
-      })
+      // Otherwise redirect to login
+      return next({ name: 'login', query: { redirect: to.fullPath } })
     }
 
-    // 4. Handle temporary auth routes (email/phone verification during registration)
-    if (to.meta.requiresTempAuth && !auth.tempAccessToken) {
-      return next({ name: 'register' }) // Restart registration if temp auth is missing
-    }
-
-    // 5. Check phone verification for protected routes
-    if (to.meta.requiresPhoneVerification && !isPhoneVerified) {
-      return next({ name: 'phone-number' }) // Force phone verification
-    }
-
-    // 6. Final check - if user tries to access onboarding after completion
-    if (to.meta.isOnboarding && onboardingCompleted) {
-      return next({ name: 'home' })
-    }
-
-    // All checks passed - allow navigation
+    // 3. Handle authenticated users - allow access
     next()
   })
 
-  // Optional: Handle navigation errors
+  // Optional error handling
   router.onError((error) => {
     console.error('[Router Error]', error)
-    // You might want to redirect to error page here
   })
 })

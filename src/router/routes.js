@@ -21,15 +21,14 @@ const routes = [
     path: '/pages',
     component: () => import('layouts/PagesLayout.vue'),
     redirect: { name: 'home' },
-    meta: { requiresAuth: true },
     children: [
       {
         path: 'home',
         name: 'home',
         component: () => import('pages/Main/HomePage.vue'),
         meta: {
+          requiresAuth: true,
           title: 'Dashboard',
-          requiresPhoneVerification: true,
         },
       },
       {
@@ -37,8 +36,8 @@ const routes = [
         name: 'edit',
         component: () => import('pages/Main/RegisterContacts.vue'),
         meta: {
+          requiresAuth: true,
           title: 'Edit Contacts',
-          requiresPhoneVerification: true,
         },
       },
       {
@@ -46,8 +45,8 @@ const routes = [
         name: 'list',
         component: () => import('pages/Main/ContactList.vue'),
         meta: {
+          requiresAuth: true,
           title: 'Contact List',
-          requiresPhoneVerification: true,
         },
       },
       {
@@ -55,8 +54,8 @@ const routes = [
         name: 'more',
         component: () => import('pages/Main/MorePage.vue'),
         meta: {
+          requiresAuth: true,
           title: 'More Options',
-          requiresPhoneVerification: true,
         },
       },
     ],
@@ -100,7 +99,6 @@ const routes = [
         meta: {
           public: true,
           title: 'Verify Email',
-          requiresTempAuth: true,
         },
       },
       {
@@ -110,7 +108,6 @@ const routes = [
         meta: {
           public: true,
           title: 'Phone Verification',
-          requiresTempAuth: true,
         },
       },
       {
@@ -120,7 +117,6 @@ const routes = [
         meta: {
           public: true,
           title: 'Verify Phone',
-          requiresTempAuth: true,
         },
       },
       {
@@ -140,7 +136,6 @@ const routes = [
         meta: {
           public: true,
           title: 'New Password',
-          requiresTempAuth: true,
         },
       },
     ],
