@@ -67,7 +67,7 @@ export const useAuthStore = defineStore('auth', {
             type: 'positive',
             message: 'Login successful',
           })
-          this.router.push({ path: '/' })
+          this.router.push({ name: 'home' })
         }
       } catch (e) {
         const res = e.response
