@@ -25,7 +25,7 @@
               <!-- cardsEnd -->
             </q-tab-panel>
 
-            <q-tab-panel name="emergency" class="q-gutter-y-lg">
+            <q-tab-panel name="emergency" class="q-gutter-y-lg q-py-xl">
               <InfoCard
                 :titles="EmerTit"
                 :describe="tableDescribe"
