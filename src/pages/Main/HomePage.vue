@@ -36,9 +36,10 @@ import callImg from '../../assets/img/callss.svg'
 import nonviolenceImg from '../../assets/img/nonviolence.svg'
 import userssolid from '../../assets/img/userssolid.svg'
 import usersolid from '../../assets/img/usersolid.svg'
+import { useQuasar } from 'quasar'
 
 const TriggerAlert = useOperations()
-
+  const $q = useQuasar()
 const dialogOpen = ref(false)
 const selectedCard = ref(null)
 const notRegisteredImg = usersolid
@@ -49,7 +50,7 @@ const noApprovedMessage = 'None of your contacts have approved your request. Ale
 
 const contacts = computed(() => TriggerAlert.myContacts || [])
 const approveCont = computed(() => 
-  contacts.value.filter((contact) => contact.status === 'approve').length
+  contacts.value.filter((contact) => contact.status === 'approved').length
 )
 
 const CardName1 = computed(() => {
@@ -143,6 +144,17 @@ const TriggerAction = async () => {
   if (contacts.value.length > 0 && approveCont.value > 0) {
     try {
       const geolocation = await getGeolocation()
+      if (!geolocation.latitude || !geolocation.longitude) {
+        console.error('Geolocation not available')
+        $q.notify({
+          message: 'Location not available. Please turn on your device location',
+          type: 'negative',
+          icon: 'location_off',
+          position: 'bottom',
+          timeout: 3000,
+        })
+        return
+      }
       await TriggerAlert.alertTrigger( {
         alertType: selectedCard.value?.cardName1,
         location: geolocation,

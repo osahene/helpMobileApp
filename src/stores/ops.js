@@ -17,9 +17,10 @@ export const useOperations = defineStore('ops', {
           }))
         }
       } catch (error) {
+        console.log('Error fetching dependants:', error)
         Notify.create({
           type: 'negative',
-          message: error,
+          message: 'No dependants found',
         })
       }
     },
@@ -32,9 +33,10 @@ export const useOperations = defineStore('ops', {
           }))
         }
       } catch (error) {
+        console.log('Error fetching contacts:', error)
         Notify.create({
           type: 'negative',
-          message: error,
+          message: 'No contacts found',
         })
       }
     },
@@ -48,9 +50,10 @@ export const useOperations = defineStore('ops', {
           })
         }
       } catch (error) {
+        console.log('Error creating relation:', error)
         Notify.create({
           type: 'negative',
-          message: error,
+          message: 'Error creating relation',
         })
       }
     },
@@ -64,9 +67,10 @@ export const useOperations = defineStore('ops', {
           })
         }
       } catch (error) {
+        console.log('Error approving dependant:', error)
         Notify.create({
           type: 'negative',
-          message: error,
+          message: 'Error approving dependant',
         })
       }
     },
@@ -82,7 +86,7 @@ export const useOperations = defineStore('ops', {
       } catch (error) {
         Notify.create({
           type: 'negative',
-          message: error,
+          message: error.response?.message || 'Error rejecting dependant',
         })
       }
     },
@@ -98,7 +102,7 @@ export const useOperations = defineStore('ops', {
       } catch (error) {
         Notify.create({
           type: 'negative',
-          message: error,
+          message: error.response?.message || 'Error deleting contact',
         })
       }
     },
@@ -114,7 +118,7 @@ export const useOperations = defineStore('ops', {
       } catch (error) {
         Notify.create({
           type: 'negative',
-          message: error,
+          message: error.response?.message || 'Error updating contact',
         })
       }
     },
@@ -130,7 +134,7 @@ export const useOperations = defineStore('ops', {
       } catch (error) {
         Notify.create({
           type: 'negative',
-          message: error,
+          message: error.response?.message || 'Error triggering alert',
         })
       }
     },
