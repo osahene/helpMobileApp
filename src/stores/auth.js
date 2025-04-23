@@ -56,7 +56,7 @@ export const useAuthStore = defineStore('auth', {
             first_name: res.data.data.first_name,
             last_name: res.data.data.last_name,
           }
-          this.saveUser(res.data.tokens, userDetails)
+          this.saveUser(res.data.data.tokens, userDetails)
           Notify.create({
             type: 'positive',
             message: 'Login successful',
