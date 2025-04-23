@@ -28,7 +28,7 @@
       <q-separator class="q-ma-md" inset />
       <q-card-section class="q-pa-sm text-center">
         <div class="text-grey-8 text-weight-light text-h6 q-ma-none">
-          or login with custom credentials
+          or 
         </div>
       </q-card-section>
       <q-card-section class="q-gutter-xs">
@@ -37,7 +37,7 @@
           class="custom-input"
           filled
           v-model.trim="user.email_address"
-          placeholder="amahenewaa@example.com or +233241123456"
+          placeholder="amahenewaa@example.com or +233123456789"
           type="email"
           lazy-rules
           :error="$v.user.email_address.$error"

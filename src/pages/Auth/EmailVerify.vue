@@ -15,7 +15,7 @@
             class="q-ma-none q-mt-md text-weight-light"
             :class="isDisabled ? 'isDisable' : 'isEnable'"
           >
-            <q-btn flat :disable="isDisabled" @click.prevent="handleResend" label="Resend Code" />
+            <q-btn flat :disable="isDisabled" @click.prevent="handleResend" label="Resend OTP" />
           </h6>
         </div>
       </q-card-section>

@@ -53,10 +53,8 @@ export const useAuthStore = defineStore('auth', {
         console.log('social res', res)
         if (res.status === 200) {
           const userDetails = {
-            first_name: res.data.first_name,
-            last_name: res.data.last_name,
-            email: res.data.email,
-            phone_number: res.data.phone_number,
+            first_name: res.data.data.first_name,
+            last_name: res.data.data.last_name,
           }
           this.saveUser(res.data.tokens, userDetails)
           Notify.create({
