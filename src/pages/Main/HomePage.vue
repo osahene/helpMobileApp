@@ -155,8 +155,8 @@ const TriggerAction = async () => {
         })
         return
       }
-      await TriggerAlert.alertTrigger( {
-        alertType: selectedCard.value?.cardName1,
+      await TriggerAlert.alertTrigger({
+        alertType: selectedCard.value?.cardTitle,
         location: geolocation,
       })
     } catch (error) {
