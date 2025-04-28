@@ -60,7 +60,7 @@ const CardName1 = computed(() => {
 })
 
 const CardName2 = computed(() => {
-   if (contacts.value.length === 0) return ' Contacts'
+  if (contacts.value.length === 0) return ' Contacts'
   if (approveCont.value === 0) return ' Approved Contacts'
   return selectedCard.value?.cardTitle2 || ''
 })
@@ -155,12 +155,31 @@ const TriggerAction = async () => {
         })
         return
       }
-      await TriggerAlert.alertTrigger({
+      const res = await TriggerAlert.alertTrigger({
         alertType: selectedCard.value?.cardTitle,
         location: geolocation,
       })
+      if (res.status === 200) {
+        $q.notify({
+          message: 'Alert triggered successfully',
+          type: 'positive',
+          icon: 'check_circle',
+          position: 'bottom',
+          timeout: 3000,
+        })
+      } else {
+        $q.notify({
+          message: 'Failed to trigger alert',
+          type: 'negative',
+          icon: 'error',
+          position: 'bottom',
+          timeout: 3000,
+        })
+      }
     } catch (error) {
       console.error('Error triggering alert:', error)
+    } finally {
+      onClose()
     }
   } else {
     console.warn('Cannot trigger action: User not authenticated or no contacts available.')
@@ -194,7 +213,7 @@ const getGeolocation = () => {
               reject('An unknown error occurred while retrieving location.')
           }
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
       )
     }
   })

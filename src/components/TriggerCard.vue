@@ -6,7 +6,7 @@
           <q-card-section class="q-pt-xs text-center">
             <div class="mt-5 text-xl font-bold text-red-400"><span>Heads Up</span><q-icon :name="fasExclamation" /> </div>
             <div class="text-h5 font-bold q-mt-sm q-mb-xs">
-              <span>{{ cardName1 }}</span
+              <span class="px-4">{{ cardName1 }}</span
               ><span>{{ cardName2 }}</span>
             </div>
             <div class="text-lg pt-5 text-black">
