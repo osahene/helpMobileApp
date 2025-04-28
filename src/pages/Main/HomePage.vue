@@ -159,6 +159,7 @@ const TriggerAction = async () => {
         alertType: selectedCard.value?.cardTitle,
         location: geolocation,
       })
+      console.log('trigger res', res)
       if (res.status === 201) {
         $q.notify({
           message: 'Alert triggered successfully',
