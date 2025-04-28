@@ -159,7 +159,7 @@ const TriggerAction = async () => {
         alertType: selectedCard.value?.cardTitle,
         location: geolocation,
       })
-      if (res.status === 200) {
+      if (res.status === 201) {
         $q.notify({
           message: 'Alert triggered successfully',
           type: 'positive',
@@ -177,12 +177,24 @@ const TriggerAction = async () => {
         })
       }
     } catch (error) {
-      console.error('Error triggering alert:', error)
+      $q.notify({
+          message: error.response?.data.error || 'Error triggering alert',
+          type: 'negative',
+          icon: 'error',
+          position: 'bottom',
+          timeout: 3000,
+        })
     } finally {
       onClose()
     }
   } else {
-    console.warn('Cannot trigger action: User not authenticated or no contacts available.')
+      $q.notify({
+        message: 'Error triggering alert: No approved contacts or user not authenticated',
+        type: 'negative',
+        icon: 'error',
+        position: 'bottom',
+        timeout: 3000,
+      })
   }
 }
 

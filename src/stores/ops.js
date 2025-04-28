@@ -17,10 +17,9 @@ export const useOperations = defineStore('ops', {
           }))
         }
       } catch (error) {
-        console.log('Error fetching dependants:', error)
         Notify.create({
           type: 'negative',
-          message: 'No dependants found',
+          message: error.response?.data?.error || 'No dependants found',
         })
       }
     },
@@ -33,10 +32,9 @@ export const useOperations = defineStore('ops', {
           }))
         }
       } catch (error) {
-        console.log('Error fetching contacts:', error)
         Notify.create({
           type: 'negative',
-          message: 'No contacts found',
+          message: error.response?.data?.error || 'No contacts found',
         })
       }
     },
