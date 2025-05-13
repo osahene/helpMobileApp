@@ -9,7 +9,7 @@ const $axios = axios.create({
   withCredentials: true,
   headers: {
     'Content-type': 'application/json',
-    'X-API-KEY': process.env.FRONTEND_API_KEY,
+    'X-API-KEY': process.env.VITE_frontendKey,
   },
 })
 
