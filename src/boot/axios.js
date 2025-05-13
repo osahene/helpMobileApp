@@ -7,7 +7,10 @@ import { Loading, QSpinnerBall, Notify } from 'quasar'
 const $axios = axios.create({
   baseURL: process.env.VITE_baseURL ? process.env.VITE_baseURL : 'http://127.0.0.1:8000',
   withCredentials: true,
-  'Content-type': 'application/json',
+  headers: {
+    'Content-type': 'application/json',
+    'X-API-KEY': process.env.FRONTEND_API_KEY,
+  },
 })
 
 // Function to refresh access token
