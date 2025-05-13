@@ -49,6 +49,7 @@ export default defineConfig((ctx) => {
       // analyze: true,
       env: {
         VITE_baseURL: process.env.VITE_baseURL,
+        VITE_frontendKey: process.env.VITE_frontendKey,
         VITE_clientId: process.env.VITE_clientId,
         VITE_twitter_client_id: process.env.VITE_twitter_client_id,
       },
