@@ -27,7 +27,7 @@ import { ref, computed } from 'vue'
 import TriggerCard from 'src/components/TriggerCard.vue'
 import { useOperations } from 'src/stores/ops'
 import { Geolocation as CapGeolocation } from '@capacitor/geolocation';
-import { isNativePlatform } from '../utils/platform';
+import { isNativePlatform } from '../../utils/platform';
 import HomeCard from 'src/components/HomeCard.vue'
 
 import healthImg from '../../assets/img/health.svg'
