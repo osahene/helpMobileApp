@@ -26,6 +26,8 @@
 import { ref, computed } from 'vue'
 import TriggerCard from 'src/components/TriggerCard.vue'
 import { useOperations } from 'src/stores/ops'
+import { Geolocation as CapGeolocation } from '@capacitor/geolocation';
+import { isNativePlatform } from '../utils/platform';
 import HomeCard from 'src/components/HomeCard.vue'
 
 import healthImg from '../../assets/img/health.svg'
@@ -156,7 +158,14 @@ const TriggerAction = async () => {
         return
       } else {
         console.log('trigger card',selectedCard.value?.cardTitle )
-        console.log('trigger loc',geolocation )
+        console.log('trigger loc', geolocation)
+        $q.notify({
+          message: `Location acquired (accuracy: ${Math.round(geolocation.accuracy)} meters)`,
+          type: 'positive',
+          icon: 'my_location',
+          position: 'bottom',
+          timeout: 3000,
+        })
         await TriggerAlert.alertTrigger({
           alertType: selectedCard.value?.cardTitle,
           location: geolocation,
@@ -173,8 +182,38 @@ const TriggerAction = async () => {
       })
   }
 }
+const getGeolocation = async () => {
+  if (isNativePlatform()) {
+    return getNativeGeolocation();
+  } else {
+    return getWebGeolocation();
+  }
+};
 
-const getGeolocation = () => {
+const getNativeGeolocation = async () => {
+  try {
+    const coordinates = await CapGeolocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000
+    });
+    return {
+      latitude: coordinates.coords.latitude,
+      longitude: coordinates.coords.longitude,
+      accuracy: coordinates.coords.accuracy
+    };
+  } catch (error) {
+    $q.notify({
+        message: error.message || 'User denied the request for Geolocation.',
+        type: 'negative',
+        icon: 'location_off',
+        position: 'bottom',
+        timeout: 3000,
+      });
+  }
+};
+
+
+const getWebGeolocation = () => {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       reject('Geolocation is not supported by your browser')
@@ -188,6 +227,7 @@ const getGeolocation = () => {
               resolve({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
+                accuracy: position.coords.accuracy,
               });
               // Clear the watch immediately after getting position
               navigator.geolocation.clearWatch(watchId);
