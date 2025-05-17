@@ -122,6 +122,7 @@ export const useOperations = defineStore('ops', {
     },
     async alertTrigger(data) {
       try {
+        console.log('Triggering alert with data:', data)
         const res = await apiService.triggerAlert(data)
         if (res.status === 201) {
           Notify.create({
