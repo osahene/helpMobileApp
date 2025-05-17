@@ -155,6 +155,8 @@ const TriggerAction = async () => {
         })
         return
       }
+      console.log('trigger card',selectedCard.value?.cardTitle )
+      console.log('trigger loc',geolocation )
       const res = await TriggerAlert.alertTrigger({
         alertType: selectedCard.value?.cardTitle,
         location: geolocation,
