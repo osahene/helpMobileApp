@@ -194,7 +194,7 @@ const getNativeGeolocation = async () => {
   try {
     const coordinates = await CapGeolocation.getCurrentPosition({
       enableHighAccuracy: true,
-      timeout: 40000
+      timeout: 60000
     }, $q.notify({
         message: 'Mobile location triggered',
         type: 'negative',
@@ -239,11 +239,11 @@ const getWebGeolocation = () => {
               navigator.geolocation.clearWatch(watchId);
             },
             (error) => handleGeolocationError(error, reject),
-            { enableHighAccuracy: true, timeout: 40000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: 60000, maximumAge: 0 }
           );
         },
         (error) => handleGeolocationError(error, reject),
-        { enableHighAccuracy: true, timeout: 40000 }
+        { enableHighAccuracy: true, timeout: 60000 }
       );
     }
   });
