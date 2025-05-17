@@ -142,7 +142,7 @@ const onClose = () => {
 const TriggerAction = async () => {
   // Check for the authenticated and contact conditions
   if (contacts.value.length > 0 && approveCont.value > 0) {
-    try {
+    
       const geolocation = await getGeolocation()
       if (!geolocation.latitude || !geolocation.longitude) {
         console.error('Geolocation not available')
@@ -154,42 +154,15 @@ const TriggerAction = async () => {
           timeout: 3000,
         })
         return
-      }
-      console.log('trigger card',selectedCard.value?.cardTitle )
-      console.log('trigger loc',geolocation )
-      const res = await TriggerAlert.alertTrigger({
-        alertType: selectedCard.value?.cardTitle,
-        location: geolocation,
-      })
-      console.log('trigger res', res)
-      if (res.status === 201) {
-        $q.notify({
-          message: 'Alert triggered successfully',
-          type: 'positive',
-          icon: 'check_circle',
-          position: 'bottom',
-          timeout: 3000,
-        })
       } else {
-        $q.notify({
-          message: 'Failed to trigger alert',
-          type: 'negative',
-          icon: 'error',
-          position: 'bottom',
-          timeout: 3000,
+        console.log('trigger card',selectedCard.value?.cardTitle )
+        console.log('trigger loc',geolocation )
+        await TriggerAlert.alertTrigger({
+          alertType: selectedCard.value?.cardTitle,
+          location: geolocation,
         })
-      }
-    } catch (error) {
-      $q.notify({
-          message: error.response?.data.error || 'Error triggering alert',
-          type: 'negative',
-          icon: 'error',
-          position: 'bottom',
-          timeout: 3000,
-        })
-    } finally {
-      onClose()
-    }
+        onClose()
+      }   
   } else {
       $q.notify({
         message: 'Error triggering alert: No approved contacts or user not authenticated',
