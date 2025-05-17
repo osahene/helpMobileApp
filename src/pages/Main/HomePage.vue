@@ -157,15 +157,6 @@ const TriggerAction = async () => {
         })
         return
       } else {
-        console.log('trigger card',selectedCard.value?.cardTitle )
-        console.log('trigger loc', geolocation)
-        $q.notify({
-          message: `Location acquired (accuracy: ${Math.round(geolocation.accuracy)} meters)`,
-          type: 'positive',
-          icon: 'my_location',
-          position: 'bottom',
-          timeout: 3000,
-        })
         await TriggerAlert.alertTrigger({
           alertType: selectedCard.value?.cardTitle,
           location: geolocation,
