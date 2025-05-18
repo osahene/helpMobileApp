@@ -11,8 +11,9 @@ export const useOperations = defineStore('ops', {
     async getMyDependant() {
       try {
         const res = await apiService.getMyDependants()
+        console.log('Response from getMyDependants:', res)
         if (res.status === 200) {
-          this.myDependants = res.data.results.map((item) => ({
+          this.myDependants = res.data.data.results.map((item) => ({
             ...item,
           }))
         }
