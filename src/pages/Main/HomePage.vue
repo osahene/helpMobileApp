@@ -1,5 +1,10 @@
 <template>
   <q-page class="relative flex-1 flex-grow flex flex-col min-w-0 break-words w-full">
+    <RobberyCountdown 
+      ref="robberyCountdownRef" 
+      @complete="triggerRobberyAlert" 
+      @cancel="cancelRobberyAlert"
+    />
     <div class="m-5 grid grid-cols-2 gap-7 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
       <div v-for="(item, key) in cardInfo" :key="key">
         <HomeCard
@@ -23,9 +28,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import TriggerCard from 'src/components/TriggerCard.vue'
+import RobberyCountdown from 'src/components/RobberyCountdown.vue';
 import { useOperations } from 'src/stores/ops'
+import { App } from '@capacitor/app';
 import { Geolocation as CapGeolocation } from '@capacitor/geolocation';
 import { isNativePlatform } from '../../utils/platform';
 import HomeCard from 'src/components/HomeCard.vue'
@@ -39,7 +46,7 @@ import nonviolenceImg from '../../assets/img/nonviolence.svg'
 import userssolid from '../../assets/img/userssolid.svg'
 import usersolid from '../../assets/img/usersolid.svg'
 import { useQuasar } from 'quasar'
-
+import { registerVolumeButtonListener, unregisterVolumeButtonListener } from 'src/utils/volumeButtonHandler';
 const TriggerAlert = useOperations()
   const $q = useQuasar()
 const dialogOpen = ref(false)
@@ -49,6 +56,44 @@ const noContactsImg = userssolid
 const Message = 'All approved contacts on your emergency list would receive this message.'
 const noContactsMessage = 'You do not have any contacts in your emergency list. To use this service, register at least one person, and they must approve your request before receiving alerts.'
 const noApprovedMessage = 'None of your contacts have approved your request. Alert them to approve your request.'
+
+const robberyCountdownRef = ref(null);
+const robberyCard = {
+  id: 2,
+  cardTitle: 'Robbery',
+  cardTitle2: 'Attack',
+  cardImg: handcuffsImg,
+};
+// Register global function for background task to call
+window.triggerRobberyAlert = () => {
+  if (robberyCountdownRef.value) {
+    robberyCountdownRef.value.start();
+  }
+};
+
+// Mount/Unmount listeners
+onMounted(() => {
+  App.addListener('appStateChange', (state) => {
+    if (state.isActive) {
+      // App is active, reset the robbery countdown
+      if (robberyCountdownRef.value) {
+        // robberyCountdownRef.value.start();
+        registerVolumeButtonListener();
+      }
+    } else {
+      // App is in background, stop the countdown
+      if (robberyCountdownRef.value) {
+        robberyCountdownRef.value.cancel();
+      }
+    }
+  });
+});
+
+onBeforeUnmount(() => {
+  unregisterVolumeButtonListener();
+  delete window.triggerRobberyAlert;
+});
+
 
 const contacts = computed(() => TriggerAlert.myContacts || [])
 const approveCont = computed(() => 
@@ -109,7 +154,7 @@ const cardInfo = [
     id: 2,
     cardTitle: 'Robbery',
     cardTitle2: 'Attack',
-    cardImg: handcuffsImg,
+    cardImg: handcuffsImg
   },
   {
     id: 3,
@@ -140,6 +185,66 @@ const cardInfo = [
 const onClose = () => {
   dialogOpen.value = false
 }
+
+const triggerRobberyAlert = async () => {
+  selectedCard.value = robberyCard;
+  
+  if (contacts.value.length > 0 && approveCont.value > 0) {
+    const geolocation = await getGeolocation();
+    
+    if (!geolocation.latitude || !geolocation.longitude) {
+      $q.notify({
+        message: 'Location not available. Please turn on your device location',
+        type: 'negative',
+        icon: 'location_off',
+        position: 'bottom',
+        timeout: 3000,
+      });
+      return;
+    }
+    
+    try {
+      await TriggerAlert.alertTrigger({
+        alertType: robberyCard.cardTitle,
+        location: geolocation,
+      });
+      
+      $q.notify({
+        message: 'Robbery alert sent to your emergency contacts!',
+        type: 'positive',
+        icon: 'check_circle',
+        position: 'bottom',
+        timeout: 3000,
+      });
+    } catch (error) {
+      $q.notify({
+        message: 'Failed to send robbery alert: ' + error.message,
+        type: 'negative',
+        icon: 'error',
+        position: 'bottom',
+        timeout: 3000,
+      });
+    }
+  } else {
+    $q.notify({
+      message: 'Cannot send alert: No approved contacts available',
+      type: 'negative',
+      icon: 'error',
+      position: 'bottom',
+      timeout: 3000,
+    });
+  }
+};
+
+const cancelRobberyAlert = () => {
+  $q.notify({
+    message: 'Robbery alert canceled',
+    type: 'info',
+    icon: 'cancel',
+    position: 'bottom',
+    timeout: 2000,
+  });
+};
 
 const TriggerAction = async () => {
   // Check for the authenticated and contact conditions

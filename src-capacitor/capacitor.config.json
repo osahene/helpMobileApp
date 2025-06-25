@@ -1,5 +1,23 @@
 {
   "appId": "org.capacitor.helpmobile.app",
   "appName": "Help Mobile App",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "BackgroundRunner": {
+      "label": "com.example.background.task",
+      "src": "background.js",
+      "event": "volumeButtonPressed",
+      "repeat": true,
+      "interval": 15,
+      "autoStart": true
+    }
+  },
+  "android": {
+    "allowMixedHttp": true,
+    "foregroundService": {
+      "notificationTitle": "Emergency Alert Service",
+      "notificationBody": "Monitoring for emergency triggers",
+      "notificationColor": "#FF0000"
+    }
+  }
 }
