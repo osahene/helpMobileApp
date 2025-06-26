@@ -32,7 +32,6 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import TriggerCard from 'src/components/TriggerCard.vue'
 import RobberyCountdown from 'src/components/RobberyCountdown.vue';
 import { useOperations } from 'src/stores/ops'
-import { App } from '@capacitor/app';
 import { Geolocation as CapGeolocation } from '@capacitor/geolocation';
 import { isNativePlatform } from '../../utils/platform';
 import HomeCard from 'src/components/HomeCard.vue'
@@ -47,6 +46,9 @@ import userssolid from '../../assets/img/userssolid.svg'
 import usersolid from '../../assets/img/usersolid.svg'
 import { useQuasar } from 'quasar'
 import { registerVolumeButtonListener, unregisterVolumeButtonListener } from 'src/utils/volumeButtonHandler';
+const {App} = isNativePlatform()
+
+
 const TriggerAlert = useOperations()
   const $q = useQuasar()
 const dialogOpen = ref(false)

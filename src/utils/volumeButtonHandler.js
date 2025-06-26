@@ -1,5 +1,26 @@
-import { BackgroundRunner } from '@capacitor/background-runner'
 import { App } from '@capacitor/app'
+import { Capacitor } from '@capacitor/core';
+
+
+
+let BackgroundRunner;
+
+const initializeBackgroundRunner = async () => {
+  if (Capacitor.isNativePlatform()) {
+    const { BackgroundRunner: BR } = await import('@capacitor/background-runner');
+    BackgroundRunner = BR;
+  } else {
+    BackgroundRunner = {
+      addListener: () => ({ remove: () => {} }),
+      removeAllListeners: () => {},
+      dispatchEvent: () => Promise.resolve(),
+      isAvailable: () => Promise.resolve({ available: false })
+    };
+  }
+};
+
+initializeBackgroundRunner();
+
 
 const VOLUME_PRESS_INTERVAL = 500 // Max time between presses (ms)
 const PRESS_COUNT_THRESHOLD = 4 // Number of presses to trigger
@@ -32,7 +53,10 @@ export const registerVolumeButtonListener = async () => {
   if (isRegistered) return
 
   try {
-    // First, check if background task is registered
+    if (!BackgroundRunner) {
+      await initializeBackgroundRunner();
+    }
+    
     const isAvailable = await BackgroundRunner.isAvailable()
     if (!isAvailable.available) {
       console.error('Background runner not available:', isAvailable.reason)
