@@ -3,7 +3,9 @@
   "appName": "Help Mobile App",
   "webDir": "www",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "url": "http://172.22.96.1:9500",
+    "cleartext": true
   },
   "plugins": {
     "BackgroundRunner": {
