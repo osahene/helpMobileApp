@@ -3,7 +3,9 @@
 	"appName": "Help Mobile App",
 	"webDir": "www",
 	"server": {
-		"androidScheme": "https"
+		"androidScheme": "https",
+		"url": "http://172.22.96.1:9500",
+		"cleartext": true
 	},
 	"plugins": {
 		"BackgroundRunner": {
@@ -18,7 +20,7 @@
 			"launchShowDuration": 5,
 			"launchAutoHide": true,
 			"launchFadeOutDuration": 5,
-			"backgroundColor": "#ffffffff",
+			"backgroundColor": "#b32424",
 			"androidSplashResourceName": "splash",
 			"androidScaleType": "CENTER_CROP",
 			"showSpinner": false,
@@ -29,6 +31,13 @@
 			"splashImmersive": false,
 			"layoutName": "launch_screen",
 			"useDialog": false
+		},
+		"Google": {
+			"clientId": "972387283638-ad9c1rcda4sc1ki137f80u87po7f07l5.apps.googleusercontent.com",
+			"scopes": [
+				"profile",
+				"email"
+			]
 		}
 	},
 	"android": {
@@ -42,6 +51,7 @@
 	"packageClassList": [
 		"AppPlugin",
 		"GeolocationPlugin",
-		"HapticsPlugin"
+		"HapticsPlugin",
+		"SocialLoginPlugin"
 	]
 }
