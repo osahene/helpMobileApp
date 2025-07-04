@@ -4,10 +4,36 @@
   "webDir": "www",
   "server": {
     "androidScheme": "https",
-    "url": "http://172.22.96.1:9500",
+    "url": "http://192.168.197.141:9500",
     "cleartext": true
   },
   "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "CapacitorStorage": {
+      "enabled": true
+    },
+    "CapacitorPushNotifications": {
+      "enabled": true,
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
+    },
+    "CapacitorLocalNotifications": {
+      "enabled": true,
+      "iconColor": "#FF0000",
+      "smallIcon": "ic_stat_icon_config_sample",
+      "sound": "beep.wav",
+      "channelId": "emergency_alerts",
+      "channelName": "Emergency Alerts",
+      "channelDescription": "Notifications for emergency alerts",
+      "importance": "high",
+      "visibility": "public",
+      "vibrate": true
+    },
     "BackgroundRunner": {
       "label": "com.example.background.task",
       "src": "background.js",

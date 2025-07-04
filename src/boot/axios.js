@@ -2,14 +2,25 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import dayjs from 'dayjs'
 import { Loading, QSpinnerBall, Notify } from 'quasar'
+import { Capacitor } from '@capacitor/core'
 
+const isNativeMobile = Capacitor.isNativePlatform()
+
+const baseURL = isNativeMobile
+  ? 'https://emerg.mvbm3bdqqxhm2.eu-west-2.cs.amazonlightsail.com'
+  : process.env.VITE_baseURL || 'http://127.0.0.1:8000'
+
+const frontendKey = isNativeMobile
+  ? 'jszRfa=0[L~87W_B4f1@XBK~ubL_2H,{.,0)WvvVo~FRrTcR}E'
+  : process.env.VITE_frontendKey
 // Creating Axios instance with default configuration
+
 const $axios = axios.create({
-  baseURL: process.env.VITE_baseURL ? process.env.VITE_baseURL : 'http://127.0.0.1:8000',
+  baseURL: baseURL,
   withCredentials: true,
   headers: {
     'Content-type': 'application/json',
-    'X-API-KEY': process.env.VITE_frontendKey,
+    'X-API-KEY': frontendKey,
   },
 })
 
