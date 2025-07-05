@@ -9,28 +9,34 @@ importers:
   .:
     dependencies:
       '@capacitor/android':
-        specifier: ^7.2.0
-        version: 7.4.0(@capacitor/core@7.4.0)
+        specifier: ^7.4.1
+        version: 7.4.1(@capacitor/core@7.4.1)
       '@capacitor/app':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.0)
+        version: 7.0.1(@capacitor/core@7.4.1)
+      '@capacitor/background-runner':
+        specifier: ^2.1.0
+        version: 2.1.0(@capacitor/core@7.4.1)
       '@capacitor/cli':
-        specifier: ^7.2.0
-        version: 7.4.0
+        specifier: ^7.4.1
+        version: 7.4.1
       '@capacitor/core':
-        specifier: ^7.2.0
-        version: 7.4.0
+        specifier: ^7.4.1
+        version: 7.4.1
       '@capacitor/geolocation':
-        specifier: ^7.1.2
-        version: 7.1.2(@capacitor/core@7.4.0)
+        specifier: ^7.1.3
+        version: 7.1.3(@capacitor/core@7.4.1)
       '@capacitor/haptics':
         specifier: ^7.0.1
-        version: 7.0.1(@capacitor/core@7.4.0)
+        version: 7.0.1(@capacitor/core@7.4.1)
+      '@capgo/capacitor-social-login':
+        specifier: ^7.7.0
+        version: 7.7.0(@capacitor/core@7.4.1)
 
 packages:
 
-  '@capacitor/android@7.4.0':
-    resolution: {integrity: sha512-HVCQsnUobviGt/MR5qCfXsfkSyZ5gjJVW6Jbn0CI5NHhsvUkBtazGjaMjdt5JueIz1pfKXpiuZc/njfRHwjx6Q==}
+  '@capacitor/android@7.4.1':
+    resolution: {integrity: sha512-/LxreKsXt6oZnS7gOpHz2WvRuZzwaLpGOKqomvBTliISTQaKEwqLkX1k665fqZquuJjP8RKnkz8thO6UZJTfbg==}
     peerDependencies:
       '@capacitor/core': ^7.4.0
 
@@ -39,16 +45,21 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
-  '@capacitor/cli@7.4.0':
-    resolution: {integrity: sha512-RXmsW067r9sz7K1qtXGNB12w2aJtt86J3Jc4vOvmvpA+GyVYkVY1UhAMRnuVrXHjGZEVlwBORHunwrmv30HoZg==}
+  '@capacitor/background-runner@2.1.0':
+    resolution: {integrity: sha512-5ezvBeZVOaMC1sqDgD5gvCC4RYarEA47k29fAKti+mr2B9VvTp9yjeirMxjPJHvM247z1QNDTgAvEk4KmClE4Q==}
+    peerDependencies:
+      '@capacitor/core': ^6.0.0 || ^7.0.0
+
+  '@capacitor/cli@7.4.1':
+    resolution: {integrity: sha512-pN5SCj5SAA54yHj8XKJNhRXjjHNKrSfUuSS7a8GKQl/+OeaG0aA2hNJmM5RQJMBQ5MtU0sQqSLWpTkSW9nd7YA==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
-  '@capacitor/core@7.4.0':
-    resolution: {integrity: sha512-P6NnjoHyobZgTjynlZSn27d0SUj6j38inlNxFnKZr9qwU7/r6+0Sg2nWkGkIH/pMmXHsvGD8zVe6KUq1UncIjA==}
+  '@capacitor/core@7.4.1':
+    resolution: {integrity: sha512-0ap4FzPJItaeg3QiiS1WguPNHY2aD67fQ9wr7DojCRzTFuNXQPvFB6lBkqlrVeQyJ9jCw0KV/LXv25oXjDcsyA==}
 
-  '@capacitor/geolocation@7.1.2':
-    resolution: {integrity: sha512-J++OuOpn6Bjweo7SZ+jwI/dhVF9DNw6Wx0UHgQ4qfrATqmNKGNZ/BUljGhXiKJceSx2GIhfrYS7BYqo3uWibgQ==}
+  '@capacitor/geolocation@7.1.3':
+    resolution: {integrity: sha512-uAW9za/1t/z4kWXTxM74NxCq1IcL45+5U5ILKvukEuCLUFN/+NyfbYI3H/rF0s4EVQXppd1U1WkXH6yxKLrpMQ==}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
 
@@ -59,6 +70,11 @@ packages:
 
   '@capacitor/synapse@1.0.3':
     resolution: {integrity: sha512-7gGvuQ1NlSCwnjdIMkry+/meyUxHTnsVodRxOTOerLAoAyvtSnCp1rKyLjt9kCz9Lf7Y/wUbCe+AWbAvfxL5bA==}
+
+  '@capgo/capacitor-social-login@7.7.0':
+    resolution: {integrity: sha512-Hn7xBxJbY3Ncx2FijYp26ZvWOAN+mEjJcJUlmfqbdi/ZHPkCpWG5OZRbMWZFeAtCozQgZc6guXZgZBFMDlwb3Q==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
 
   '@ionic/cli-framework-output@2.2.8':
     resolution: {integrity: sha512-TshtaFQsovB4NWRBydbNFawql6yul7d5bMiW1WYYf17hd99V6xdDdk3vtF51bw6sLkxON3bDQpWsnUc9/hVo3g==}
@@ -107,8 +123,8 @@ packages:
   '@types/fs-extra@8.1.5':
     resolution: {integrity: sha512-0dzKcwO+S8s2kuF5Z9oUWatQJj5Uq/iqphEtE3GQJVRRYm/tD1LglU2UnXi2A8jLq5umkGouOXOR9y0n613ZwQ==}
 
-  '@types/node@24.0.4':
-    resolution: {integrity: sha512-ulyqAkrhnuNq9pB76DRBTkcS6YsmDALy6Ua63V8OhrOBgbcYt6IOdzpw5P1+dyRIyMerzLkeYWBeOXPpA9GMAA==}
+  '@types/node@24.0.10':
+    resolution: {integrity: sha512-ENHwaH+JIRTDIEEbDK6QSQntAYGtbvdDXnMXnZaZ6k13Du1dPMmprkEHIL7ok2Wl2aZevetwTAb5S+7yIF+enA==}
 
   '@types/slice-ansi@4.0.0':
     resolution: {integrity: sha512-+OpjSaq85gvlZAYINyzKpLeiFkSC4EsC6IIiT6v6TLSU5k5U83fHGj9Lel8oKEXM0HqgrMVCjXPDPVICtxF7EQ==}
@@ -461,15 +477,19 @@ packages:
 
 snapshots:
 
-  '@capacitor/android@7.4.0(@capacitor/core@7.4.0)':
+  '@capacitor/android@7.4.1(@capacitor/core@7.4.1)':
     dependencies:
-      '@capacitor/core': 7.4.0
+      '@capacitor/core': 7.4.1
 
-  '@capacitor/app@7.0.1(@capacitor/core@7.4.0)':
+  '@capacitor/app@7.0.1(@capacitor/core@7.4.1)':
     dependencies:
-      '@capacitor/core': 7.4.0
+      '@capacitor/core': 7.4.1
 
-  '@capacitor/cli@7.4.0':
+  '@capacitor/background-runner@2.1.0(@capacitor/core@7.4.1)':
+    dependencies:
+      '@capacitor/core': 7.4.1
+
+  '@capacitor/cli@7.4.1':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
       '@ionic/utils-subprocess': 3.0.1
@@ -491,20 +511,24 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/core@7.4.0':
+  '@capacitor/core@7.4.1':
     dependencies:
       tslib: 2.8.1
 
-  '@capacitor/geolocation@7.1.2(@capacitor/core@7.4.0)':
+  '@capacitor/geolocation@7.1.3(@capacitor/core@7.4.1)':
     dependencies:
-      '@capacitor/core': 7.4.0
+      '@capacitor/core': 7.4.1
       '@capacitor/synapse': 1.0.3
 
-  '@capacitor/haptics@7.0.1(@capacitor/core@7.4.0)':
+  '@capacitor/haptics@7.0.1(@capacitor/core@7.4.1)':
     dependencies:
-      '@capacitor/core': 7.4.0
+      '@capacitor/core': 7.4.1
 
   '@capacitor/synapse@1.0.3': {}
+
+  '@capgo/capacitor-social-login@7.7.0(@capacitor/core@7.4.1)':
+    dependencies:
+      '@capacitor/core': 7.4.1
 
   '@ionic/cli-framework-output@2.2.8':
     dependencies:
@@ -599,9 +623,9 @@ snapshots:
 
   '@types/fs-extra@8.1.5':
     dependencies:
-      '@types/node': 24.0.4
+      '@types/node': 24.0.10
 
-  '@types/node@24.0.4':
+  '@types/node@24.0.10':
     dependencies:
       undici-types: 7.8.0
 
