@@ -4,15 +4,9 @@ import { SocialLogin } from '@capgo/capacitor-social-login'
 import { Capacitor } from '@capacitor/core'
 
 const isNativeMobile = Capacitor.isNativePlatform()
+console.log('isNativeMobile:', isNativeMobile)
 
 export default boot(({ app }) => async () => {
-  // app.use(
-  //   await SocialLogin.initialize({
-  //     google: {
-  //       webClientId: '972387283638-50fgpr3klnhg5ld92jtam1iu69n4s7gf.apps.googleusercontent.com',
-  //     },
-  //   }),
-  // )
   if (isNativeMobile) {
     app.use(
       SocialLogin.initialize({

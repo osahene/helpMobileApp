@@ -144,9 +144,9 @@ export const useAuthStore = defineStore('auth', {
         if (res.status === 200) {
           this.first_name = res.data.data.first_name
           this.last_name = res.data.data.last_name
-          this.is_phone_verified = res.data.is_phone_verified
+          this.is_phone_verified = res.data.data.is_phone_verified
           this.isAuthenticated = true
-          this.setTokens(res.data.tokens.tokens)
+          this.setTokens(res.data.data.tokens.tokens)
 
           Notify.create({
             type: 'positive',
