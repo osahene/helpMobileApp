@@ -121,14 +121,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed} from 'vue'
+import { ref, reactive, computed, onMounted} from 'vue'
 import { useAuthStore } from 'src/stores/auth.js'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { useQuasar } from 'quasar'
 import { GoogleSignInButton } from 'vue3-google-signin'
 import { SocialLogin } from '@capgo/capacitor-social-login';
-import '@capgo/capacitor-social-login/dist/esm/social-login.css'
 import { Capacitor } from '@capacitor/core'
 
 const isNativeMobile = Capacitor.isNativePlatform()
@@ -180,13 +179,13 @@ const onSubmit = async () => {
   }
 }
 
-// onMounted(() => {
-//   SocialLogin.initialize({
-//     google: {
-//       webClientId: '972387283638-50fgpr3klnhg5ld92jtam1iu69n4s7gf.apps.googleusercontent.com',
-//     }
-//   })
-// })
+onMounted(() => {
+  SocialLogin.initialize({
+    google: {
+      webClientId: '972387283638-50fgpr3klnhg5ld92jtam1iu69n4s7gf.apps.googleusercontent.com',
+    }
+  })
+})
 
 const initiateGoogleSignInMobile = async () => {
   if (isNativeMobile) {
