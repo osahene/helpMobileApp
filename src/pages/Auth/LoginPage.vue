@@ -15,7 +15,7 @@
             @click="initiateGoogleSignInMobile"
           />
         </template> -->
-        <template>
+        <!-- <template> -->
           
           <GoogleSignInButton
             @success="handleGoogleLoginSuccess"
@@ -28,7 +28,7 @@
               Google
             </template>
           </GoogleSignInButton>
-        </template>
+        <!-- </template> -->
         <!-- <q-separator vertical />
         <q-btn
           outline

@@ -21,7 +21,7 @@ export default boot(({ app }) => async () => {
     clientId:
       process.env.NODE_ENV === 'development'
         ? process.env.VITE_googleCred
-        : process.env.VITE_clientId,
+        : '972387283638-ad9c1rcda4sc1ki137f80u87po7f07l5.apps.googleusercontent.com',
     scope: 'profile email',
     response_type: 'id_token',
     prompt: 'consent',
