@@ -5,7 +5,7 @@
         <div class="text-grey-9 text-weight-light">Login with</div>
       </q-card-section>
       <q-card-section class="flex justify-around">
-        <!-- <template v-if="$q.platform.is.mobile">
+        <template v-if="$q.platform.is.mobile">
           <q-btn
             outline
             class="text-subtitle1 q-ma-none shadow-2 text-weight-light"
@@ -14,8 +14,8 @@
             label="Google"
             @click="initiateGoogleSignInMobile"
           />
-        </template> -->
-        <!-- <template> -->
+        </template>
+        <template>
           
           <GoogleSignInButton
             @success="handleGoogleLoginSuccess"
@@ -28,7 +28,7 @@
               Google
             </template>
           </GoogleSignInButton>
-        <!-- </template> -->
+        </template>
         <!-- <q-separator vertical />
         <q-btn
           outline
@@ -127,10 +127,10 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { useQuasar } from 'quasar'
 import { GoogleSignInButton } from 'vue3-google-signin'
-// import { SocialLogin } from '@capgo/capacitor-social-login';
-// import { Capacitor } from '@capacitor/core'
+import { SocialLogin } from '@capgo/capacitor-social-login';
+import { Capacitor } from '@capacitor/core'
 
-// const isNativeMobile = Capacitor.isNativePlatform()
+const isNativeMobile = Capacitor.isNativePlatform()
 
 const isValidEmailOrPhone = (value) => {
   if (!value) return false
@@ -187,36 +187,36 @@ const onSubmit = async () => {
 //   })
 // })
 
-// const initiateGoogleSignInMobile = async () => {
-//   if (isNativeMobile) {
-//     try {
-//       console.log('Initiating Google Sign-In for mobile...')
-//       const response = await SocialLogin.login({
-//         provider: 'google',
-//         options: {
-//           scopes: ['email', 'profile'],
-//         }
-//       }
-//       )
-//       console.log('Google Sign-In Response:', response);
-//       handleGoogleLoginSuccess(response)
-//     } catch (error) {
-//       console.error('Google Sign-In Error Details:', {
-//         message: error.message,
-//         code: error.code,
-//         stack: error.stack,
-//       });
-//       handleGoogleLoginError(error)
-//     }
-//   } else {
-//     $q.notify({
-//       color: 'red-5',
-//       textColor: 'white',
-//       icon: 'warning',
-//       message: 'Google Sign-In is not supported on this platform.',
-//     })
-//   }
-// }
+const initiateGoogleSignInMobile = async () => {
+  if (isNativeMobile) {
+    try {
+      console.log('Initiating Google Sign-In for mobile...')
+      const response = await SocialLogin.login({
+        provider: 'google',
+        options: {
+          scopes: ['email', 'profile'],
+        }
+      }
+      )
+      console.log('Google Sign-In Response:', response);
+      handleGoogleLoginSuccess(response)
+    } catch (error) {
+      console.error('Google Sign-In Error Details:', {
+        message: error.message,
+        code: error.code,
+        stack: error.stack,
+      });
+      handleGoogleLoginError(error)
+    }
+  } else {
+    $q.notify({
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'warning',
+      message: 'Google Sign-In is not supported on this platform.',
+    })
+  }
+}
 
 
 const handleGoogleLoginSuccess = async (response) => {
