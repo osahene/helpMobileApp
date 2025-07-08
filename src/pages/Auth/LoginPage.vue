@@ -15,7 +15,7 @@
             @click="initiateGoogleSignInMobile"
           />
         </template>
-        <template>
+        <template v-else>
           
           <GoogleSignInButton
             @success="handleGoogleLoginSuccess"
@@ -39,7 +39,7 @@
         /> -->
       </q-card-section>
       <q-separator class="q-ma-md" inset />
-      <q-card-section class="q-pa-sm text-center">
+      <q-card-section class="q-pa-none text-center">
         <div class="text-grey-8 text-weight-light text-h6 q-ma-none">
           or 
         </div>
