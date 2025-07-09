@@ -11,8 +11,7 @@ export default boot(({ app }) => {
     app.use(
       SocialLogin.initialize({
         google: {
-          androidClientId:
-            '972387283638-50fgpr3klnhg5ld92jtam1iu69n4s7gf.apps.googleusercontent.com',
+          webClientId: '972387283638-ad9c1rcda4sc1ki137f80u87po7f07l5.apps.googleusercontent.com',
         },
       }),
     )
