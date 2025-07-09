@@ -5,7 +5,7 @@
         <div class="text-grey-9 text-weight-light">Login with</div>
       </q-card-section>
       <q-card-section class="flex justify-around">
-        <template v-if="$q.platform.is.mobile">
+        <template v-if="isNativeMobile">
           <q-btn
             outline
             class="text-subtitle1 q-ma-none shadow-2 text-weight-light"
@@ -179,13 +179,6 @@ const onSubmit = async () => {
   }
 }
 
-// onMounted(() => {
-//   SocialLogin.initialize({
-//     google: {
-//       webClientId: '972387283638-50fgpr3klnhg5ld92jtam1iu69n4s7gf.apps.googleusercontent.com',
-//     }
-//   })
-// })
 
 const initiateGoogleSignInMobile = async () => {
   if (isNativeMobile) {
