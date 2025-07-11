@@ -191,8 +191,11 @@ const initiateGoogleSignInMobile = async () => {
         }
       }
       )
-      console.log('Google Sign-In Response:', response);
-      handleGoogleLoginSuccess(response)
+      // const id_token = response?.result?.accessToken?.token
+      console.log('Google Sign-In stuff:', JSON.stringify(response))
+      const id_token = response?.result?.idToken
+      // handleGoogleLoginSuccess(JSON.stringify(response))
+      handleGoogleLoginSuccess(JSON.stringify(id_token))
     } catch (error) {
       console.error('Google Sign-In Error Details:', {
         message: error.message,
@@ -214,7 +217,17 @@ const initiateGoogleSignInMobile = async () => {
 
 const handleGoogleLoginSuccess = async (response) => {
   const { credential } = response
-  await AuthStore.socialLogin({ credential })
+  console.log('Google Sign-In cred:', credential)
+  // console.log('Google Sign-In res:', response)
+  if (!credential) {
+    console.error('No credential found in Google Sign-In response:', response)
+    const res = await AuthStore.socialLogin(response)
+    console.log('Social login response:', res)
+   
+  } else {
+    console.log('Google Sign-In credential:', credential)
+    await AuthStore.socialLogin(credential)
+  }
 }
 
 const handleGoogleLoginError = (errorResponse) => {

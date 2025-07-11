@@ -2,11 +2,24 @@ import { defineStore } from 'pinia'
 import { Notify } from 'quasar'
 import apiService from 'src/api/axiosInstance'
 
+const extractErrorMessage = (error, defaultMessage) => {
+  if (!error.response) return error.message || defaultMessage
+
+  const { data } = error.response
+  if (data?.detail) return data.detail
+  if (data?.error) {
+    const errorString = typeof data.error === 'object' ? JSON.stringify(data.error) : data.error
+    const match = /ErrorDetail\(string='(.*?)'/.exec(errorString)
+    return match?.[1] || errorString
+  }
+  return defaultMessage
+}
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isLoading: false,
     isAuthenticated: false,
-    onBoardCount: localStorage.getItem('onBoardCount') || 0,
+    onBoardCount: localStorage.getItem('onBoardCount') || '0',
     first_name: localStorage.getItem('first_name') || '',
     last_name: localStorage.getItem('last_name') || '',
     email: localStorage.getItem('email') || '',
@@ -15,171 +28,106 @@ export const useAuthStore = defineStore('auth', {
     accessToken: localStorage.getItem('accessToken') || null,
     refreshToken: localStorage.getItem('refreshToken') || null,
   }),
+
   getters: {
-    isLoggedIn(state) {
-      return !!state.accessToken
-    },
-    shouldCompleteOnboarding: () => {
-      return (
-        !localStorage.getItem('onBoardCount') || localStorage.getItem('onBoardCount') !== 'true'
-      )
-    },
+    isLoggedIn: (state) => !!state.accessToken,
+    shouldCompleteOnboarding: (state) => state.onBoardCount !== 'true',
   },
 
   actions: {
-    setTokens(token) {
-      this.accessToken = token.access
-      this.refreshToken = token.refresh
-      localStorage.setItem('accessToken', this.accessToken)
-      localStorage.setItem('refreshToken', this.refreshToken)
+    setTokens(tokens) {
+      this.accessToken = tokens.access
+      this.refreshToken = tokens.refresh
+      localStorage.setItem('accessToken', tokens.access)
+      localStorage.setItem('refreshToken', tokens.refresh)
     },
 
-    saveUser(token, userDetails) {
-      this.setTokens(token)
+    saveUser(tokens, userDetails) {
+      this.setTokens(tokens)
       this.isAuthenticated = true
-      this.first_name = userDetails.first_name
-      this.last_name = userDetails.last_name
-      this.is_phone_verified = userDetails.is_phone_verified
-      localStorage.setItem('first_name', userDetails.first_name)
-      localStorage.setItem('last_name', userDetails.last_name)
-      localStorage.setItem('is_phone_verified', userDetails.is_phone_verified)
+
+      Object.entries(userDetails).forEach(([key, value]) => {
+        if (Object.prototype.hasOwnProperty.call(this, key)) {
+          this[key] = value
+          localStorage.setItem(key, value)
+        }
+      })
+    },
+
+    handleAuthSuccess(response, successMessage = 'Login successful') {
+      const { tokens, data: userData } = response.data
+      this.saveUser(tokens, {
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        is_phone_verified: userData.is_phone_verified,
+      })
+
+      Notify.create({ type: 'positive', message: successMessage })
+      this.router.push('/pages/home')
+    },
+
+    handleRedirectResponse(response) {
+      const redirectUrl = response.data.redirect_url
+      Notify.create({
+        type: 'negative',
+        message: response.data.message || 'Redirection required.',
+      })
+      if (redirectUrl) this.router.push(redirectUrl)
+    },
+
+    async handleAuthError(error, defaultMessage = 'An error occurred during authentication') {
+      if (error.response?.status === 307) {
+        this.handleRedirectResponse(error.response)
+      } else {
+        const errorMessage = extractErrorMessage(error, defaultMessage)
+        Notify.create({ type: 'negative', message: errorMessage })
+      }
     },
 
     async socialLogin(response) {
       try {
-        const res = await apiService.googleLogin({
-          id_token: response.credential,
-        })
-        console.log('social res', res)
-        if (res.status === 200) {
-          const userDetails = {
-            first_name: res.data.data.first_name,
-            last_name: res.data.data.last_name,
+        if (!response.credential) {
+          console.log('No credential found in response:', response)
+          const res = await apiService.googleLogin({ id_token: response.replace(/^"|"$/g, '') })
+          if (res.status === 200) {
+            this.handleAuthSuccess(res)
           }
-          this.saveUser(res.data.data.tokens, userDetails)
-          Notify.create({
-            type: 'positive',
-            message: 'Login successful',
-          })
-          this.router.push({ path: '/pages/home' })
-        }
-      } catch (e) {
-        const res = e.response
-        if (res && res.status === 307) {
-          const redirectUrl = res.data.redirect_url
-          this.setTokens(res.data.data.token)
-          this.router.push({ path: redirectUrl })
-
-          Notify.create({
-            type: 'negative',
-            message: res.data.message || 'Redirection required.',
-          })
         } else {
-          let errorMessage = 'An error occurred during login.'
-          if (e.response && e.response.data && e.response.data.detail) {
-            errorMessage = e.response.data.detail
-          } else if (e.message) {
-            errorMessage = e.message
+          console.log('Credential found in response:', response.credential)
+          const res = await apiService.googleLogin({ id_token: response.credential })
+          if (res.status === 200) {
+            this.handleAuthSuccess(res)
           }
-
-          Notify.create({
-            type: 'negative',
-            message: errorMessage,
-          })
         }
+      } catch (error) {
+        await this.handleAuthError(error)
       }
     },
 
-    async loginsRem(credentials) {
+    async logins(credentials, useAlternativeResponse = false) {
       try {
         const res = await apiService.login(credentials)
-        console.log('res log rem', res)
-        if (res.status === 200) {
+        if (res.status !== 200) return
+
+        if (useAlternativeResponse) {
           const userDetails = {
             first_name: res.data.data.first_name,
             last_name: res.data.data.last_name,
-            is_phone_verified: res.data.is_phone_verified,
+            is_phone_verified: res.data.data.is_phone_verified,
           }
           this.saveUser(res.data.tokens.tokens, userDetails)
-
-          Notify.create({
-            type: 'positive',
-            message: 'Login successful',
-          })
-          this.router.push({ path: '/pages/home' })
-        }
-      } catch (e) {
-        const res = e.response
-        if (res && res.status === 307) {
-          const redirectUrl = res.data.redirect_url
-
-          Notify.create({
-            type: 'negative',
-            message: res.data.detail || 'Redirection required.',
-          })
-
-          if (redirectUrl) {
-            this.router.push({ path: redirectUrl })
-          }
         } else {
-          let errorMessage = 'An error occurred during login.'
-          if (e.response && e.response.data && e.response.data.detail) {
-            errorMessage = e.response.data.detail
-          } else if (e.message) {
-            errorMessage = e.message
-          }
-
-          Notify.create({
-            type: 'negative',
-            message: errorMessage,
-          })
-        }
-      }
-    },
-
-    async logins(credentials) {
-      try {
-        const res = await apiService.login(credentials)
-        console.log('res log', res)
-        if (res.status === 200) {
           this.first_name = res.data.data.first_name
           this.last_name = res.data.data.last_name
           this.is_phone_verified = res.data.data.is_phone_verified
           this.isAuthenticated = true
           this.setTokens(res.data.data.tokens.tokens)
-
-          Notify.create({
-            type: 'positive',
-            message: 'Login successful',
-          })
-          this.router.push({ path: '/pages/home' })
         }
-      } catch (e) {
-        const res = e.response
-        if (res && res.status === 307) {
-          const redirectUrl = res.data.redirect_url
 
-          Notify.create({
-            type: 'negative',
-            message: res.data.detail || 'Redirection required.',
-          })
-
-          if (redirectUrl) {
-            this.router.push({ path: redirectUrl })
-          }
-        } else {
-          let errorMessage = 'An error occurred during login.'
-          if (e.response && e.response.data && e.response.data.detail) {
-            errorMessage = e.response.data.detail
-          } else if (e.message) {
-            errorMessage = e.message
-          }
-
-          Notify.create({
-            type: 'negative',
-            message: errorMessage,
-          })
-        }
+        Notify.create({ type: 'positive', message: 'Login successful' })
+        this.router.push('/pages/home')
+      } catch (error) {
+        await this.handleAuthError(error)
       }
     },
 
@@ -188,128 +136,57 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await apiService.register(data)
         if (response.status === 201) {
-          this.router.push({ path: '/reg/email-verify' })
+          this.router.push('/reg/email-verify')
           Notify.create({
             type: 'positive',
             message: 'Enter the One Time Password to verify email',
           })
         }
-      } catch (e) {
-        let errorMessage = 'An error occurred during registration.' // Default message
+      } catch (error) {
+        const errorMessage = extractErrorMessage(error, 'An error occurred during registration')
+        Notify.create({ type: 'negative', message: errorMessage })
+      } finally {
+        this.isLoading = false
+      }
+    },
 
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.error) {
-          const errorData = e.response.data.error
-
-          // Convert error object to string if it's an object
-          let errorString = typeof errorData === 'object' ? JSON.stringify(errorData) : errorData
-
-          // Use regular expression to extract the error message within 'ErrorDetail(string=...)'
-          let regex = /ErrorDetail\(string='(.*?)'/
-          let match = regex.exec(errorString)
-
-          if (match && match[1]) {
-            errorMessage = match[1] // Extracted error message
-          } else {
-            errorMessage = errorData // Fallback if regex doesn't match
-          }
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
+    async handleVerificationFlow(apiCall, data, successPath, successMessage) {
+      this.isLoading = true
+      try {
+        const response = await apiCall(data)
+        if (response.status === 200) {
+          this.router.push(successPath)
+          Notify.create({ type: 'positive', message: successMessage })
+          return response
         }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
+      } catch (error) {
+        const errorMessage = extractErrorMessage(error, 'An error occurred during verification')
+        Notify.create({ type: 'negative', message: errorMessage })
+      } finally {
+        this.isLoading = false
       }
     },
 
     async EmailOTP(data) {
-      this.isLoading = true
-      try {
-        const response = await apiService.verifyEmail(data)
-        console.log('hi')
-        if (response.status === 200) {
-          this.setTokens(response.data.tokens)
-          localStorage.setItem('is_phone_verified', 'false')
-          this.router.push({ path: '/reg/phone-number' })
-          Notify.create({
-            type: 'positive',
-            message: response.data.message || 'Proceed to enter phone number',
-          })
-        }
-      } catch (e) {
-        let errorMessage = 'An error occurred during registration.' // Default message
-
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.error) {
-          const errorData = e.response.data.error
-
-          // Convert error object to string if it's an object
-          let errorString = typeof errorData === 'object' ? JSON.stringify(errorData) : errorData
-
-          // Use regular expression to extract the error message within 'ErrorDetail(string=...)'
-          let regex = /ErrorDetail\(string='(.*?)'/
-          let match = regex.exec(errorString)
-
-          if (match && match[1]) {
-            errorMessage = match[1] // Extracted error message
-          } else {
-            errorMessage = errorData // Fallback if regex doesn't match
-          }
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
-        }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
+      const response = await this.handleVerificationFlow(
+        apiService.verifyEmail,
+        data,
+        '/reg/phone-number',
+        'Proceed to enter phone number',
+      )
+      if (response) {
+        this.setTokens(response.data.tokens)
+        localStorage.setItem('is_phone_verified', 'false')
       }
     },
 
     async VerifyPhone(data) {
-      this.isLoading = true
-      try {
-        const response = await apiService.VerifyPhoneNumber(data)
-        if (response.status === 200) {
-          this.router.push({ path: '/reg/phone-number-verify' })
-          Notify.create({
-            type: 'positive',
-            message: 'Enter the One Time Password to verify email',
-          })
-        }
-      } catch (e) {
-        let errorMessage = 'An error occurred during registration.' // Default message
-
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.error) {
-          const errorData = e.response.data.error
-
-          // Convert error object to string if it's an object
-          let errorString = typeof errorData === 'object' ? JSON.stringify(errorData) : errorData
-
-          // Use regular expression to extract the error message within 'ErrorDetail(string=...)'
-          let regex = /ErrorDetail\(string='(.*?)'/
-          let match = regex.exec(errorString)
-
-          if (match && match[1]) {
-            errorMessage = match[1] // Extracted error message
-          } else {
-            errorMessage = errorData // Fallback if regex doesn't match
-          }
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
-        }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
-      }
+      await this.handleVerificationFlow(
+        apiService.VerifyPhoneNumber,
+        data,
+        '/reg/phone-number-verify',
+        'Enter the One Time Password to verify phone',
+      )
     },
 
     async PhoneVerifyOTP(data) {
@@ -322,41 +199,16 @@ export const useAuthStore = defineStore('auth', {
           this.last_name = res.data.last_name
           this.isAuthenticated = true
           this.setTokens(res.data.tokens)
-          this.router.push({ path: '/pages/home' })
 
           Notify.create({
             type: 'positive',
             message: res.data.message || 'Registration Successful',
           })
+          this.router.push('/pages/home')
         }
-      } catch (e) {
-        let errorMessage = 'An error occurred during registration.' // Default message
-
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.error) {
-          const errorData = e.response.data.error
-
-          // Convert error object to string if it's an object
-          let errorString = typeof errorData === 'object' ? JSON.stringify(errorData) : errorData
-
-          // Use regular expression to extract the error message within 'ErrorDetail(string=...)'
-          let regex = /ErrorDetail\(string='(.*?)'/
-          let match = regex.exec(errorString)
-
-          if (match && match[1]) {
-            errorMessage = match[1] // Extracted error message
-          } else {
-            errorMessage = errorData // Fallback if regex doesn't match
-          }
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
-        }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
+      } catch (error) {
+        const errorMessage = extractErrorMessage(error, 'An error occurred during verification')
+        Notify.create({ type: 'negative', message: errorMessage })
       }
     },
 
@@ -365,85 +217,48 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await apiService.generateRegister(data)
         if (response.status === 200) {
-          Notify.create({
-            type: 'positive',
-            message: 'OTP has been sent',
-          })
+          Notify.create({ type: 'positive', message: 'OTP has been sent' })
         }
-      } catch (e) {
-        let errorMessage = 'An error occurred during setup.'
+      } catch (error) {
+        const errorMessage = extractErrorMessage(error, 'An error occurred during OTP resend')
+        Notify.create({ type: 'negative', message: errorMessage })
+      } finally {
+        this.isLoading = false
+      }
+    },
 
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.error) {
-          errorMessage = e.response.data.error
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
+    async passwordResetFlow(apiCall, data, successPath, successMessage) {
+      this.isLoading = true
+      try {
+        const response = await apiCall(data)
+        if (response.status === 200) {
+          this.router.push(successPath)
+          Notify.create({ type: 'positive', message: successMessage })
         }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
+      } catch (error) {
+        const errorMessage = extractErrorMessage(error, 'An error occurred during password reset')
+        Notify.create({ type: 'negative', message: errorMessage })
+      } finally {
+        this.isLoading = false
       }
     },
 
     async forgotEmail(data) {
-      this.isLoading = true
-      try {
-        const response = await apiService.forgottenEmail(data)
-        if (response.status == 200) {
-          this.router.push({ path: '/reg/confirm-password' })
-          Notify.create({
-            type: 'positive',
-            message: 'Password reset successful',
-          })
-        }
-      } catch (e) {
-        let errorMessage = 'An error occurred during setup.'
-
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.error) {
-          errorMessage = e.response.data.error
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
-        }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
-      }
+      await this.passwordResetFlow(
+        apiService.forgottenEmail,
+        data,
+        '/reg/confirm-password',
+        'Password reset instructions sent',
+      )
     },
 
     async ConfirmPassword(data) {
-      this.isLoading = true
-      try {
-        const response = await apiService.confirmPassword(data)
-        if (response.status == 200) {
-          this.router.push({ path: '/auth/login' })
-          Notify.create({
-            type: 'positive',
-            message: 'Password reset successful',
-          })
-        }
-      } catch (e) {
-        let errorMessage = 'An error occurred during setup.'
-
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.error) {
-          errorMessage = e.response.data.error
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
-        }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
-      }
+      await this.passwordResetFlow(
+        apiService.confirmPassword,
+        data,
+        '/auth/login',
+        'Password reset successful',
+      )
     },
 
     async logout() {
@@ -453,27 +268,14 @@ export const useAuthStore = defineStore('auth', {
         const res = await apiService.logout({ refresh_token: refreshToken })
         if (res.status === 204) {
           localStorage.clear()
-          this.router.push({ path: '/auth/login' })
+          this.router.push('/auth/login')
+          Notify.create({ type: 'positive', message: 'Logout successful' })
         }
-        Notify.create({
-          type: 'positive',
-          message: 'Logout successful',
-        })
-      } catch (e) {
-        let errorMessage = 'An error occurred during login.'
-
-        // Check if error response has data and a specific error message
-        if (e.response && e.response.data && e.response.data.detail) {
-          errorMessage = e.response.data.detail
-        } else if (e.message) {
-          // Fallback to error message if no specific error message from server
-          errorMessage = e.message
-        }
-
-        Notify.create({
-          type: 'negative',
-          message: errorMessage,
-        })
+      } catch (error) {
+        const errorMessage = extractErrorMessage(error, 'An error occurred during logout')
+        Notify.create({ type: 'negative', message: errorMessage })
+      } finally {
+        this.isLoading = false
       }
     },
   },
