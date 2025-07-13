@@ -3,12 +3,13 @@ import { BackgroundRunner } from '@capacitor/background-runner'
 
 const VolumeButtons = registerPlugin('VolumeButtons')
 
-// Register the background task
-BackgroundRunner.addListener('volumeButtonPressed', async () => {
+// Initialize the background task
+export default async () => {
   try {
-    // Listen to actual hardware volume buttons
+    // Listen to volume buttons
     VolumeButtons.addListener('volumeButtonPressed', ({ direction }) => {
-      // Forward the event to your handler
+      console.log('Volume button pressed:', direction)
+      // Dispatch event to your app
       BackgroundRunner.dispatchEvent({
         label: 'com.example.background.task',
         event: 'volumeButtonPressed',
@@ -20,7 +21,4 @@ BackgroundRunner.addListener('volumeButtonPressed', async () => {
   } catch (error) {
     return { error: error.message }
   }
-})
-
-// Initialize the background task
-BackgroundRunner.init()
+}

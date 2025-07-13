@@ -16,11 +16,7 @@
     },
     "CapacitorPushNotifications": {
       "enabled": true,
-      "presentationOptions": [
-        "badge",
-        "sound",
-        "alert"
-      ]
+      "presentationOptions": ["badge", "sound", "alert"]
     },
     "CapacitorLocalNotifications": {
       "enabled": true,
@@ -36,7 +32,7 @@
     },
     "BackgroundRunner": {
       "label": "com.example.background.task",
-      "src": "background.js",
+      "src": "public/background.js",
       "event": "volumeButtonPressed",
       "repeat": true,
       "interval": 15,
