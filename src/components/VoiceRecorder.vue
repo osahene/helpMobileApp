@@ -54,9 +54,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, onBeforeUnmount, nextTick } from 'vue'
 import { useQuasar } from 'quasar'
-import { Capacitor } from '@capacitor/core'
+// import { Capacitor } from '@capacitor/core'
 import { CapacitorVoiceRecorder } from '@lgicc/capacitor-voice-recorder'
 import WaveSurfer from 'wavesurfer.js'
 
@@ -74,15 +74,15 @@ let wavesurferInstance = null
 let timer = null
 const maxDuration = 120 // 2 minutes in seconds
 
-onMounted(async () => {
-  if (Capacitor.isNativePlatform()) {
-    try {
-      await CapacitorVoiceRecorder.requestAudioRecordingPermission()
-    } catch (error) {
-      $q.notify({ type: 'negative', message: `Permission request failed: ${error.message || error}` })
-    }
-  }
-})
+// onMounted(async () => {
+//   if (Capacitor.isNativePlatform()) {
+//     try {
+//       await CapacitorVoiceRecorder.requestAudioRecordingPermission()
+//     } catch (error) {
+//       $q.notify({ type: 'negative', message: `Permission request failed: ${error.message || error}` })
+//     }
+//   }
+// })
 
 onBeforeUnmount(() => {
   if (wavesurferInstance) wavesurferInstance.destroy()

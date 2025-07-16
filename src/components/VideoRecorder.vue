@@ -3,16 +3,20 @@
     <q-card-section>
       <div class="text-h6">Video Recorder</div>
 
-      <div v-if="!videoBlob" class="text-center q-my-md">
+      <div v-if="!videoUrl" class="text-center q-my-md">
         <q-btn
           color="primary"
           icon="videocam"
           label="Record Video"
           @click="startRecording"
+          :disable="!cameraInitialized"
         />
+        <p v-if="!cameraInitialized" class="text-caption text-red q-mt-sm">
+          Initializing camera...
+        </p>
       </div>
 
-      <div v-if="videoBlob" class="q-mt-md">
+      <div v-if="videoUrl" class="q-mt-md">
         <video
           ref="videoPlayer"
           :src="videoUrl"
@@ -31,143 +35,262 @@
           Playback speed: {{ videoSpeed }}x
         </div>
       </div>
-
-      </q-card-section>
+    </q-card-section>
   </q-card>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue' // Import watch for reactivity
-import { useQuasar } from 'quasar'
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera' // Import necessary Camera enums
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useQuasar } from 'quasar';
+import { VideoRecorder, VideoRecorderCamera, VideoRecorderQuality } from '@capacitor-community/video-recorder';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Capacitor } from '@capacitor/core';
 
-const $q = useQuasar()
-const videoBlob = ref(null) // This will store the actual file path for native or the blob URL for web
-const videoUrl = ref('') // This will be the URL to display in the <video> tag
-const videoPlayer = ref(null)
-const videoSpeed = ref(1)
-let videoTimer = null
-const maxVideoDuration = 60 // 1 minute in seconds
+const $q = useQuasar();
+const emit = defineEmits(['record-complete']);
 
-onMounted(async () => {
-  console.log('VideoRecorder component mounted. Requesting camera permissions...');
+const videoUrl = ref(null);
+const videoPlayer = ref(null);
+const videoSpeed = ref(1);
+const cameraInitialized = ref(false);
+const recordedVideoPath = ref(null);
+const isRecording = ref(false);
+
+// Check and request camera permissions
+const checkPermissions = async () => {
   try {
-    console.log('Requesting camera permissions...');
-    const permStatus = await Camera.requestPermissions();
-    console.log('Camera permissions status:', permStatus);
-    if (permStatus.camera === 'denied' || permStatus.microphone === 'denied') {
+    const cameraStatus = await Permissions.checkPermission({ name: 'camera' });
+    const microphoneStatus = await Permissions.checkPermission({ name: 'microphone' });
+    
+    if (cameraStatus.state !== 'granted') {
+      await Permissions.requestPermission({ name: 'camera' });
+    }
+    
+    if (microphoneStatus.state !== 'granted') {
+      await Permissions.requestPermission({ name: 'microphone' });
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Permission error:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Camera permission required',
+      caption: 'Please enable camera permissions in app settings'
+    });
+    return false;
+  }
+};
+
+// Initialize the video recorder with retry logic
+const initializeRecorder = async () => {
+  try {
+    const hasPermission = await checkPermissions();
+    if (!hasPermission) {
+      cameraInitialized.value = false;
+      return;
+    }
+    
+    // First remove any existing listeners
+    VideoRecorder.removeAllListeners();
+    
+    // Initialize with retry logic
+    let retries = 3;
+    while (retries > 0) {
+      try {
+        await VideoRecorder.initialize({
+          camera: VideoRecorderCamera.FRONT,
+          quality: VideoRecorderQuality.MAX_720P,
+          autoShow: true,
+        });
+        cameraInitialized.value = true;
+        return;
+      } catch (initError) {
+        retries--;
+        if (retries === 0) throw initError;
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
+  } catch (error) {
+    console.error('Error initializing video recorder:', error);
+    cameraInitialized.value = false;
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to initialize camera',
+      caption: error.message
+    });
+  }
+};
+
+// Start recording with camera preview
+const startRecording = async () => {
+  if (isRecording.value) return;
+  
+  try {
+    if (!cameraInitialized.value) {
+      await initializeRecorder();
+    }
+    
+    await VideoRecorder.showPreview();
+    await new Promise(resolve => setTimeout(resolve, 300)); // Small delay for preview to show
+    
+    await VideoRecorder.startRecording();
+    isRecording.value = true;
+    
+    $q.notify({
+      type: 'info',
+      message: 'Recording started',
+      timeout: 1000
+    });
+  } catch (error) {
+    console.error('Error starting recording:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to start recording',
+      caption: error.message
+    });
+  }
+};
+
+// Stop recording and get the video
+const stopRecording = async () => {
+  if (!isRecording.value) return;
+  
+  try {
+    const result = await VideoRecorder.stopRecording();
+    isRecording.value = false;
+    console.log('Recording stopped:', result);
+    
+    if (result?.video) {
+      recordedVideoPath.value = result.video;
+      
+      if (!Capacitor.isNativePlatform()) {
+        videoUrl.value = result.video;
+      } else {
+        try {
+          const file = await Filesystem.readFile({
+            path: result.video,
+            directory: Directory.Data,
+          });
+          
+          const blob = b64toBlob(file.data, 'video/mp4');
+          videoUrl.value = URL.createObjectURL(blob);
+        } catch (readError) {
+          console.error('Error reading video file:', readError);
+          $q.notify({
+            type: 'negative',
+            message: 'Failed to load recorded video',
+            caption: readError.message
+          });
+        }
+      }
+      
+      emit('record-complete', result.video);
       $q.notify({
-        type: 'warning',
-        message: 'Camera and microphone permissions are required to record videos. Please enable them in app settings.',
-        timeout: 5000,
-        // actions: [
-        //   { label: 'Settings', handler: () => {
-        //       // Open app settings - requires @capacitor/app plugin
-        //       // import { App } from '@capacitor/app';
-        //       // App.openSettings();
-        //     }, color: 'white' }
-        // ]
+        type: 'positive',
+        message: 'Video recorded successfully',
+        timeout: 2000
       });
     }
-  } catch (e) {
-    console.error('Error requesting permissions:', e);
-    $q.notify({ type: 'negative', message: 'Failed to request camera permissions.' });
-  }
-});
-
-// Emit an event to the parent component with the video data
-const emit = defineEmits(['record-complete'])
-
-const startRecording = async () => {
-  console.log('Attempting to record video...');
-  try {
-    const video = await Camera.getVideo({
-      quality: 100, // Quality can be 0-100
-      duration: maxVideoDuration, // This is the duration limit in seconds
-      // Capacitor 4+ uses presentationStyle for prompt customization
-      // For older versions, the promptLabel options might still work on some platforms
-      presentationStyle: 'fullscreen', // 'fullscreen', 'popover', or 'formSheet'
-      source: CameraSource.Prompt, // Allows user to choose between camera or gallery
-      resultType: CameraResultType.Uri, // This is key: get a URI
-    });
-
-    console.log('Video recording result:', video);
-
-    if (video && video.path) {
-      // For native platforms, video.path will be the file URI
-      videoBlob.value = video.path;
-      videoUrl.value = video.path; // Use path for display on native
-      $q.notify({ type: 'positive', message: 'Video recorded successfully!' });
-
-      // Emit the path to the parent for potential upload
-      emit('record-complete', video.path);
-
-    } else if (video && video.webPath) {
-      // For web (PWA/browser), video.webPath will be a blob URL
-      videoBlob.value = video.webPath; // Store the webPath
-      videoUrl.value = video.webPath; // Use webPath for display on web
-      $q.notify({ type: 'positive', message: 'Video recorded successfully!' });
-
-      // On web, webPath is a blob URL. If you need to upload it,
-      // you'll need to fetch the blob content.
-      // This part will be handled in the parent component if necessary.
-      emit('record-complete', video.webPath);
-    } else {
-        throw new Error('Video path or webPath not found.');
-    }
-
-    // Reset recording state (these might not be needed for Capacitor Camera)
-    clearInterval(videoTimer);
-
   } catch (error) {
-    console.error('Video recording failed:', error);
-    // Check for user cancellation specifically
-    if (error.message === 'User cancelled photos app' || error.message === 'User cancelled video recording.') {
-      $q.notify({ type: 'info', message: 'Video recording cancelled.' });
-    } else {
-      $q.notify({ type: 'negative', message: 'Video recording failed. Please ensure camera permissions are granted.' });
-    }
+    console.error('Error stopping recording:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to stop recording',
+      caption: error.message
+    });
   }
-}
+};
 
+// Helper function to convert base64 to Blob
+const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  return new Blob(byteArrays, { type: contentType });
+};
+
+// Video player controls
 const playVideo = () => {
   if (videoPlayer.value) {
-    videoPlayer.value.playbackRate = videoSpeed.value
-    videoPlayer.value.play()
+    videoPlayer.value.play();
   }
-}
+};
 
 const pauseVideo = () => {
   if (videoPlayer.value) {
-    videoPlayer.value.pause()
+    videoPlayer.value.pause();
   }
-}
+};
 
 const toggleVideoSpeed = () => {
-  videoSpeed.value = videoSpeed.value === 1 ? 1.5 : videoSpeed.value === 1.5 ? 2 : 1
+  videoSpeed.value = videoSpeed.value === 1 ? 2 : 1;
   if (videoPlayer.value) {
-    videoPlayer.value.playbackRate = videoSpeed.value
+    videoPlayer.value.playbackRate = videoSpeed.value;
   }
-}
+};
 
-const deleteVideo = () => {
-  videoBlob.value = null
-  videoUrl.value = ''
-  // Emit null to the parent to indicate video deletion
-  emit('record-complete', null);
-}
-
-// const formatTime = (seconds) => {
-//   const mins = Math.floor(seconds / 60)
-//   const secs = seconds % 60
-//   return `${mins}:${secs < 10 ? '0' : ''}${secs}`
-// }
-
-// Watch for changes in videoUrl and update videoPlayer's src if needed
-// This might be redundant if the video element is re-rendered, but good for robustness
-watch(videoUrl, (newUrl) => {
-  if (videoPlayer.value && newUrl) {
-    videoPlayer.value.src = newUrl;
+const deleteVideo = async () => {
+  try {
+    // Clean up native file if it exists
+    if (Capacitor.isNativePlatform() && recordedVideoPath.value) {
+      await Filesystem.deleteFile({
+        path: recordedVideoPath.value,
+        directory: Directory.Data,
+      });
+    }
+    
+    // Clean up blob URL if it exists
+    if (videoUrl.value && !Capacitor.isNativePlatform()) {
+      URL.revokeObjectURL(videoUrl.value);
+    }
+    
+    videoUrl.value = null;
+    recordedVideoPath.value = null;
+    emit('record-complete', null);
+  } catch (error) {
+    console.error('Error deleting video:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to delete video',
+      caption: error.message
+    });
   }
+};
+
+// Initialize on mount
+onMounted(async () => {
+  await initializeRecorder();
+  
+  VideoRecorder.addListener('startedRecording', () => {
+    console.log('Recording started event received');
+  });
+  
+  VideoRecorder.addListener('stoppedRecording', stopRecording);
+});
+
+// Clean up on unmount
+onBeforeUnmount(() => {
+  if (isRecording.value) {
+    VideoRecorder.stopRecording().catch(console.error);
+  }
+  
+  if (videoUrl.value && !Capacitor.isNativePlatform()) {
+    URL.revokeObjectURL(videoUrl.value);
+  }
+  
+  VideoRecorder.removeAllListeners();
 });
 </script>

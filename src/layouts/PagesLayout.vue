@@ -7,7 +7,7 @@
           <q-footer>
             <q-tabs v-model="tab" align="justify" dense class="bg-white text-red shadow-2">
               <q-route-tab to="/pages/home" name="home" icon="home" class="q-pa-sm" />
-              <q-route-tab to="/pages/report" name="report" icon="fa-solid fa-bullhorn" class="q-pa-sm" />
+              <!-- <q-route-tab to="/pages/report" name="report" icon="fa-solid fa-bullhorn" class="q-pa-sm" /> -->
               <q-route-tab to="/pages/edit" name="edit" icon="edit" />
               <q-route-tab to="/pages/list" name="lists" icon="list">
                 <q-badge v-if="pendingCount > 0" color="purple" text-color="white" floating>{{

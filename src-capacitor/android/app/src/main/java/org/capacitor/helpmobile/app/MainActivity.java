@@ -9,7 +9,10 @@ import android.content.Intent;
 import android.util.Log;
 // social login end
 import com.getcapacitor.BridgeActivity;
-
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 // public class MainActivity extends BridgeActivity {}
 public class MainActivity extends BridgeActivity implements ModifiedMainActivityForSocialLoginPlugin {
 

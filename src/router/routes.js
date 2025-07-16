@@ -31,15 +31,15 @@ const routes = [
           title: 'Dashboard',
         },
       },
-      {
-        path: 'report',
-        name: 'report',
-        component: () => import('pages/Main/ReportEmergency.vue'),
-        meta: {
-          requiresAuth: true,
-          title: 'Report Emergency',
-        },
-      },
+      // {
+      //   path: 'report',
+      //   name: 'report',
+      //   component: () => import('pages/Main/ReportEmergency.vue'),
+      //   meta: {
+      //     requiresAuth: true,
+      //     title: 'Report Emergency',
+      //   },
+      // },
       {
         path: 'edit',
         name: 'edit',

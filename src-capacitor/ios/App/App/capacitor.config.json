@@ -74,6 +74,7 @@
 		}
 	},
 	"packageClassList": [
+		"VideoRecorder",
 		"AppPlugin",
 		"BackgroundRunnerPlugin",
 		"CAPCameraPlugin",
