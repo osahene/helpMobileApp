@@ -4,7 +4,7 @@
 	"webDir": "www",
 	"server": {
 		"androidScheme": "https",
-		"url": "http://192.168.197.141:9500",
+		"url": "http://192.168.52.1:9500",
 		"cleartext": true
 	},
 	"plugins": {
@@ -34,9 +34,15 @@
 			"visibility": "public",
 			"vibrate": true
 		},
+		"Camera": {
+			"cameraPermissionDescription": "We need access to your camera to record videos"
+		},
+		"VoiceRecorder": {
+			"microphonePermission": "We need access to your microphone to record audio notes"
+		},
 		"BackgroundRunner": {
 			"label": "com.example.background.task",
-			"src": "background.js",
+			"src": "public/background.js",
 			"event": "volumeButtonPressed",
 			"repeat": true,
 			"interval": 15,
@@ -70,8 +76,11 @@
 	"packageClassList": [
 		"AppPlugin",
 		"BackgroundRunnerPlugin",
+		"CAPCameraPlugin",
+		"FilesystemPlugin",
 		"GeolocationPlugin",
 		"HapticsPlugin",
-		"SocialLoginPlugin"
+		"SocialLoginPlugin",
+		"CapacitorVoiceRecorder"
 	]
 }

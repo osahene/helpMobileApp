@@ -1,5 +1,5 @@
 <template>
-  <q-page class="relative top-[100px] flex-1 flex-grow flex flex-col min-w-0 break-words w-full">
+  <q-page class="relative flex-1 flex-grow flex flex-col min-w-0 break-words w-full">
     <RobberyCountdown 
       ref="robberyCountdownRef" 
       @complete="triggerRobberyAlert" 

@@ -16,7 +16,11 @@
     },
     "CapacitorPushNotifications": {
       "enabled": true,
-      "presentationOptions": ["badge", "sound", "alert"]
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
     },
     "CapacitorLocalNotifications": {
       "enabled": true,
@@ -29,6 +33,12 @@
       "importance": "high",
       "visibility": "public",
       "vibrate": true
+    },
+    "Camera": {
+      "cameraPermissionDescription": "We need access to your camera to record videos"
+    },
+    "VoiceRecorder": {
+      "microphonePermission": "We need access to your microphone to record audio notes"
     },
     "BackgroundRunner": {
       "label": "com.example.background.task",

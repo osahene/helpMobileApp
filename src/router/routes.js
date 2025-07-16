@@ -32,6 +32,15 @@ const routes = [
         },
       },
       {
+        path: 'report',
+        name: 'report',
+        component: () => import('pages/Main/ReportEmergency.vue'),
+        meta: {
+          requiresAuth: true,
+          title: 'Report Emergency',
+        },
+      },
+      {
         path: 'edit',
         name: 'edit',
         component: () => import('pages/Main/RegisterContacts.vue'),
