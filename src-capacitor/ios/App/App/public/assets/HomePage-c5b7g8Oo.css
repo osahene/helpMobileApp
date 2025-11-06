@@ -1,8 +1,8 @@
-
-.fade-enter-active[data-v-d7cbb035], .fade-leave-active[data-v-d7cbb035] {
-    transition: opacity 0.3s;
+.fade-enter-active[data-v-d7cbb035],
+.fade-leave-active[data-v-d7cbb035] {
+  transition: opacity 0.3s;
 }
-.fade-enter-from[data-v-d7cbb035], .fade-leave-to[data-v-d7cbb035] {
-    opacity: 0;
+.fade-enter-from[data-v-d7cbb035],
+.fade-leave-to[data-v-d7cbb035] {
+  opacity: 0;
 }
-  

@@ -1,6 +1,4 @@
 function boot(callback) {
-  return callback;
+  return callback
 }
-export {
-  boot as b
-};
+export { boot as b }

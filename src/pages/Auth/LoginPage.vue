@@ -16,7 +16,6 @@
           />
         </template>
         <template v-else>
-          
           <GoogleSignInButton
             @success="handleGoogleLoginSuccess"
             @error="handleGoogleLoginError"
@@ -40,9 +39,7 @@
       </q-card-section>
       <q-separator class="q-ma-md" inset />
       <q-card-section class="q-pa-none text-center">
-        <div class="text-grey-8 text-weight-light text-h6 q-ma-none">
-          or 
-        </div>
+        <div class="text-grey-8 text-weight-light text-h6 q-ma-none">or</div>
       </q-card-section>
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">Email Address or Phone Number</h6>
@@ -121,13 +118,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed} from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useAuthStore } from 'src/stores/auth.js'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { useQuasar } from 'quasar'
 import { GoogleSignInButton } from 'vue3-google-signin'
-import { SocialLogin } from '@capgo/capacitor-social-login';
+import { SocialLogin } from '@capgo/capacitor-social-login'
 import { Capacitor } from '@capacitor/core'
 
 const isNativeMobile = Capacitor.isNativePlatform()
@@ -168,7 +165,7 @@ const onSubmit = async () => {
     'email',
     typeof user.email_address === 'string' && user.email_address.includes('@')
       ? user.email_address.toLowerCase()
-      : user.email_address
+      : user.email_address,
   )
   formData.append('password', user.password)
   localStorage.setItem('email_address', user.email_address)
@@ -179,7 +176,6 @@ const onSubmit = async () => {
   }
 }
 
-
 const initiateGoogleSignInMobile = async () => {
   if (isNativeMobile) {
     try {
@@ -188,9 +184,8 @@ const initiateGoogleSignInMobile = async () => {
         provider: 'google',
         options: {
           scopes: ['email', 'profile'],
-        }
-      }
-      )
+        },
+      })
       // const id_token = response?.result?.accessToken?.token
       console.log('Google Sign-In stuff:', JSON.stringify(response))
       const id_token = response?.result?.idToken
@@ -201,7 +196,7 @@ const initiateGoogleSignInMobile = async () => {
         message: error.message,
         code: error.code,
         stack: error.stack,
-      });
+      })
       handleGoogleLoginError(error)
     }
   } else {
@@ -214,7 +209,6 @@ const initiateGoogleSignInMobile = async () => {
   }
 }
 
-
 const handleGoogleLoginSuccess = async (response) => {
   const { credential } = response
   console.log('Google Sign-In cred:', credential)
@@ -223,7 +217,6 @@ const handleGoogleLoginSuccess = async (response) => {
     console.error('No credential found in Google Sign-In response:', response)
     const res = await AuthStore.socialLogin(response)
     console.log('Social login response:', res)
-   
   } else {
     console.log('Google Sign-In credential:', credential)
     await AuthStore.socialLogin(credential)

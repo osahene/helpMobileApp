@@ -1,31 +1,35 @@
 <template>
   <div
-    class="flex flex-col border-gray-900 justify-between backdrop-filter backdrop-blur-sm bg-opacity-10 bg-slate-200 overflow-hidden border-4 border-gray-200 rounded-xl shadow shadow-2xl"
+    class="flex flex-col w-full h-full  justify-between overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-150 ease-out border-2 border-gray-200 rounded-xl shadow shadow-2xl"
+    :class="cardBgClass"
   >
-    <div class="py-6 flex flex-col justify-center items-start content-fit">
-      <div class="ml-3 flex flex-col items-start">
-        <p
-          class="head-title font-bold text-black text-[20px] xs:text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px]"
-        >
-          {{ cardTitle }}
-        </p>
-        <p
-          class="head-title font-bold text-black text-[20px] xs:text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px]"
-        >
-          {{ cardTitle2 }}
-        </p>
+    <div class="flex flex-row my-14 w-full justify-around items-center px-8">
+      <div class="">
+        <img class="card-img rounded-t-lg" :src="cardImg" />
       </div>
-    </div>
-    <div
-      class="ml-3 relative flex xs:top-[10px] sm:top-[30px] md:top-[50px] xs:z-[2] justify-start"
-    >
-      <img class="card-img rounded-t-lg h-[10px] xs:h-[100px] sm:h-[150px]" :src="cardImg" />
+      <div class="py-3 flex flex-col justify-center content-fit">
+        <div class="ml-3 flex flex-col items-start">
+          <p
+            class="head-title font-bold text-[20px] xs:text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px]"
+            :class="cardTextClass"
+            >
+            {{ cardTitle }}
+          </p>
+          <p
+          class="head-title font-bold text-[20px] xs:text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] xl:text-[45px]"
+          :class="cardTextClass"
+          >
+            {{ cardTitle2 }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { watchEffect } from 'vue'
+
 const props = defineProps({
   cardTitle: {
     type: String,
@@ -36,6 +40,18 @@ const props = defineProps({
   cardImg: {
     type: String,
   },
+  // New props for dynamic styling
+  cardBgClass: {
+    type: String,
+    default: 'bg-card1', // Deep Royal Blue default
+  },
+  cardTextClass: {
+    type: String,
+    default: 'text-white',
+  },
 })
-watchEffect(() => props)
+
+watchEffect(() => props) // This line is not necessary for function but can remain
+
+// You might not need watchEffect if you're just defining props
 </script>

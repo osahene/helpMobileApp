@@ -4,4 +4,7 @@
     <string name="title_activity_main">Help Mobile App</string>
     <string name="package_name">org.capacitor.helpmobile.app</string>
     <string name="custom_url_scheme">org.capacitor.helpmobile.app</string>
+    <string name="accessibility_service_label">Emergency Alert Volume Button Listener</string>
+    <string name="accessibility_service_description">Enables background listening for volume button presses to trigger emergency alerts when you can\'t use your phone. This service needs to be enabled manually in your device\'s Accessibility settings.</string>
 </resources>
+

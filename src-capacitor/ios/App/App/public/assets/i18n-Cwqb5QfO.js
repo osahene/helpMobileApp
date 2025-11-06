@@ -1,105 +1,134 @@
-import { e as effectScope, r as ref, s as shallowRef, c as computed, w as watch, i as isRef, d as defineComponent, g as getCurrentInstance, h, F as Fragment, a as inject, o as onMounted, b as onUnmounted, f as createVNode, T as Text, j as defineBoot } from "./index-Bs10UzzQ.js";
+import {
+  e as effectScope,
+  r as ref,
+  s as shallowRef,
+  c as computed,
+  w as watch,
+  i as isRef,
+  d as defineComponent,
+  g as getCurrentInstance,
+  h,
+  F as Fragment,
+  a as inject,
+  o as onMounted,
+  b as onUnmounted,
+  f as createVNode,
+  T as Text,
+  j as defineBoot,
+} from './index-Bs10UzzQ.js'
 /*!
-  * shared v9.14.4
-  * (c) 2025 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-const inBrowser = typeof window !== "undefined";
-const makeSymbol = (name, shareable = false) => !shareable ? Symbol(name) : Symbol.for(name);
-const generateFormatCacheKey = (locale, key, source) => friendlyJSONstringify({ l: locale, k: key, s: source });
-const friendlyJSONstringify = (json) => JSON.stringify(json).replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029").replace(/\u0027/g, "\\u0027");
-const isNumber = (val) => typeof val === "number" && isFinite(val);
-const isDate = (val) => toTypeString(val) === "[object Date]";
-const isRegExp = (val) => toTypeString(val) === "[object RegExp]";
-const isEmptyObject = (val) => isPlainObject(val) && Object.keys(val).length === 0;
-const assign = Object.assign;
-const _create = Object.create;
-const create = (obj = null) => _create(obj);
+ * shared v9.14.4
+ * (c) 2025 kazuya kawaguchi
+ * Released under the MIT License.
+ */
+const inBrowser = typeof window !== 'undefined'
+const makeSymbol = (name, shareable = false) => (!shareable ? Symbol(name) : Symbol.for(name))
+const generateFormatCacheKey = (locale, key, source) =>
+  friendlyJSONstringify({ l: locale, k: key, s: source })
+const friendlyJSONstringify = (json) =>
+  JSON.stringify(json)
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')
+    .replace(/\u0027/g, '\\u0027')
+const isNumber = (val) => typeof val === 'number' && isFinite(val)
+const isDate = (val) => toTypeString(val) === '[object Date]'
+const isRegExp = (val) => toTypeString(val) === '[object RegExp]'
+const isEmptyObject = (val) => isPlainObject(val) && Object.keys(val).length === 0
+const assign = Object.assign
+const _create = Object.create
+const create = (obj = null) => _create(obj)
 function escapeHtml(rawText) {
-  return rawText.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+  return rawText
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
 }
-const hasOwnProperty = Object.prototype.hasOwnProperty;
+const hasOwnProperty = Object.prototype.hasOwnProperty
 function hasOwn(obj, key) {
-  return hasOwnProperty.call(obj, key);
+  return hasOwnProperty.call(obj, key)
 }
-const isArray = Array.isArray;
-const isFunction = (val) => typeof val === "function";
-const isString = (val) => typeof val === "string";
-const isBoolean = (val) => typeof val === "boolean";
-const isObject$1 = (val) => val !== null && typeof val === "object";
+const isArray = Array.isArray
+const isFunction = (val) => typeof val === 'function'
+const isString = (val) => typeof val === 'string'
+const isBoolean = (val) => typeof val === 'boolean'
+const isObject$1 = (val) => val !== null && typeof val === 'object'
 const isPromise = (val) => {
-  return isObject$1(val) && isFunction(val.then) && isFunction(val.catch);
-};
-const objectToString = Object.prototype.toString;
-const toTypeString = (value) => objectToString.call(value);
+  return isObject$1(val) && isFunction(val.then) && isFunction(val.catch)
+}
+const objectToString = Object.prototype.toString
+const toTypeString = (value) => objectToString.call(value)
 const isPlainObject = (val) => {
-  if (!isObject$1(val))
-    return false;
-  const proto = Object.getPrototypeOf(val);
-  return proto === null || proto.constructor === Object;
-};
+  if (!isObject$1(val)) return false
+  const proto = Object.getPrototypeOf(val)
+  return proto === null || proto.constructor === Object
+}
 const toDisplayString = (val) => {
-  return val == null ? "" : isArray(val) || isPlainObject(val) && val.toString === objectToString ? JSON.stringify(val, null, 2) : String(val);
-};
-function join(items, separator = "") {
-  return items.reduce((str, item, index) => index === 0 ? str + item : str + separator + item, "");
+  return val == null
+    ? ''
+    : isArray(val) || (isPlainObject(val) && val.toString === objectToString)
+      ? JSON.stringify(val, null, 2)
+      : String(val)
+}
+function join(items, separator = '') {
+  return items.reduce((str, item, index) => (index === 0 ? str + item : str + separator + item), '')
 }
 function incrementer(code2) {
-  let current = code2;
-  return () => ++current;
+  let current = code2
+  return () => ++current
 }
 function warn(msg, err) {
-  if (typeof console !== "undefined") {
-    console.warn(`[intlify] ` + msg);
+  if (typeof console !== 'undefined') {
+    console.warn(`[intlify] ` + msg)
     if (err) {
-      console.warn(err.stack);
+      console.warn(err.stack)
     }
   }
 }
-const isNotObjectOrIsArray = (val) => !isObject$1(val) || isArray(val);
+const isNotObjectOrIsArray = (val) => !isObject$1(val) || isArray(val)
 function deepCopy(src, des) {
   if (isNotObjectOrIsArray(src) || isNotObjectOrIsArray(des)) {
-    throw new Error("Invalid value");
+    throw new Error('Invalid value')
   }
-  const stack = [{ src, des }];
+  const stack = [{ src, des }]
   while (stack.length) {
-    const { src: src2, des: des2 } = stack.pop();
+    const { src: src2, des: des2 } = stack.pop()
     Object.keys(src2).forEach((key) => {
-      if (key === "__proto__") {
-        return;
+      if (key === '__proto__') {
+        return
       }
       if (isObject$1(src2[key]) && !isObject$1(des2[key])) {
-        des2[key] = Array.isArray(src2[key]) ? [] : create();
+        des2[key] = Array.isArray(src2[key]) ? [] : create()
       }
       if (isNotObjectOrIsArray(des2[key]) || isNotObjectOrIsArray(src2[key])) {
-        des2[key] = src2[key];
+        des2[key] = src2[key]
       } else {
-        stack.push({ src: src2[key], des: des2[key] });
+        stack.push({ src: src2[key], des: des2[key] })
       }
-    });
+    })
   }
 }
 /*!
-  * message-compiler v9.14.4
-  * (c) 2025 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-const RE_ARGS = /\{([0-9a-zA-Z]+)\}/g;
+ * message-compiler v9.14.4
+ * (c) 2025 kazuya kawaguchi
+ * Released under the MIT License.
+ */
+const RE_ARGS = /\{([0-9a-zA-Z]+)\}/g
 function format(message, ...args) {
   if (args.length === 1 && isObject(args[0])) {
-    args = args[0];
+    args = args[0]
   }
   if (!args || !args.hasOwnProperty) {
-    args = {};
+    args = {}
   }
   return message.replace(RE_ARGS, (match, identifier) => {
-    return args.hasOwnProperty(identifier) ? args[identifier] : "";
-  });
+    return args.hasOwnProperty(identifier) ? args[identifier] : ''
+  })
 }
-const isObject = (val) => val !== null && typeof val === "object";
+const isObject = (val) => val !== null && typeof val === 'object'
 const CompileWarnCodes = {
-  __EXTEND_POINT__: 2
-};
+  __EXTEND_POINT__: 2,
+}
 const CompileErrorCodes = {
   // tokenizer error codes
   EXPECTED_TOKEN: 1,
@@ -124,8 +153,8 @@ const CompileErrorCodes = {
   // Special value for higher-order compilers to pick up the last code
   // to avoid collision of error codes. This should always be kept as the last
   // item.
-  __EXTEND_POINT__: 17
-};
+  __EXTEND_POINT__: 17,
+}
 const errorMessages = {
   // tokenizer error messages
   [CompileErrorCodes.EXPECTED_TOKEN]: `Expected token: '{0}'`,
@@ -146,43 +175,43 @@ const errorMessages = {
   // generator error messages
   [CompileErrorCodes.UNHANDLED_CODEGEN_NODE_TYPE]: `unhandled codegen node type: '{0}'`,
   // minimizer error messages
-  [CompileErrorCodes.UNHANDLED_MINIFIER_NODE_TYPE]: `unhandled mimifier node type: '{0}'`
-};
+  [CompileErrorCodes.UNHANDLED_MINIFIER_NODE_TYPE]: `unhandled mimifier node type: '{0}'`,
+}
 function createCompileError(code2, loc, options = {}) {
-  const { domain, messages: messages2, args } = options;
-  const msg = format((messages2 || errorMessages)[code2] || "", ...args || []);
-  const error = new SyntaxError(String(msg));
-  error.code = code2;
-  error.domain = domain;
-  return error;
+  const { domain, messages: messages2, args } = options
+  const msg = format((messages2 || errorMessages)[code2] || '', ...(args || []))
+  const error = new SyntaxError(String(msg))
+  error.code = code2
+  error.domain = domain
+  return error
 }
 /*!
-  * core-base v9.14.4
-  * (c) 2025 kazuya kawaguchi
-  * Released under the MIT License.
-  */
+ * core-base v9.14.4
+ * (c) 2025 kazuya kawaguchi
+ * Released under the MIT License.
+ */
 function isMessageAST(val) {
-  return isObject$1(val) && resolveType(val) === 0 && (hasOwn(val, "b") || hasOwn(val, "body"));
+  return isObject$1(val) && resolveType(val) === 0 && (hasOwn(val, 'b') || hasOwn(val, 'body'))
 }
-const PROPS_BODY = ["b", "body"];
-const PROPS_CASES = ["c", "cases"];
-const PROPS_STATIC = ["s", "static"];
-const PROPS_ITEMS = ["i", "items"];
-const PROPS_TYPE = ["t", "type"];
+const PROPS_BODY = ['b', 'body']
+const PROPS_CASES = ['c', 'cases']
+const PROPS_STATIC = ['s', 'static']
+const PROPS_ITEMS = ['i', 'items']
+const PROPS_TYPE = ['t', 'type']
 function resolveType(node) {
-  return resolveProps(node, PROPS_TYPE);
+  return resolveProps(node, PROPS_TYPE)
 }
-const PROPS_VALUE = ["v", "value"];
-const PROPS_MODIFIER = ["m", "modifier"];
-const PROPS_KEY = ["k", "key"];
+const PROPS_VALUE = ['v', 'value']
+const PROPS_MODIFIER = ['m', 'modifier']
+const PROPS_KEY = ['k', 'key']
 function resolveProps(node, props, defaultValue) {
   for (let i = 0; i < props.length; i++) {
-    const prop = props[i];
+    const prop = props[i]
     if (hasOwn(node, prop) && node[prop] != null) {
-      return node[prop];
+      return node[prop]
     }
   }
-  return defaultValue;
+  return defaultValue
 }
 const AST_NODE_PROPS_KEYS = [
   ...PROPS_BODY,
@@ -192,270 +221,216 @@ const AST_NODE_PROPS_KEYS = [
   ...PROPS_KEY,
   ...PROPS_MODIFIER,
   ...PROPS_VALUE,
-  ...PROPS_TYPE
-];
-const pathStateMachine = [];
-pathStateMachine[
-  0
-  /* States.BEFORE_PATH */
-] = {
-  [
-    "w"
-    /* PathCharTypes.WORKSPACE */
-  ]: [
-    0
-    /* States.BEFORE_PATH */
-  ],
-  [
-    "i"
-    /* PathCharTypes.IDENT */
-  ]: [
-    3,
-    0
-    /* Actions.APPEND */
-  ],
-  [
-    "["
-    /* PathCharTypes.LEFT_BRACKET */
-  ]: [
-    4
-    /* States.IN_SUB_PATH */
-  ],
-  [
-    "o"
-    /* PathCharTypes.END_OF_FAIL */
-  ]: [
-    7
-    /* States.AFTER_PATH */
-  ]
-};
-pathStateMachine[
-  1
-  /* States.IN_PATH */
-] = {
-  [
-    "w"
-    /* PathCharTypes.WORKSPACE */
-  ]: [
-    1
-    /* States.IN_PATH */
-  ],
-  [
-    "."
-    /* PathCharTypes.DOT */
-  ]: [
-    2
-    /* States.BEFORE_IDENT */
-  ],
-  [
-    "["
-    /* PathCharTypes.LEFT_BRACKET */
-  ]: [
-    4
-    /* States.IN_SUB_PATH */
-  ],
-  [
-    "o"
-    /* PathCharTypes.END_OF_FAIL */
-  ]: [
-    7
-    /* States.AFTER_PATH */
-  ]
-};
-pathStateMachine[
-  2
-  /* States.BEFORE_IDENT */
-] = {
-  [
-    "w"
-    /* PathCharTypes.WORKSPACE */
-  ]: [
-    2
-    /* States.BEFORE_IDENT */
-  ],
-  [
-    "i"
-    /* PathCharTypes.IDENT */
-  ]: [
-    3,
-    0
-    /* Actions.APPEND */
-  ],
-  [
-    "0"
-    /* PathCharTypes.ZERO */
-  ]: [
-    3,
-    0
-    /* Actions.APPEND */
-  ]
-};
-pathStateMachine[
-  3
-  /* States.IN_IDENT */
-] = {
-  [
-    "i"
-    /* PathCharTypes.IDENT */
-  ]: [
-    3,
-    0
-    /* Actions.APPEND */
-  ],
-  [
-    "0"
-    /* PathCharTypes.ZERO */
-  ]: [
-    3,
-    0
-    /* Actions.APPEND */
-  ],
-  [
-    "w"
-    /* PathCharTypes.WORKSPACE */
-  ]: [
-    1,
-    1
-    /* Actions.PUSH */
-  ],
-  [
-    "."
-    /* PathCharTypes.DOT */
-  ]: [
-    2,
-    1
-    /* Actions.PUSH */
-  ],
-  [
-    "["
-    /* PathCharTypes.LEFT_BRACKET */
-  ]: [
-    4,
-    1
-    /* Actions.PUSH */
-  ],
-  [
-    "o"
-    /* PathCharTypes.END_OF_FAIL */
-  ]: [
-    7,
-    1
-    /* Actions.PUSH */
-  ]
-};
-pathStateMachine[
-  4
-  /* States.IN_SUB_PATH */
-] = {
-  [
-    "'"
-    /* PathCharTypes.SINGLE_QUOTE */
-  ]: [
-    5,
-    0
-    /* Actions.APPEND */
-  ],
-  [
-    '"'
-    /* PathCharTypes.DOUBLE_QUOTE */
-  ]: [
-    6,
-    0
-    /* Actions.APPEND */
-  ],
-  [
-    "["
-    /* PathCharTypes.LEFT_BRACKET */
-  ]: [
-    4,
-    2
-    /* Actions.INC_SUB_PATH_DEPTH */
-  ],
-  [
-    "]"
-    /* PathCharTypes.RIGHT_BRACKET */
-  ]: [
-    1,
-    3
-    /* Actions.PUSH_SUB_PATH */
-  ],
-  [
-    "o"
-    /* PathCharTypes.END_OF_FAIL */
-  ]: 8,
-  [
-    "l"
-    /* PathCharTypes.ELSE */
-  ]: [
-    4,
-    0
-    /* Actions.APPEND */
-  ]
-};
-pathStateMachine[
-  5
-  /* States.IN_SINGLE_QUOTE */
-] = {
-  [
-    "'"
-    /* PathCharTypes.SINGLE_QUOTE */
-  ]: [
-    4,
-    0
-    /* Actions.APPEND */
-  ],
-  [
-    "o"
-    /* PathCharTypes.END_OF_FAIL */
-  ]: 8,
-  [
-    "l"
-    /* PathCharTypes.ELSE */
-  ]: [
-    5,
-    0
-    /* Actions.APPEND */
-  ]
-};
-pathStateMachine[
-  6
-  /* States.IN_DOUBLE_QUOTE */
-] = {
-  [
-    '"'
-    /* PathCharTypes.DOUBLE_QUOTE */
-  ]: [
-    4,
-    0
-    /* Actions.APPEND */
-  ],
-  [
-    "o"
-    /* PathCharTypes.END_OF_FAIL */
-  ]: 8,
-  [
-    "l"
-    /* PathCharTypes.ELSE */
-  ]: [
-    6,
-    0
-    /* Actions.APPEND */
-  ]
-};
-const literalValueRE = /^\s?(?:true|false|-?[\d.]+|'[^']*'|"[^"]*")\s?$/;
+  ...PROPS_TYPE,
+]
+const pathStateMachine = []
+pathStateMachine[0] =
+/* States.BEFORE_PATH */
+  {
+    ['w']:
+      /* PathCharTypes.WORKSPACE */
+      [
+        0,
+        /* States.BEFORE_PATH */
+      ],
+    ['i']:
+      /* PathCharTypes.IDENT */
+      [
+        3, 0,
+        /* Actions.APPEND */
+      ],
+    ['[']:
+      /* PathCharTypes.LEFT_BRACKET */
+      [
+        4,
+        /* States.IN_SUB_PATH */
+      ],
+    ['o']:
+      /* PathCharTypes.END_OF_FAIL */
+      [
+        7,
+        /* States.AFTER_PATH */
+      ],
+  }
+pathStateMachine[1] =
+/* States.IN_PATH */
+  {
+    ['w']:
+      /* PathCharTypes.WORKSPACE */
+      [
+        1,
+        /* States.IN_PATH */
+      ],
+    ['.']:
+      /* PathCharTypes.DOT */
+      [
+        2,
+        /* States.BEFORE_IDENT */
+      ],
+    ['[']:
+      /* PathCharTypes.LEFT_BRACKET */
+      [
+        4,
+        /* States.IN_SUB_PATH */
+      ],
+    ['o']:
+      /* PathCharTypes.END_OF_FAIL */
+      [
+        7,
+        /* States.AFTER_PATH */
+      ],
+  }
+pathStateMachine[2] =
+/* States.BEFORE_IDENT */
+  {
+    ['w']:
+      /* PathCharTypes.WORKSPACE */
+      [
+        2,
+        /* States.BEFORE_IDENT */
+      ],
+    ['i']:
+      /* PathCharTypes.IDENT */
+      [
+        3, 0,
+        /* Actions.APPEND */
+      ],
+    ['0']:
+      /* PathCharTypes.ZERO */
+      [
+        3, 0,
+        /* Actions.APPEND */
+      ],
+  }
+pathStateMachine[3] =
+/* States.IN_IDENT */
+  {
+    ['i']:
+      /* PathCharTypes.IDENT */
+      [
+        3, 0,
+        /* Actions.APPEND */
+      ],
+    ['0']:
+      /* PathCharTypes.ZERO */
+      [
+        3, 0,
+        /* Actions.APPEND */
+      ],
+    ['w']:
+      /* PathCharTypes.WORKSPACE */
+      [
+        1, 1,
+        /* Actions.PUSH */
+      ],
+    ['.']:
+      /* PathCharTypes.DOT */
+      [
+        2, 1,
+        /* Actions.PUSH */
+      ],
+    ['[']:
+      /* PathCharTypes.LEFT_BRACKET */
+      [
+        4, 1,
+        /* Actions.PUSH */
+      ],
+    ['o']:
+      /* PathCharTypes.END_OF_FAIL */
+      [
+        7, 1,
+        /* Actions.PUSH */
+      ],
+  }
+pathStateMachine[4] =
+/* States.IN_SUB_PATH */
+  {
+    ["'"]:
+      /* PathCharTypes.SINGLE_QUOTE */
+      [
+        5, 0,
+        /* Actions.APPEND */
+      ],
+    ['"']:
+      /* PathCharTypes.DOUBLE_QUOTE */
+      [
+        6, 0,
+        /* Actions.APPEND */
+      ],
+    ['[']:
+      /* PathCharTypes.LEFT_BRACKET */
+      [
+        4, 2,
+        /* Actions.INC_SUB_PATH_DEPTH */
+      ],
+    [']']:
+      /* PathCharTypes.RIGHT_BRACKET */
+      [
+        1, 3,
+        /* Actions.PUSH_SUB_PATH */
+      ],
+    ['o']:
+      /* PathCharTypes.END_OF_FAIL */
+      8,
+    ['l']:
+      /* PathCharTypes.ELSE */
+      [
+        4, 0,
+        /* Actions.APPEND */
+      ],
+  }
+pathStateMachine[5] =
+/* States.IN_SINGLE_QUOTE */
+  {
+    ["'"]:
+      /* PathCharTypes.SINGLE_QUOTE */
+      [
+        4, 0,
+        /* Actions.APPEND */
+      ],
+    ['o']:
+      /* PathCharTypes.END_OF_FAIL */
+      8,
+    ['l']:
+      /* PathCharTypes.ELSE */
+      [
+        5, 0,
+        /* Actions.APPEND */
+      ],
+  }
+pathStateMachine[6] =
+/* States.IN_DOUBLE_QUOTE */
+  {
+    ['"']:
+      /* PathCharTypes.DOUBLE_QUOTE */
+      [
+        4, 0,
+        /* Actions.APPEND */
+      ],
+    ['o']:
+      /* PathCharTypes.END_OF_FAIL */
+      8,
+    ['l']:
+      /* PathCharTypes.ELSE */
+      [
+        6, 0,
+        /* Actions.APPEND */
+      ],
+  }
+const literalValueRE = /^\s?(?:true|false|-?[\d.]+|'[^']*'|"[^"]*")\s?$/
 function isLiteral(exp) {
-  return literalValueRE.test(exp);
+  return literalValueRE.test(exp)
 }
 function stripQuotes(str) {
-  const a = str.charCodeAt(0);
-  const b = str.charCodeAt(str.length - 1);
-  return a === b && (a === 34 || a === 39) ? str.slice(1, -1) : str;
+  const a = str.charCodeAt(0)
+  const b = str.charCodeAt(str.length - 1)
+  return a === b && (a === 34 || a === 39) ? str.slice(1, -1) : str
 }
 function getPathCharType(ch) {
   if (ch === void 0 || ch === null) {
-    return "o";
+    return 'o'
   }
-  const code2 = ch.charCodeAt(0);
+  const code2 = ch.charCodeAt(0)
   switch (code2) {
     case 91:
     // [
@@ -466,13 +441,13 @@ function getPathCharType(ch) {
     case 34:
     // "
     case 39:
-      return ch;
+      return ch
     case 95:
     // _
     case 36:
     // $
     case 45:
-      return "i";
+      return 'i'
     case 9:
     // Tab (HT)
     case 10:
@@ -486,279 +461,285 @@ function getPathCharType(ch) {
     case 8232:
     // Line Separator (LS)
     case 8233:
-      return "w";
+      return 'w'
   }
-  return "i";
+  return 'i'
 }
 function formatSubPath(path) {
-  const trimmed = path.trim();
-  if (path.charAt(0) === "0" && isNaN(parseInt(path))) {
-    return false;
+  const trimmed = path.trim()
+  if (path.charAt(0) === '0' && isNaN(parseInt(path))) {
+    return false
   }
-  return isLiteral(trimmed) ? stripQuotes(trimmed) : "*" + trimmed;
+  return isLiteral(trimmed) ? stripQuotes(trimmed) : '*' + trimmed
 }
 function parse(path) {
-  const keys = [];
-  let index = -1;
-  let mode = 0;
-  let subPathDepth = 0;
-  let c;
-  let key;
-  let newChar;
-  let type;
-  let transition;
-  let action;
-  let typeMap;
-  const actions = [];
-  actions[
-    0
-    /* Actions.APPEND */
-  ] = () => {
-    if (key === void 0) {
-      key = newChar;
-    } else {
-      key += newChar;
-    }
-  };
-  actions[
-    1
-    /* Actions.PUSH */
-  ] = () => {
-    if (key !== void 0) {
-      keys.push(key);
-      key = void 0;
-    }
-  };
-  actions[
-    2
-    /* Actions.INC_SUB_PATH_DEPTH */
-  ] = () => {
-    actions[
-      0
-      /* Actions.APPEND */
-    ]();
-    subPathDepth++;
-  };
-  actions[
-    3
-    /* Actions.PUSH_SUB_PATH */
-  ] = () => {
-    if (subPathDepth > 0) {
-      subPathDepth--;
-      mode = 4;
-      actions[
-        0
-        /* Actions.APPEND */
-      ]();
-    } else {
-      subPathDepth = 0;
+  const keys = []
+  let index = -1
+  let mode = 0
+  let subPathDepth = 0
+  let c
+  let key
+  let newChar
+  let type
+  let transition
+  let action
+  let typeMap
+  const actions = []
+  actions[0] =
+  /* Actions.APPEND */
+    () => {
       if (key === void 0) {
-        return false;
-      }
-      key = formatSubPath(key);
-      if (key === false) {
-        return false;
+        key = newChar
       } else {
-        actions[
-          1
-          /* Actions.PUSH */
-        ]();
+        key += newChar
       }
     }
-  };
-  function maybeUnescapeQuote() {
-    const nextChar = path[index + 1];
-    if (mode === 5 && nextChar === "'" || mode === 6 && nextChar === '"') {
-      index++;
-      newChar = "\\" + nextChar;
-      actions[
-        0
+  actions[1] =
+  /* Actions.PUSH */
+    () => {
+      if (key !== void 0) {
+        keys.push(key)
+        key = void 0
+      }
+    }
+  actions[2] =
+  /* Actions.INC_SUB_PATH_DEPTH */
+    () => {
+      actions[0]()
+      /* Actions.APPEND */
+      subPathDepth++
+    }
+  actions[3] =
+  /* Actions.PUSH_SUB_PATH */
+    () => {
+      if (subPathDepth > 0) {
+        subPathDepth--
+        mode = 4
+        actions[0]()
         /* Actions.APPEND */
-      ]();
-      return true;
+      } else {
+        subPathDepth = 0
+        if (key === void 0) {
+          return false
+        }
+        key = formatSubPath(key)
+        if (key === false) {
+          return false
+        } else {
+          actions[1]()
+          /* Actions.PUSH */
+        }
+      }
+    }
+  function maybeUnescapeQuote() {
+    const nextChar = path[index + 1]
+    if ((mode === 5 && nextChar === "'") || (mode === 6 && nextChar === '"')) {
+      index++
+      newChar = '\\' + nextChar
+      actions[0]()
+      /* Actions.APPEND */
+      return true
     }
   }
   while (mode !== null) {
-    index++;
-    c = path[index];
-    if (c === "\\" && maybeUnescapeQuote()) {
-      continue;
+    index++
+    c = path[index]
+    if (c === '\\' && maybeUnescapeQuote()) {
+      continue
     }
-    type = getPathCharType(c);
-    typeMap = pathStateMachine[mode];
-    transition = typeMap[type] || typeMap[
-      "l"
-      /* PathCharTypes.ELSE */
-    ] || 8;
+    type = getPathCharType(c)
+    typeMap = pathStateMachine[mode]
+    transition =
+      typeMap[type] ||
+      typeMap[
+        'l'
+        /* PathCharTypes.ELSE */
+      ] ||
+      8
     if (transition === 8) {
-      return;
+      return
     }
-    mode = transition[0];
+    mode = transition[0]
     if (transition[1] !== void 0) {
-      action = actions[transition[1]];
+      action = actions[transition[1]]
       if (action) {
-        newChar = c;
+        newChar = c
         if (action() === false) {
-          return;
+          return
         }
       }
     }
     if (mode === 7) {
-      return keys;
+      return keys
     }
   }
 }
-const cache = /* @__PURE__ */ new Map();
+const cache = /* @__PURE__ */ new Map()
 function resolveWithKeyValue(obj, path) {
-  return isObject$1(obj) ? obj[path] : null;
+  return isObject$1(obj) ? obj[path] : null
 }
 function resolveValue(obj, path) {
   if (!isObject$1(obj)) {
-    return null;
+    return null
   }
-  let hit = cache.get(path);
+  let hit = cache.get(path)
   if (!hit) {
-    hit = parse(path);
+    hit = parse(path)
     if (hit) {
-      cache.set(path, hit);
+      cache.set(path, hit)
     }
   }
   if (!hit) {
-    return null;
+    return null
   }
-  const len = hit.length;
-  let last = obj;
-  let i = 0;
+  const len = hit.length
+  let last = obj
+  let i = 0
   while (i < len) {
-    const key = hit[i];
+    const key = hit[i]
     if (AST_NODE_PROPS_KEYS.includes(key) && isMessageAST(last)) {
-      return null;
+      return null
     }
-    const val = last[key];
+    const val = last[key]
     if (val === void 0) {
-      return null;
+      return null
     }
     if (isFunction(last)) {
-      return null;
+      return null
     }
-    last = val;
-    i++;
+    last = val
+    i++
   }
-  return last;
+  return last
 }
-const DEFAULT_MODIFIER = (str) => str;
-const DEFAULT_MESSAGE = (ctx) => "";
-const DEFAULT_MESSAGE_DATA_TYPE = "text";
-const DEFAULT_NORMALIZE = (values) => values.length === 0 ? "" : join(values);
-const DEFAULT_INTERPOLATE = toDisplayString;
+const DEFAULT_MODIFIER = (str) => str
+const DEFAULT_MESSAGE = (ctx) => ''
+const DEFAULT_MESSAGE_DATA_TYPE = 'text'
+const DEFAULT_NORMALIZE = (values) => (values.length === 0 ? '' : join(values))
+const DEFAULT_INTERPOLATE = toDisplayString
 function pluralDefault(choice, choicesLength) {
-  choice = Math.abs(choice);
+  choice = Math.abs(choice)
   if (choicesLength === 2) {
-    return choice ? choice > 1 ? 1 : 0 : 1;
+    return choice ? (choice > 1 ? 1 : 0) : 1
   }
-  return choice ? Math.min(choice, 2) : 0;
+  return choice ? Math.min(choice, 2) : 0
 }
 function getPluralIndex(options) {
-  const index = isNumber(options.pluralIndex) ? options.pluralIndex : -1;
-  return options.named && (isNumber(options.named.count) || isNumber(options.named.n)) ? isNumber(options.named.count) ? options.named.count : isNumber(options.named.n) ? options.named.n : index : index;
+  const index = isNumber(options.pluralIndex) ? options.pluralIndex : -1
+  return options.named && (isNumber(options.named.count) || isNumber(options.named.n))
+    ? isNumber(options.named.count)
+      ? options.named.count
+      : isNumber(options.named.n)
+        ? options.named.n
+        : index
+    : index
 }
 function normalizeNamed(pluralIndex, props) {
   if (!props.count) {
-    props.count = pluralIndex;
+    props.count = pluralIndex
   }
   if (!props.n) {
-    props.n = pluralIndex;
+    props.n = pluralIndex
   }
 }
 function createMessageContext(options = {}) {
-  const locale = options.locale;
-  const pluralIndex = getPluralIndex(options);
-  const pluralRule = isObject$1(options.pluralRules) && isString(locale) && isFunction(options.pluralRules[locale]) ? options.pluralRules[locale] : pluralDefault;
-  const orgPluralRule = isObject$1(options.pluralRules) && isString(locale) && isFunction(options.pluralRules[locale]) ? pluralDefault : void 0;
+  const locale = options.locale
+  const pluralIndex = getPluralIndex(options)
+  const pluralRule =
+    isObject$1(options.pluralRules) && isString(locale) && isFunction(options.pluralRules[locale])
+      ? options.pluralRules[locale]
+      : pluralDefault
+  const orgPluralRule =
+    isObject$1(options.pluralRules) && isString(locale) && isFunction(options.pluralRules[locale])
+      ? pluralDefault
+      : void 0
   const plural = (messages2) => {
-    return messages2[pluralRule(pluralIndex, messages2.length, orgPluralRule)];
-  };
-  const _list = options.list || [];
-  const list = (index) => _list[index];
-  const _named = options.named || create();
-  isNumber(options.pluralIndex) && normalizeNamed(pluralIndex, _named);
-  const named = (key) => _named[key];
-  function message(key) {
-    const msg = isFunction(options.messages) ? options.messages(key) : isObject$1(options.messages) ? options.messages[key] : false;
-    return !msg ? options.parent ? options.parent.message(key) : DEFAULT_MESSAGE : msg;
+    return messages2[pluralRule(pluralIndex, messages2.length, orgPluralRule)]
   }
-  const _modifier = (name) => options.modifiers ? options.modifiers[name] : DEFAULT_MODIFIER;
-  const normalize = isPlainObject(options.processor) && isFunction(options.processor.normalize) ? options.processor.normalize : DEFAULT_NORMALIZE;
-  const interpolate = isPlainObject(options.processor) && isFunction(options.processor.interpolate) ? options.processor.interpolate : DEFAULT_INTERPOLATE;
-  const type = isPlainObject(options.processor) && isString(options.processor.type) ? options.processor.type : DEFAULT_MESSAGE_DATA_TYPE;
+  const _list = options.list || []
+  const list = (index) => _list[index]
+  const _named = options.named || create()
+  isNumber(options.pluralIndex) && normalizeNamed(pluralIndex, _named)
+  const named = (key) => _named[key]
+  function message(key) {
+    const msg = isFunction(options.messages)
+      ? options.messages(key)
+      : isObject$1(options.messages)
+        ? options.messages[key]
+        : false
+    return !msg ? (options.parent ? options.parent.message(key) : DEFAULT_MESSAGE) : msg
+  }
+  const _modifier = (name) => (options.modifiers ? options.modifiers[name] : DEFAULT_MODIFIER)
+  const normalize =
+    isPlainObject(options.processor) && isFunction(options.processor.normalize)
+      ? options.processor.normalize
+      : DEFAULT_NORMALIZE
+  const interpolate =
+    isPlainObject(options.processor) && isFunction(options.processor.interpolate)
+      ? options.processor.interpolate
+      : DEFAULT_INTERPOLATE
+  const type =
+    isPlainObject(options.processor) && isString(options.processor.type)
+      ? options.processor.type
+      : DEFAULT_MESSAGE_DATA_TYPE
   const linked = (key, ...args) => {
-    const [arg1, arg2] = args;
-    let type2 = "text";
-    let modifier = "";
+    const [arg1, arg2] = args
+    let type2 = 'text'
+    let modifier = ''
     if (args.length === 1) {
       if (isObject$1(arg1)) {
-        modifier = arg1.modifier || modifier;
-        type2 = arg1.type || type2;
+        modifier = arg1.modifier || modifier
+        type2 = arg1.type || type2
       } else if (isString(arg1)) {
-        modifier = arg1 || modifier;
+        modifier = arg1 || modifier
       }
     } else if (args.length === 2) {
       if (isString(arg1)) {
-        modifier = arg1 || modifier;
+        modifier = arg1 || modifier
       }
       if (isString(arg2)) {
-        type2 = arg2 || type2;
+        type2 = arg2 || type2
       }
     }
-    const ret = message(key)(ctx);
-    const msg = (
+    const ret = message(key)(ctx)
+    const msg =
       // The message in vnode resolved with linked are returned as an array by processor.nomalize
-      type2 === "vnode" && isArray(ret) && modifier ? ret[0] : ret
-    );
-    return modifier ? _modifier(modifier)(msg, type2) : msg;
-  };
+      type2 === 'vnode' && isArray(ret) && modifier ? ret[0] : ret
+    return modifier ? _modifier(modifier)(msg, type2) : msg
+  }
   const ctx = {
-    [
-      "list"
+    ['list']:
       /* HelperNameMap.LIST */
-    ]: list,
-    [
-      "named"
+      list,
+    ['named']:
       /* HelperNameMap.NAMED */
-    ]: named,
-    [
-      "plural"
+      named,
+    ['plural']:
       /* HelperNameMap.PLURAL */
-    ]: plural,
-    [
-      "linked"
+      plural,
+    ['linked']:
       /* HelperNameMap.LINKED */
-    ]: linked,
-    [
-      "message"
+      linked,
+    ['message']:
       /* HelperNameMap.MESSAGE */
-    ]: message,
-    [
-      "type"
+      message,
+    ['type']:
       /* HelperNameMap.TYPE */
-    ]: type,
-    [
-      "interpolate"
+      type,
+    ['interpolate']:
       /* HelperNameMap.INTERPOLATE */
-    ]: interpolate,
-    [
-      "normalize"
+      interpolate,
+    ['normalize']:
       /* HelperNameMap.NORMALIZE */
-    ]: normalize,
-    [
-      "values"
+      normalize,
+    ['values']:
       /* HelperNameMap.VALUES */
-    ]: assign(create(), _list, _named)
-  };
-  return ctx;
+      assign(create(), _list, _named),
+  }
+  return ctx
 }
-const code$1$1 = CompileWarnCodes.__EXTEND_POINT__;
-const inc$1$1 = incrementer(code$1$1);
+const code$1$1 = CompileWarnCodes.__EXTEND_POINT__
+const inc$1$1 = incrementer(code$1$1)
 const CoreWarnCodes = {
   // 2
   FALLBACK_TO_TRANSLATE: inc$1$1(),
@@ -773,11 +754,11 @@ const CoreWarnCodes = {
   // 7
   EXPERIMENTAL_CUSTOM_MESSAGE_COMPILER: inc$1$1(),
   // 8
-  __EXTEND_POINT__: inc$1$1()
+  __EXTEND_POINT__: inc$1$1(),
   // 9
-};
-const code$2 = CompileErrorCodes.__EXTEND_POINT__;
-const inc$2 = incrementer(code$2);
+}
+const code$2 = CompileErrorCodes.__EXTEND_POINT__
+const inc$2 = incrementer(code$2)
 const CoreErrorCodes = {
   INVALID_ARGUMENT: code$2,
   // 17
@@ -793,164 +774,209 @@ const CoreErrorCodes = {
   // 22
   NOT_SUPPORT_LOCALE_TYPE: inc$2(),
   // 23
-  __EXTEND_POINT__: inc$2()
+  __EXTEND_POINT__: inc$2(),
   // 24
-};
+}
 function createCoreError(code2) {
-  return createCompileError(code2, null, void 0);
+  return createCompileError(code2, null, void 0)
 }
 function getLocale(context, options) {
-  return options.locale != null ? resolveLocale(options.locale) : resolveLocale(context.locale);
+  return options.locale != null ? resolveLocale(options.locale) : resolveLocale(context.locale)
 }
-let _resolveLocale;
+let _resolveLocale
 function resolveLocale(locale) {
   if (isString(locale)) {
-    return locale;
+    return locale
   } else {
     if (isFunction(locale)) {
       if (locale.resolvedOnce && _resolveLocale != null) {
-        return _resolveLocale;
-      } else if (locale.constructor.name === "Function") {
-        const resolve = locale();
+        return _resolveLocale
+      } else if (locale.constructor.name === 'Function') {
+        const resolve = locale()
         if (isPromise(resolve)) {
-          throw createCoreError(CoreErrorCodes.NOT_SUPPORT_LOCALE_PROMISE_VALUE);
+          throw createCoreError(CoreErrorCodes.NOT_SUPPORT_LOCALE_PROMISE_VALUE)
         }
-        return _resolveLocale = resolve;
+        return (_resolveLocale = resolve)
       } else {
-        throw createCoreError(CoreErrorCodes.NOT_SUPPORT_LOCALE_ASYNC_FUNCTION);
+        throw createCoreError(CoreErrorCodes.NOT_SUPPORT_LOCALE_ASYNC_FUNCTION)
       }
     } else {
-      throw createCoreError(CoreErrorCodes.NOT_SUPPORT_LOCALE_TYPE);
+      throw createCoreError(CoreErrorCodes.NOT_SUPPORT_LOCALE_TYPE)
     }
   }
 }
 function fallbackWithSimple(ctx, fallback, start) {
-  return [.../* @__PURE__ */ new Set([
-    start,
-    ...isArray(fallback) ? fallback : isObject$1(fallback) ? Object.keys(fallback) : isString(fallback) ? [fallback] : [start]
-  ])];
+  return [
+    .../* @__PURE__ */ new Set([
+      start,
+      ...(isArray(fallback)
+        ? fallback
+        : isObject$1(fallback)
+          ? Object.keys(fallback)
+          : isString(fallback)
+            ? [fallback]
+            : [start]),
+    ]),
+  ]
 }
 function fallbackWithLocaleChain(ctx, fallback, start) {
-  const startLocale = isString(start) ? start : DEFAULT_LOCALE;
-  const context = ctx;
+  const startLocale = isString(start) ? start : DEFAULT_LOCALE
+  const context = ctx
   if (!context.__localeChainCache) {
-    context.__localeChainCache = /* @__PURE__ */ new Map();
+    context.__localeChainCache = /* @__PURE__ */ new Map()
   }
-  let chain = context.__localeChainCache.get(startLocale);
+  let chain = context.__localeChainCache.get(startLocale)
   if (!chain) {
-    chain = [];
-    let block = [start];
+    chain = []
+    let block = [start]
     while (isArray(block)) {
-      block = appendBlockToChain(chain, block, fallback);
+      block = appendBlockToChain(chain, block, fallback)
     }
-    const defaults = isArray(fallback) || !isPlainObject(fallback) ? fallback : fallback["default"] ? fallback["default"] : null;
-    block = isString(defaults) ? [defaults] : defaults;
+    const defaults =
+      isArray(fallback) || !isPlainObject(fallback)
+        ? fallback
+        : fallback['default']
+          ? fallback['default']
+          : null
+    block = isString(defaults) ? [defaults] : defaults
     if (isArray(block)) {
-      appendBlockToChain(chain, block, false);
+      appendBlockToChain(chain, block, false)
     }
-    context.__localeChainCache.set(startLocale, chain);
+    context.__localeChainCache.set(startLocale, chain)
   }
-  return chain;
+  return chain
 }
 function appendBlockToChain(chain, block, blocks) {
-  let follow = true;
+  let follow = true
   for (let i = 0; i < block.length && isBoolean(follow); i++) {
-    const locale = block[i];
+    const locale = block[i]
     if (isString(locale)) {
-      follow = appendLocaleToChain(chain, block[i], blocks);
+      follow = appendLocaleToChain(chain, block[i], blocks)
     }
   }
-  return follow;
+  return follow
 }
 function appendLocaleToChain(chain, locale, blocks) {
-  let follow;
-  const tokens = locale.split("-");
+  let follow
+  const tokens = locale.split('-')
   do {
-    const target = tokens.join("-");
-    follow = appendItemToChain(chain, target, blocks);
-    tokens.splice(-1, 1);
-  } while (tokens.length && follow === true);
-  return follow;
+    const target = tokens.join('-')
+    follow = appendItemToChain(chain, target, blocks)
+    tokens.splice(-1, 1)
+  } while (tokens.length && follow === true)
+  return follow
 }
 function appendItemToChain(chain, target, blocks) {
-  let follow = false;
+  let follow = false
   if (!chain.includes(target)) {
-    follow = true;
+    follow = true
     if (target) {
-      follow = target[target.length - 1] !== "!";
-      const locale = target.replace(/!/g, "");
-      chain.push(locale);
+      follow = target[target.length - 1] !== '!'
+      const locale = target.replace(/!/g, '')
+      chain.push(locale)
       if ((isArray(blocks) || isPlainObject(blocks)) && blocks[locale]) {
-        follow = blocks[locale];
+        follow = blocks[locale]
       }
     }
   }
-  return follow;
+  return follow
 }
-const VERSION$1 = "9.14.4";
-const NOT_REOSLVED = -1;
-const DEFAULT_LOCALE = "en-US";
-const MISSING_RESOLVE_VALUE = "";
-const capitalize = (str) => `${str.charAt(0).toLocaleUpperCase()}${str.substr(1)}`;
+const VERSION$1 = '9.14.4'
+const NOT_REOSLVED = -1
+const DEFAULT_LOCALE = 'en-US'
+const MISSING_RESOLVE_VALUE = ''
+const capitalize = (str) => `${str.charAt(0).toLocaleUpperCase()}${str.substr(1)}`
 function getDefaultLinkedModifiers() {
   return {
     upper: (val, type) => {
-      return type === "text" && isString(val) ? val.toUpperCase() : type === "vnode" && isObject$1(val) && "__v_isVNode" in val ? val.children.toUpperCase() : val;
+      return type === 'text' && isString(val)
+        ? val.toUpperCase()
+        : type === 'vnode' && isObject$1(val) && '__v_isVNode' in val
+          ? val.children.toUpperCase()
+          : val
     },
     lower: (val, type) => {
-      return type === "text" && isString(val) ? val.toLowerCase() : type === "vnode" && isObject$1(val) && "__v_isVNode" in val ? val.children.toLowerCase() : val;
+      return type === 'text' && isString(val)
+        ? val.toLowerCase()
+        : type === 'vnode' && isObject$1(val) && '__v_isVNode' in val
+          ? val.children.toLowerCase()
+          : val
     },
     capitalize: (val, type) => {
-      return type === "text" && isString(val) ? capitalize(val) : type === "vnode" && isObject$1(val) && "__v_isVNode" in val ? capitalize(val.children) : val;
-    }
-  };
+      return type === 'text' && isString(val)
+        ? capitalize(val)
+        : type === 'vnode' && isObject$1(val) && '__v_isVNode' in val
+          ? capitalize(val.children)
+          : val
+    },
+  }
 }
-let _compiler;
-let _resolver;
+let _compiler
+let _resolver
 function registerMessageResolver(resolver) {
-  _resolver = resolver;
+  _resolver = resolver
 }
-let _fallbacker;
+let _fallbacker
 function registerLocaleFallbacker(fallbacker) {
-  _fallbacker = fallbacker;
+  _fallbacker = fallbacker
 }
-const setAdditionalMeta = /* @__NO_SIDE_EFFECTS__ */ (meta) => {
-};
-let _fallbackContext = null;
+const setAdditionalMeta = /* @__NO_SIDE_EFFECTS__ */ (meta) => {}
+let _fallbackContext = null
 const setFallbackContext = (context) => {
-  _fallbackContext = context;
-};
-const getFallbackContext = () => _fallbackContext;
-let _cid = 0;
+  _fallbackContext = context
+}
+const getFallbackContext = () => _fallbackContext
+let _cid = 0
 function createCoreContext(options = {}) {
-  const onWarn = isFunction(options.onWarn) ? options.onWarn : warn;
-  const version = isString(options.version) ? options.version : VERSION$1;
-  const locale = isString(options.locale) || isFunction(options.locale) ? options.locale : DEFAULT_LOCALE;
-  const _locale = isFunction(locale) ? DEFAULT_LOCALE : locale;
-  const fallbackLocale = isArray(options.fallbackLocale) || isPlainObject(options.fallbackLocale) || isString(options.fallbackLocale) || options.fallbackLocale === false ? options.fallbackLocale : _locale;
-  const messages2 = isPlainObject(options.messages) ? options.messages : createResources(_locale);
-  const datetimeFormats = isPlainObject(options.datetimeFormats) ? options.datetimeFormats : createResources(_locale);
-  const numberFormats = isPlainObject(options.numberFormats) ? options.numberFormats : createResources(_locale);
-  const modifiers = assign(create(), options.modifiers, getDefaultLinkedModifiers());
-  const pluralRules = options.pluralRules || create();
-  const missing = isFunction(options.missing) ? options.missing : null;
-  const missingWarn = isBoolean(options.missingWarn) || isRegExp(options.missingWarn) ? options.missingWarn : true;
-  const fallbackWarn = isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true;
-  const fallbackFormat = !!options.fallbackFormat;
-  const unresolving = !!options.unresolving;
-  const postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null;
-  const processor = isPlainObject(options.processor) ? options.processor : null;
-  const warnHtmlMessage = isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true;
-  const escapeParameter = !!options.escapeParameter;
-  const messageCompiler = isFunction(options.messageCompiler) ? options.messageCompiler : _compiler;
-  const messageResolver = isFunction(options.messageResolver) ? options.messageResolver : _resolver || resolveWithKeyValue;
-  const localeFallbacker = isFunction(options.localeFallbacker) ? options.localeFallbacker : _fallbacker || fallbackWithSimple;
-  const fallbackContext = isObject$1(options.fallbackContext) ? options.fallbackContext : void 0;
-  const internalOptions = options;
-  const __datetimeFormatters = isObject$1(internalOptions.__datetimeFormatters) ? internalOptions.__datetimeFormatters : /* @__PURE__ */ new Map();
-  const __numberFormatters = isObject$1(internalOptions.__numberFormatters) ? internalOptions.__numberFormatters : /* @__PURE__ */ new Map();
-  const __meta = isObject$1(internalOptions.__meta) ? internalOptions.__meta : {};
-  _cid++;
+  const onWarn = isFunction(options.onWarn) ? options.onWarn : warn
+  const version = isString(options.version) ? options.version : VERSION$1
+  const locale =
+    isString(options.locale) || isFunction(options.locale) ? options.locale : DEFAULT_LOCALE
+  const _locale = isFunction(locale) ? DEFAULT_LOCALE : locale
+  const fallbackLocale =
+    isArray(options.fallbackLocale) ||
+    isPlainObject(options.fallbackLocale) ||
+    isString(options.fallbackLocale) ||
+    options.fallbackLocale === false
+      ? options.fallbackLocale
+      : _locale
+  const messages2 = isPlainObject(options.messages) ? options.messages : createResources(_locale)
+  const datetimeFormats = isPlainObject(options.datetimeFormats)
+    ? options.datetimeFormats
+    : createResources(_locale)
+  const numberFormats = isPlainObject(options.numberFormats)
+    ? options.numberFormats
+    : createResources(_locale)
+  const modifiers = assign(create(), options.modifiers, getDefaultLinkedModifiers())
+  const pluralRules = options.pluralRules || create()
+  const missing = isFunction(options.missing) ? options.missing : null
+  const missingWarn =
+    isBoolean(options.missingWarn) || isRegExp(options.missingWarn) ? options.missingWarn : true
+  const fallbackWarn =
+    isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true
+  const fallbackFormat = !!options.fallbackFormat
+  const unresolving = !!options.unresolving
+  const postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null
+  const processor = isPlainObject(options.processor) ? options.processor : null
+  const warnHtmlMessage = isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true
+  const escapeParameter = !!options.escapeParameter
+  const messageCompiler = isFunction(options.messageCompiler) ? options.messageCompiler : _compiler
+  const messageResolver = isFunction(options.messageResolver)
+    ? options.messageResolver
+    : _resolver || resolveWithKeyValue
+  const localeFallbacker = isFunction(options.localeFallbacker)
+    ? options.localeFallbacker
+    : _fallbacker || fallbackWithSimple
+  const fallbackContext = isObject$1(options.fallbackContext) ? options.fallbackContext : void 0
+  const internalOptions = options
+  const __datetimeFormatters = isObject$1(internalOptions.__datetimeFormatters)
+    ? internalOptions.__datetimeFormatters
+    : /* @__PURE__ */ new Map()
+  const __numberFormatters = isObject$1(internalOptions.__numberFormatters)
+    ? internalOptions.__numberFormatters
+    : /* @__PURE__ */ new Map()
+  const __meta = isObject$1(internalOptions.__meta) ? internalOptions.__meta : {}
+  _cid++
   const context = {
     version,
     cid: _cid,
@@ -973,117 +999,143 @@ function createCoreContext(options = {}) {
     localeFallbacker,
     fallbackContext,
     onWarn,
-    __meta
-  };
-  {
-    context.datetimeFormats = datetimeFormats;
-    context.numberFormats = numberFormats;
-    context.__datetimeFormatters = __datetimeFormatters;
-    context.__numberFormatters = __numberFormatters;
+    __meta,
   }
-  return context;
+  {
+    context.datetimeFormats = datetimeFormats
+    context.numberFormats = numberFormats
+    context.__datetimeFormatters = __datetimeFormatters
+    context.__numberFormatters = __numberFormatters
+  }
+  return context
 }
-const createResources = (locale) => ({ [locale]: create() });
+const createResources = (locale) => ({ [locale]: create() })
 function handleMissing(context, key, locale, missingWarn, type) {
-  const { missing, onWarn } = context;
+  const { missing, onWarn } = context
   if (missing !== null) {
-    const ret = missing(context, locale, key, type);
-    return isString(ret) ? ret : key;
+    const ret = missing(context, locale, key, type)
+    return isString(ret) ? ret : key
   } else {
-    return key;
+    return key
   }
 }
 function updateFallbackLocale(ctx, locale, fallback) {
-  const context = ctx;
-  context.__localeChainCache = /* @__PURE__ */ new Map();
-  ctx.localeFallbacker(ctx, fallback, locale);
+  const context = ctx
+  context.__localeChainCache = /* @__PURE__ */ new Map()
+  ctx.localeFallbacker(ctx, fallback, locale)
 }
 function isAlmostSameLocale(locale, compareLocale) {
-  if (locale === compareLocale)
-    return false;
-  return locale.split("-")[0] === compareLocale.split("-")[0];
+  if (locale === compareLocale) return false
+  return locale.split('-')[0] === compareLocale.split('-')[0]
 }
 function isImplicitFallback(targetLocale, locales) {
-  const index = locales.indexOf(targetLocale);
+  const index = locales.indexOf(targetLocale)
   if (index === -1) {
-    return false;
+    return false
   }
   for (let i = index + 1; i < locales.length; i++) {
     if (isAlmostSameLocale(targetLocale, locales[i])) {
-      return true;
+      return true
     }
   }
-  return false;
+  return false
 }
-const NOOP_MESSAGE_FUNCTION = () => "";
-const isMessageFunction = (val) => isFunction(val);
+const NOOP_MESSAGE_FUNCTION = () => ''
+const isMessageFunction = (val) => isFunction(val)
 function translate(context, ...args) {
-  const { fallbackFormat, postTranslation, unresolving, messageCompiler, fallbackLocale, messages: messages2 } = context;
-  const [key, options] = parseTranslateArgs(...args);
-  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
-  const fallbackWarn = isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
-  const escapeParameter = isBoolean(options.escapeParameter) ? options.escapeParameter : context.escapeParameter;
-  const resolvedMessage = !!options.resolvedMessage;
-  const defaultMsgOrKey = isString(options.default) || isBoolean(options.default) ? !isBoolean(options.default) ? options.default : !messageCompiler ? () => key : key : fallbackFormat ? !messageCompiler ? () => key : key : "";
-  const enableDefaultMsg = fallbackFormat || defaultMsgOrKey !== "";
-  const locale = getLocale(context, options);
-  escapeParameter && escapeParams(options);
-  let [formatScope, targetLocale, message] = !resolvedMessage ? resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn) : [
-    key,
-    locale,
-    messages2[locale] || create()
-  ];
-  let format2 = formatScope;
-  let cacheBaseKey = key;
-  if (!resolvedMessage && !(isString(format2) || isMessageAST(format2) || isMessageFunction(format2))) {
+  const {
+    fallbackFormat,
+    postTranslation,
+    unresolving,
+    messageCompiler,
+    fallbackLocale,
+    messages: messages2,
+  } = context
+  const [key, options] = parseTranslateArgs(...args)
+  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn
+  const fallbackWarn = isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn
+  const escapeParameter = isBoolean(options.escapeParameter)
+    ? options.escapeParameter
+    : context.escapeParameter
+  const resolvedMessage = !!options.resolvedMessage
+  const defaultMsgOrKey =
+    isString(options.default) || isBoolean(options.default)
+      ? !isBoolean(options.default)
+        ? options.default
+        : !messageCompiler
+          ? () => key
+          : key
+      : fallbackFormat
+        ? !messageCompiler
+          ? () => key
+          : key
+        : ''
+  const enableDefaultMsg = fallbackFormat || defaultMsgOrKey !== ''
+  const locale = getLocale(context, options)
+  escapeParameter && escapeParams(options)
+  let [formatScope, targetLocale, message] = !resolvedMessage
+    ? resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn)
+    : [key, locale, messages2[locale] || create()]
+  let format2 = formatScope
+  let cacheBaseKey = key
+  if (
+    !resolvedMessage &&
+    !(isString(format2) || isMessageAST(format2) || isMessageFunction(format2))
+  ) {
     if (enableDefaultMsg) {
-      format2 = defaultMsgOrKey;
-      cacheBaseKey = format2;
+      format2 = defaultMsgOrKey
+      cacheBaseKey = format2
     }
   }
-  if (!resolvedMessage && (!(isString(format2) || isMessageAST(format2) || isMessageFunction(format2)) || !isString(targetLocale))) {
-    return unresolving ? NOT_REOSLVED : key;
+  if (
+    !resolvedMessage &&
+    (!(isString(format2) || isMessageAST(format2) || isMessageFunction(format2)) ||
+      !isString(targetLocale))
+  ) {
+    return unresolving ? NOT_REOSLVED : key
   }
-  let occurred = false;
+  let occurred = false
   const onError = () => {
-    occurred = true;
-  };
-  const msg = !isMessageFunction(format2) ? compileMessageFormat(context, key, targetLocale, format2, cacheBaseKey, onError) : format2;
-  if (occurred) {
-    return format2;
+    occurred = true
   }
-  const ctxOptions = getMessageContextOptions(context, targetLocale, message, options);
-  const msgContext = createMessageContext(ctxOptions);
-  const messaged = evaluateMessage(context, msg, msgContext);
-  const ret = postTranslation ? postTranslation(messaged, key) : messaged;
-  return ret;
+  const msg = !isMessageFunction(format2)
+    ? compileMessageFormat(context, key, targetLocale, format2, cacheBaseKey, onError)
+    : format2
+  if (occurred) {
+    return format2
+  }
+  const ctxOptions = getMessageContextOptions(context, targetLocale, message, options)
+  const msgContext = createMessageContext(ctxOptions)
+  const messaged = evaluateMessage(context, msg, msgContext)
+  const ret = postTranslation ? postTranslation(messaged, key) : messaged
+  return ret
 }
 function escapeParams(options) {
   if (isArray(options.list)) {
-    options.list = options.list.map((item) => isString(item) ? escapeHtml(item) : item);
+    options.list = options.list.map((item) => (isString(item) ? escapeHtml(item) : item))
   } else if (isObject$1(options.named)) {
     Object.keys(options.named).forEach((key) => {
       if (isString(options.named[key])) {
-        options.named[key] = escapeHtml(options.named[key]);
+        options.named[key] = escapeHtml(options.named[key])
       }
-    });
+    })
   }
 }
 function resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn) {
-  const { messages: messages2, onWarn, messageResolver: resolveValue2, localeFallbacker } = context;
-  const locales = localeFallbacker(context, fallbackLocale, locale);
-  let message = create();
-  let targetLocale;
-  let format2 = null;
-  const type = "translate";
+  const { messages: messages2, onWarn, messageResolver: resolveValue2, localeFallbacker } = context
+  const locales = localeFallbacker(context, fallbackLocale, locale)
+  let message = create()
+  let targetLocale
+  let format2 = null
+  const type = 'translate'
   for (let i = 0; i < locales.length; i++) {
-    targetLocale = locales[i];
-    message = messages2[targetLocale] || create();
+    targetLocale = locales[i]
+    message = messages2[targetLocale] || create()
     if ((format2 = resolveValue2(message, key)) === null) {
-      format2 = message[key];
+      format2 = message[key]
     }
     if (isString(format2) || isMessageAST(format2) || isMessageFunction(format2)) {
-      break;
+      break
     }
     if (!isImplicitFallback(targetLocale, locales)) {
       const missingRet = handleMissing(
@@ -1092,63 +1144,66 @@ function resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn
         key,
         targetLocale,
         missingWarn,
-        type
-      );
+        type,
+      )
       if (missingRet !== key) {
-        format2 = missingRet;
+        format2 = missingRet
       }
     }
   }
-  return [format2, targetLocale, message];
+  return [format2, targetLocale, message]
 }
 function compileMessageFormat(context, key, targetLocale, format2, cacheBaseKey, onError) {
-  const { messageCompiler, warnHtmlMessage } = context;
+  const { messageCompiler, warnHtmlMessage } = context
   if (isMessageFunction(format2)) {
-    const msg2 = format2;
-    msg2.locale = msg2.locale || targetLocale;
-    msg2.key = msg2.key || key;
-    return msg2;
+    const msg2 = format2
+    msg2.locale = msg2.locale || targetLocale
+    msg2.key = msg2.key || key
+    return msg2
   }
   if (messageCompiler == null) {
-    const msg2 = () => format2;
-    msg2.locale = targetLocale;
-    msg2.key = key;
-    return msg2;
+    const msg2 = () => format2
+    msg2.locale = targetLocale
+    msg2.key = key
+    return msg2
   }
-  const msg = messageCompiler(format2, getCompileContext(context, targetLocale, cacheBaseKey, format2, warnHtmlMessage, onError));
-  msg.locale = targetLocale;
-  msg.key = key;
-  msg.source = format2;
-  return msg;
+  const msg = messageCompiler(
+    format2,
+    getCompileContext(context, targetLocale, cacheBaseKey, format2, warnHtmlMessage, onError),
+  )
+  msg.locale = targetLocale
+  msg.key = key
+  msg.source = format2
+  return msg
 }
 function evaluateMessage(context, msg, msgCtx) {
-  const messaged = msg(msgCtx);
-  return messaged;
+  const messaged = msg(msgCtx)
+  return messaged
 }
 function parseTranslateArgs(...args) {
-  const [arg1, arg2, arg3] = args;
-  const options = create();
+  const [arg1, arg2, arg3] = args
+  const options = create()
   if (!isString(arg1) && !isNumber(arg1) && !isMessageFunction(arg1) && !isMessageAST(arg1)) {
-    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
+    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT)
   }
-  const key = isNumber(arg1) ? String(arg1) : isMessageFunction(arg1) ? arg1 : arg1;
+  const key = isNumber(arg1) ? String(arg1) : isMessageFunction(arg1) ? arg1 : arg1
   if (isNumber(arg2)) {
-    options.plural = arg2;
+    options.plural = arg2
   } else if (isString(arg2)) {
-    options.default = arg2;
+    options.default = arg2
   } else if (isPlainObject(arg2) && !isEmptyObject(arg2)) {
-    options.named = arg2;
+    options.named = arg2
   } else if (isArray(arg2)) {
-    options.list = arg2;
+    options.list = arg2
   }
   if (isNumber(arg3)) {
-    options.plural = arg3;
+    options.plural = arg3
   } else if (isString(arg3)) {
-    options.default = arg3;
+    options.default = arg3
   } else if (isPlainObject(arg3)) {
-    assign(options, arg3);
+    assign(options, arg3)
   }
-  return [key, options];
+  return [key, options]
 }
 function getCompileContext(context, locale, key, source, warnHtmlMessage, onError) {
   return {
@@ -1156,291 +1211,308 @@ function getCompileContext(context, locale, key, source, warnHtmlMessage, onErro
     key,
     warnHtmlMessage,
     onError: (err) => {
-      onError && onError(err);
+      onError && onError(err)
       {
-        throw err;
+        throw err
       }
     },
-    onCacheKey: (source2) => generateFormatCacheKey(locale, key, source2)
-  };
+    onCacheKey: (source2) => generateFormatCacheKey(locale, key, source2),
+  }
 }
 function getMessageContextOptions(context, locale, message, options) {
-  const { modifiers, pluralRules, messageResolver: resolveValue2, fallbackLocale, fallbackWarn, missingWarn, fallbackContext } = context;
+  const {
+    modifiers,
+    pluralRules,
+    messageResolver: resolveValue2,
+    fallbackLocale,
+    fallbackWarn,
+    missingWarn,
+    fallbackContext,
+  } = context
   const resolveMessage = (key) => {
-    let val = resolveValue2(message, key);
+    let val = resolveValue2(message, key)
     if (val == null && fallbackContext) {
-      const [, , message2] = resolveMessageFormat(fallbackContext, key, locale, fallbackLocale, fallbackWarn, missingWarn);
-      val = resolveValue2(message2, key);
+      const [, , message2] = resolveMessageFormat(
+        fallbackContext,
+        key,
+        locale,
+        fallbackLocale,
+        fallbackWarn,
+        missingWarn,
+      )
+      val = resolveValue2(message2, key)
     }
     if (isString(val) || isMessageAST(val)) {
-      let occurred = false;
+      let occurred = false
       const onError = () => {
-        occurred = true;
-      };
-      const msg = compileMessageFormat(context, key, locale, val, key, onError);
-      return !occurred ? msg : NOOP_MESSAGE_FUNCTION;
+        occurred = true
+      }
+      const msg = compileMessageFormat(context, key, locale, val, key, onError)
+      return !occurred ? msg : NOOP_MESSAGE_FUNCTION
     } else if (isMessageFunction(val)) {
-      return val;
+      return val
     } else {
-      return NOOP_MESSAGE_FUNCTION;
+      return NOOP_MESSAGE_FUNCTION
     }
-  };
+  }
   const ctxOptions = {
     locale,
     modifiers,
     pluralRules,
-    messages: resolveMessage
-  };
+    messages: resolveMessage,
+  }
   if (context.processor) {
-    ctxOptions.processor = context.processor;
+    ctxOptions.processor = context.processor
   }
   if (options.list) {
-    ctxOptions.list = options.list;
+    ctxOptions.list = options.list
   }
   if (options.named) {
-    ctxOptions.named = options.named;
+    ctxOptions.named = options.named
   }
   if (isNumber(options.plural)) {
-    ctxOptions.pluralIndex = options.plural;
+    ctxOptions.pluralIndex = options.plural
   }
-  return ctxOptions;
+  return ctxOptions
 }
 function datetime(context, ...args) {
-  const { datetimeFormats, unresolving, fallbackLocale, onWarn, localeFallbacker } = context;
-  const { __datetimeFormatters } = context;
-  const [key, value, options, overrides] = parseDateTimeArgs(...args);
-  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
-  isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
-  const part = !!options.part;
-  const locale = getLocale(context, options);
+  const { datetimeFormats, unresolving, fallbackLocale, onWarn, localeFallbacker } = context
+  const { __datetimeFormatters } = context
+  const [key, value, options, overrides] = parseDateTimeArgs(...args)
+  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn
+  isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn
+  const part = !!options.part
+  const locale = getLocale(context, options)
   const locales = localeFallbacker(
     context,
     // eslint-disable-line @typescript-eslint/no-explicit-any
     fallbackLocale,
-    locale
-  );
-  if (!isString(key) || key === "") {
-    return new Intl.DateTimeFormat(locale, overrides).format(value);
+    locale,
+  )
+  if (!isString(key) || key === '') {
+    return new Intl.DateTimeFormat(locale, overrides).format(value)
   }
-  let datetimeFormat = {};
-  let targetLocale;
-  let format2 = null;
-  const type = "datetime format";
+  let datetimeFormat = {}
+  let targetLocale
+  let format2 = null
+  const type = 'datetime format'
   for (let i = 0; i < locales.length; i++) {
-    targetLocale = locales[i];
-    datetimeFormat = datetimeFormats[targetLocale] || {};
-    format2 = datetimeFormat[key];
-    if (isPlainObject(format2))
-      break;
-    handleMissing(context, key, targetLocale, missingWarn, type);
+    targetLocale = locales[i]
+    datetimeFormat = datetimeFormats[targetLocale] || {}
+    format2 = datetimeFormat[key]
+    if (isPlainObject(format2)) break
+    handleMissing(context, key, targetLocale, missingWarn, type)
   }
   if (!isPlainObject(format2) || !isString(targetLocale)) {
-    return unresolving ? NOT_REOSLVED : key;
+    return unresolving ? NOT_REOSLVED : key
   }
-  let id = `${targetLocale}__${key}`;
+  let id = `${targetLocale}__${key}`
   if (!isEmptyObject(overrides)) {
-    id = `${id}__${JSON.stringify(overrides)}`;
+    id = `${id}__${JSON.stringify(overrides)}`
   }
-  let formatter = __datetimeFormatters.get(id);
+  let formatter = __datetimeFormatters.get(id)
   if (!formatter) {
-    formatter = new Intl.DateTimeFormat(targetLocale, assign({}, format2, overrides));
-    __datetimeFormatters.set(id, formatter);
+    formatter = new Intl.DateTimeFormat(targetLocale, assign({}, format2, overrides))
+    __datetimeFormatters.set(id, formatter)
   }
-  return !part ? formatter.format(value) : formatter.formatToParts(value);
+  return !part ? formatter.format(value) : formatter.formatToParts(value)
 }
 const DATETIME_FORMAT_OPTIONS_KEYS = [
-  "localeMatcher",
-  "weekday",
-  "era",
-  "year",
-  "month",
-  "day",
-  "hour",
-  "minute",
-  "second",
-  "timeZoneName",
-  "formatMatcher",
-  "hour12",
-  "timeZone",
-  "dateStyle",
-  "timeStyle",
-  "calendar",
-  "dayPeriod",
-  "numberingSystem",
-  "hourCycle",
-  "fractionalSecondDigits"
-];
+  'localeMatcher',
+  'weekday',
+  'era',
+  'year',
+  'month',
+  'day',
+  'hour',
+  'minute',
+  'second',
+  'timeZoneName',
+  'formatMatcher',
+  'hour12',
+  'timeZone',
+  'dateStyle',
+  'timeStyle',
+  'calendar',
+  'dayPeriod',
+  'numberingSystem',
+  'hourCycle',
+  'fractionalSecondDigits',
+]
 function parseDateTimeArgs(...args) {
-  const [arg1, arg2, arg3, arg4] = args;
-  const options = create();
-  let overrides = create();
-  let value;
+  const [arg1, arg2, arg3, arg4] = args
+  const options = create()
+  let overrides = create()
+  let value
   if (isString(arg1)) {
-    const matches = arg1.match(/(\d{4}-\d{2}-\d{2})(T|\s)?(.*)/);
+    const matches = arg1.match(/(\d{4}-\d{2}-\d{2})(T|\s)?(.*)/)
     if (!matches) {
-      throw createCoreError(CoreErrorCodes.INVALID_ISO_DATE_ARGUMENT);
+      throw createCoreError(CoreErrorCodes.INVALID_ISO_DATE_ARGUMENT)
     }
-    const dateTime = matches[3] ? matches[3].trim().startsWith("T") ? `${matches[1].trim()}${matches[3].trim()}` : `${matches[1].trim()}T${matches[3].trim()}` : matches[1].trim();
-    value = new Date(dateTime);
+    const dateTime = matches[3]
+      ? matches[3].trim().startsWith('T')
+        ? `${matches[1].trim()}${matches[3].trim()}`
+        : `${matches[1].trim()}T${matches[3].trim()}`
+      : matches[1].trim()
+    value = new Date(dateTime)
     try {
-      value.toISOString();
+      value.toISOString()
     } catch (e) {
-      throw createCoreError(CoreErrorCodes.INVALID_ISO_DATE_ARGUMENT);
+      throw createCoreError(CoreErrorCodes.INVALID_ISO_DATE_ARGUMENT)
     }
   } else if (isDate(arg1)) {
     if (isNaN(arg1.getTime())) {
-      throw createCoreError(CoreErrorCodes.INVALID_DATE_ARGUMENT);
+      throw createCoreError(CoreErrorCodes.INVALID_DATE_ARGUMENT)
     }
-    value = arg1;
+    value = arg1
   } else if (isNumber(arg1)) {
-    value = arg1;
+    value = arg1
   } else {
-    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
+    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT)
   }
   if (isString(arg2)) {
-    options.key = arg2;
+    options.key = arg2
   } else if (isPlainObject(arg2)) {
     Object.keys(arg2).forEach((key) => {
       if (DATETIME_FORMAT_OPTIONS_KEYS.includes(key)) {
-        overrides[key] = arg2[key];
+        overrides[key] = arg2[key]
       } else {
-        options[key] = arg2[key];
+        options[key] = arg2[key]
       }
-    });
+    })
   }
   if (isString(arg3)) {
-    options.locale = arg3;
+    options.locale = arg3
   } else if (isPlainObject(arg3)) {
-    overrides = arg3;
+    overrides = arg3
   }
   if (isPlainObject(arg4)) {
-    overrides = arg4;
+    overrides = arg4
   }
-  return [options.key || "", value, options, overrides];
+  return [options.key || '', value, options, overrides]
 }
 function clearDateTimeFormat(ctx, locale, format2) {
-  const context = ctx;
+  const context = ctx
   for (const key in format2) {
-    const id = `${locale}__${key}`;
+    const id = `${locale}__${key}`
     if (!context.__datetimeFormatters.has(id)) {
-      continue;
+      continue
     }
-    context.__datetimeFormatters.delete(id);
+    context.__datetimeFormatters.delete(id)
   }
 }
 function number(context, ...args) {
-  const { numberFormats, unresolving, fallbackLocale, onWarn, localeFallbacker } = context;
-  const { __numberFormatters } = context;
-  const [key, value, options, overrides] = parseNumberArgs(...args);
-  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
-  isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
-  const part = !!options.part;
-  const locale = getLocale(context, options);
+  const { numberFormats, unresolving, fallbackLocale, onWarn, localeFallbacker } = context
+  const { __numberFormatters } = context
+  const [key, value, options, overrides] = parseNumberArgs(...args)
+  const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn
+  isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn
+  const part = !!options.part
+  const locale = getLocale(context, options)
   const locales = localeFallbacker(
     context,
     // eslint-disable-line @typescript-eslint/no-explicit-any
     fallbackLocale,
-    locale
-  );
-  if (!isString(key) || key === "") {
-    return new Intl.NumberFormat(locale, overrides).format(value);
+    locale,
+  )
+  if (!isString(key) || key === '') {
+    return new Intl.NumberFormat(locale, overrides).format(value)
   }
-  let numberFormat = {};
-  let targetLocale;
-  let format2 = null;
-  const type = "number format";
+  let numberFormat = {}
+  let targetLocale
+  let format2 = null
+  const type = 'number format'
   for (let i = 0; i < locales.length; i++) {
-    targetLocale = locales[i];
-    numberFormat = numberFormats[targetLocale] || {};
-    format2 = numberFormat[key];
-    if (isPlainObject(format2))
-      break;
-    handleMissing(context, key, targetLocale, missingWarn, type);
+    targetLocale = locales[i]
+    numberFormat = numberFormats[targetLocale] || {}
+    format2 = numberFormat[key]
+    if (isPlainObject(format2)) break
+    handleMissing(context, key, targetLocale, missingWarn, type)
   }
   if (!isPlainObject(format2) || !isString(targetLocale)) {
-    return unresolving ? NOT_REOSLVED : key;
+    return unresolving ? NOT_REOSLVED : key
   }
-  let id = `${targetLocale}__${key}`;
+  let id = `${targetLocale}__${key}`
   if (!isEmptyObject(overrides)) {
-    id = `${id}__${JSON.stringify(overrides)}`;
+    id = `${id}__${JSON.stringify(overrides)}`
   }
-  let formatter = __numberFormatters.get(id);
+  let formatter = __numberFormatters.get(id)
   if (!formatter) {
-    formatter = new Intl.NumberFormat(targetLocale, assign({}, format2, overrides));
-    __numberFormatters.set(id, formatter);
+    formatter = new Intl.NumberFormat(targetLocale, assign({}, format2, overrides))
+    __numberFormatters.set(id, formatter)
   }
-  return !part ? formatter.format(value) : formatter.formatToParts(value);
+  return !part ? formatter.format(value) : formatter.formatToParts(value)
 }
 const NUMBER_FORMAT_OPTIONS_KEYS = [
-  "localeMatcher",
-  "style",
-  "currency",
-  "currencyDisplay",
-  "currencySign",
-  "useGrouping",
-  "minimumIntegerDigits",
-  "minimumFractionDigits",
-  "maximumFractionDigits",
-  "minimumSignificantDigits",
-  "maximumSignificantDigits",
-  "compactDisplay",
-  "notation",
-  "signDisplay",
-  "unit",
-  "unitDisplay",
-  "roundingMode",
-  "roundingPriority",
-  "roundingIncrement",
-  "trailingZeroDisplay"
-];
+  'localeMatcher',
+  'style',
+  'currency',
+  'currencyDisplay',
+  'currencySign',
+  'useGrouping',
+  'minimumIntegerDigits',
+  'minimumFractionDigits',
+  'maximumFractionDigits',
+  'minimumSignificantDigits',
+  'maximumSignificantDigits',
+  'compactDisplay',
+  'notation',
+  'signDisplay',
+  'unit',
+  'unitDisplay',
+  'roundingMode',
+  'roundingPriority',
+  'roundingIncrement',
+  'trailingZeroDisplay',
+]
 function parseNumberArgs(...args) {
-  const [arg1, arg2, arg3, arg4] = args;
-  const options = create();
-  let overrides = create();
+  const [arg1, arg2, arg3, arg4] = args
+  const options = create()
+  let overrides = create()
   if (!isNumber(arg1)) {
-    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT);
+    throw createCoreError(CoreErrorCodes.INVALID_ARGUMENT)
   }
-  const value = arg1;
+  const value = arg1
   if (isString(arg2)) {
-    options.key = arg2;
+    options.key = arg2
   } else if (isPlainObject(arg2)) {
     Object.keys(arg2).forEach((key) => {
       if (NUMBER_FORMAT_OPTIONS_KEYS.includes(key)) {
-        overrides[key] = arg2[key];
+        overrides[key] = arg2[key]
       } else {
-        options[key] = arg2[key];
+        options[key] = arg2[key]
       }
-    });
+    })
   }
   if (isString(arg3)) {
-    options.locale = arg3;
+    options.locale = arg3
   } else if (isPlainObject(arg3)) {
-    overrides = arg3;
+    overrides = arg3
   }
   if (isPlainObject(arg4)) {
-    overrides = arg4;
+    overrides = arg4
   }
-  return [options.key || "", value, options, overrides];
+  return [options.key || '', value, options, overrides]
 }
 function clearNumberFormat(ctx, locale, format2) {
-  const context = ctx;
+  const context = ctx
   for (const key in format2) {
-    const id = `${locale}__${key}`;
+    const id = `${locale}__${key}`
     if (!context.__numberFormatters.has(id)) {
-      continue;
+      continue
     }
-    context.__numberFormatters.delete(id);
+    context.__numberFormatters.delete(id)
   }
 }
 /*!
-  * vue-i18n v9.14.4
-  * (c) 2025 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-const VERSION = "9.14.4";
-const code$1 = CoreWarnCodes.__EXTEND_POINT__;
-const inc$1 = incrementer(code$1);
-({
+ * vue-i18n v9.14.4
+ * (c) 2025 kazuya kawaguchi
+ * Released under the MIT License.
+ */
+const VERSION = '9.14.4'
+const code$1 = CoreWarnCodes.__EXTEND_POINT__
+const inc$1 = incrementer(code$1)
+;({
   // 9
   NOT_SUPPORTED_PRESERVE: inc$1(),
   // 10
@@ -1458,11 +1530,11 @@ const inc$1 = incrementer(code$1);
   // 16
   NOTICE_DROP_ALLOW_COMPOSITION: inc$1(),
   // 17
-  NOTICE_DROP_TRANSLATE_EXIST_COMPATIBLE_FLAG: inc$1()
+  NOTICE_DROP_TRANSLATE_EXIST_COMPATIBLE_FLAG: inc$1(),
   // 18
-});
-const code = CoreErrorCodes.__EXTEND_POINT__;
-const inc = incrementer(code);
+})
+const code = CoreErrorCodes.__EXTEND_POINT__
+const inc = incrementer(code)
 const I18nErrorCodes = {
   // composer module errors
   UNEXPECTED_RETURN_TYPE: code,
@@ -1503,183 +1575,215 @@ const I18nErrorCodes = {
   NOT_AVAILABLE_COMPOSITION_IN_LEGACY: inc(),
   // 37
   // for enhancement
-  __EXTEND_POINT__: inc()
+  __EXTEND_POINT__: inc(),
   // 38
-};
-function createI18nError(code2, ...args) {
-  return createCompileError(code2, null, void 0);
 }
-const TranslateVNodeSymbol = /* @__PURE__ */ makeSymbol("__translateVNode");
-const DatetimePartsSymbol = /* @__PURE__ */ makeSymbol("__datetimeParts");
-const NumberPartsSymbol = /* @__PURE__ */ makeSymbol("__numberParts");
-const SetPluralRulesSymbol = makeSymbol("__setPluralRules");
-const InejctWithOptionSymbol = /* @__PURE__ */ makeSymbol("__injectWithOption");
-const DisposeSymbol = /* @__PURE__ */ makeSymbol("__dispose");
+function createI18nError(code2, ...args) {
+  return createCompileError(code2, null, void 0)
+}
+const TranslateVNodeSymbol = /* @__PURE__ */ makeSymbol('__translateVNode')
+const DatetimePartsSymbol = /* @__PURE__ */ makeSymbol('__datetimeParts')
+const NumberPartsSymbol = /* @__PURE__ */ makeSymbol('__numberParts')
+const SetPluralRulesSymbol = makeSymbol('__setPluralRules')
+const InejctWithOptionSymbol = /* @__PURE__ */ makeSymbol('__injectWithOption')
+const DisposeSymbol = /* @__PURE__ */ makeSymbol('__dispose')
 function handleFlatJson(obj) {
   if (!isObject$1(obj)) {
-    return obj;
+    return obj
   }
   if (isMessageAST(obj)) {
-    return obj;
+    return obj
   }
   for (const key in obj) {
     if (!hasOwn(obj, key)) {
-      continue;
+      continue
     }
-    if (!key.includes(".")) {
+    if (!key.includes('.')) {
       if (isObject$1(obj[key])) {
-        handleFlatJson(obj[key]);
+        handleFlatJson(obj[key])
       }
     } else {
-      const subKeys = key.split(".");
-      const lastIndex = subKeys.length - 1;
-      let currentObj = obj;
-      let hasStringValue = false;
+      const subKeys = key.split('.')
+      const lastIndex = subKeys.length - 1
+      let currentObj = obj
+      let hasStringValue = false
       for (let i = 0; i < lastIndex; i++) {
-        if (subKeys[i] === "__proto__") {
-          throw new Error(`unsafe key: ${subKeys[i]}`);
+        if (subKeys[i] === '__proto__') {
+          throw new Error(`unsafe key: ${subKeys[i]}`)
         }
         if (!(subKeys[i] in currentObj)) {
-          currentObj[subKeys[i]] = create();
+          currentObj[subKeys[i]] = create()
         }
         if (!isObject$1(currentObj[subKeys[i]])) {
-          hasStringValue = true;
-          break;
+          hasStringValue = true
+          break
         }
-        currentObj = currentObj[subKeys[i]];
+        currentObj = currentObj[subKeys[i]]
       }
       if (!hasStringValue) {
         if (!isMessageAST(currentObj)) {
-          currentObj[subKeys[lastIndex]] = obj[key];
-          delete obj[key];
+          currentObj[subKeys[lastIndex]] = obj[key]
+          delete obj[key]
         } else {
           if (!AST_NODE_PROPS_KEYS.includes(subKeys[lastIndex])) {
-            delete obj[key];
+            delete obj[key]
           }
         }
       }
       if (!isMessageAST(currentObj)) {
-        const target = currentObj[subKeys[lastIndex]];
+        const target = currentObj[subKeys[lastIndex]]
         if (isObject$1(target)) {
-          handleFlatJson(target);
+          handleFlatJson(target)
         }
       }
     }
   }
-  return obj;
+  return obj
 }
 function getLocaleMessages(locale, options) {
-  const { messages: messages2, __i18n, messageResolver, flatJson } = options;
-  const ret = isPlainObject(messages2) ? messages2 : isArray(__i18n) ? create() : { [locale]: create() };
+  const { messages: messages2, __i18n, messageResolver, flatJson } = options
+  const ret = isPlainObject(messages2)
+    ? messages2
+    : isArray(__i18n)
+      ? create()
+      : { [locale]: create() }
   if (isArray(__i18n)) {
     __i18n.forEach((custom) => {
-      if ("locale" in custom && "resource" in custom) {
-        const { locale: locale2, resource } = custom;
+      if ('locale' in custom && 'resource' in custom) {
+        const { locale: locale2, resource } = custom
         if (locale2) {
-          ret[locale2] = ret[locale2] || create();
-          deepCopy(resource, ret[locale2]);
+          ret[locale2] = ret[locale2] || create()
+          deepCopy(resource, ret[locale2])
         } else {
-          deepCopy(resource, ret);
+          deepCopy(resource, ret)
         }
       } else {
-        isString(custom) && deepCopy(JSON.parse(custom), ret);
+        isString(custom) && deepCopy(JSON.parse(custom), ret)
       }
-    });
+    })
   }
   if (messageResolver == null && flatJson) {
     for (const key in ret) {
       if (hasOwn(ret, key)) {
-        handleFlatJson(ret[key]);
+        handleFlatJson(ret[key])
       }
     }
   }
-  return ret;
+  return ret
 }
 function getComponentOptions(instance) {
-  return instance.type;
+  return instance.type
 }
 function adjustI18nResources(gl, options, componentOptions) {
-  let messages2 = isObject$1(options.messages) ? options.messages : create();
-  if ("__i18nGlobal" in componentOptions) {
+  let messages2 = isObject$1(options.messages) ? options.messages : create()
+  if ('__i18nGlobal' in componentOptions) {
     messages2 = getLocaleMessages(gl.locale.value, {
       messages: messages2,
-      __i18n: componentOptions.__i18nGlobal
-    });
+      __i18n: componentOptions.__i18nGlobal,
+    })
   }
-  const locales = Object.keys(messages2);
+  const locales = Object.keys(messages2)
   if (locales.length) {
     locales.forEach((locale) => {
-      gl.mergeLocaleMessage(locale, messages2[locale]);
-    });
+      gl.mergeLocaleMessage(locale, messages2[locale])
+    })
   }
   {
     if (isObject$1(options.datetimeFormats)) {
-      const locales2 = Object.keys(options.datetimeFormats);
+      const locales2 = Object.keys(options.datetimeFormats)
       if (locales2.length) {
         locales2.forEach((locale) => {
-          gl.mergeDateTimeFormat(locale, options.datetimeFormats[locale]);
-        });
+          gl.mergeDateTimeFormat(locale, options.datetimeFormats[locale])
+        })
       }
     }
     if (isObject$1(options.numberFormats)) {
-      const locales2 = Object.keys(options.numberFormats);
+      const locales2 = Object.keys(options.numberFormats)
       if (locales2.length) {
         locales2.forEach((locale) => {
-          gl.mergeNumberFormat(locale, options.numberFormats[locale]);
-        });
+          gl.mergeNumberFormat(locale, options.numberFormats[locale])
+        })
       }
     }
   }
 }
 function createTextNode(key) {
-  return createVNode(Text, null, key, 0);
+  return createVNode(Text, null, key, 0)
 }
-const DEVTOOLS_META = "__INTLIFY_META__";
-const NOOP_RETURN_ARRAY = () => [];
-const NOOP_RETURN_FALSE = () => false;
-let composerID = 0;
+const DEVTOOLS_META = '__INTLIFY_META__'
+const NOOP_RETURN_ARRAY = () => []
+const NOOP_RETURN_FALSE = () => false
+let composerID = 0
 function defineCoreMissingHandler(missing) {
   return (ctx, locale, key, type) => {
-    return missing(locale, key, getCurrentInstance() || void 0, type);
-  };
+    return missing(locale, key, getCurrentInstance() || void 0, type)
+  }
 }
 const getMetaInfo = /* @__NO_SIDE_EFFECTS__ */ () => {
-  const instance = getCurrentInstance();
-  let meta = null;
-  return instance && (meta = getComponentOptions(instance)[DEVTOOLS_META]) ? { [DEVTOOLS_META]: meta } : null;
-};
+  const instance = getCurrentInstance()
+  let meta = null
+  return instance && (meta = getComponentOptions(instance)[DEVTOOLS_META])
+    ? { [DEVTOOLS_META]: meta }
+    : null
+}
 function createComposer(options = {}, VueI18nLegacy) {
-  const { __root, __injectWithOption } = options;
-  const _isGlobal = __root === void 0;
-  const flatJson = options.flatJson;
-  const _ref = inBrowser ? ref : shallowRef;
-  const translateExistCompatible = !!options.translateExistCompatible;
-  let _inheritLocale = isBoolean(options.inheritLocale) ? options.inheritLocale : true;
+  const { __root, __injectWithOption } = options
+  const _isGlobal = __root === void 0
+  const flatJson = options.flatJson
+  const _ref = inBrowser ? ref : shallowRef
+  const translateExistCompatible = !!options.translateExistCompatible
+  let _inheritLocale = isBoolean(options.inheritLocale) ? options.inheritLocale : true
   const _locale = _ref(
     // prettier-ignore
-    __root && _inheritLocale ? __root.locale.value : isString(options.locale) ? options.locale : DEFAULT_LOCALE
-  );
+    __root && _inheritLocale ? __root.locale.value : isString(options.locale) ? options.locale : DEFAULT_LOCALE,
+  )
   const _fallbackLocale = _ref(
     // prettier-ignore
-    __root && _inheritLocale ? __root.fallbackLocale.value : isString(options.fallbackLocale) || isArray(options.fallbackLocale) || isPlainObject(options.fallbackLocale) || options.fallbackLocale === false ? options.fallbackLocale : _locale.value
-  );
-  const _messages = _ref(getLocaleMessages(_locale.value, options));
-  const _datetimeFormats = _ref(isPlainObject(options.datetimeFormats) ? options.datetimeFormats : { [_locale.value]: {} });
-  const _numberFormats = _ref(isPlainObject(options.numberFormats) ? options.numberFormats : { [_locale.value]: {} });
-  let _missingWarn = __root ? __root.missingWarn : isBoolean(options.missingWarn) || isRegExp(options.missingWarn) ? options.missingWarn : true;
-  let _fallbackWarn = __root ? __root.fallbackWarn : isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true;
-  let _fallbackRoot = __root ? __root.fallbackRoot : isBoolean(options.fallbackRoot) ? options.fallbackRoot : true;
-  let _fallbackFormat = !!options.fallbackFormat;
-  let _missing = isFunction(options.missing) ? options.missing : null;
-  let _runtimeMissing = isFunction(options.missing) ? defineCoreMissingHandler(options.missing) : null;
-  let _postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null;
-  let _warnHtmlMessage = __root ? __root.warnHtmlMessage : isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true;
-  let _escapeParameter = !!options.escapeParameter;
-  const _modifiers = __root ? __root.modifiers : isPlainObject(options.modifiers) ? options.modifiers : {};
-  let _pluralRules = options.pluralRules || __root && __root.pluralRules;
-  let _context;
+    __root && _inheritLocale ? __root.fallbackLocale.value : isString(options.fallbackLocale) || isArray(options.fallbackLocale) || isPlainObject(options.fallbackLocale) || options.fallbackLocale === false ? options.fallbackLocale : _locale.value,
+  )
+  const _messages = _ref(getLocaleMessages(_locale.value, options))
+  const _datetimeFormats = _ref(
+    isPlainObject(options.datetimeFormats) ? options.datetimeFormats : { [_locale.value]: {} },
+  )
+  const _numberFormats = _ref(
+    isPlainObject(options.numberFormats) ? options.numberFormats : { [_locale.value]: {} },
+  )
+  let _missingWarn = __root
+    ? __root.missingWarn
+    : isBoolean(options.missingWarn) || isRegExp(options.missingWarn)
+      ? options.missingWarn
+      : true
+  let _fallbackWarn = __root
+    ? __root.fallbackWarn
+    : isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn)
+      ? options.fallbackWarn
+      : true
+  let _fallbackRoot = __root
+    ? __root.fallbackRoot
+    : isBoolean(options.fallbackRoot)
+      ? options.fallbackRoot
+      : true
+  let _fallbackFormat = !!options.fallbackFormat
+  let _missing = isFunction(options.missing) ? options.missing : null
+  let _runtimeMissing = isFunction(options.missing)
+    ? defineCoreMissingHandler(options.missing)
+    : null
+  let _postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null
+  let _warnHtmlMessage = __root
+    ? __root.warnHtmlMessage
+    : isBoolean(options.warnHtmlMessage)
+      ? options.warnHtmlMessage
+      : true
+  let _escapeParameter = !!options.escapeParameter
+  const _modifiers = __root
+    ? __root.modifiers
+    : isPlainObject(options.modifiers)
+      ? options.modifiers
+      : {}
+  let _pluralRules = options.pluralRules || (__root && __root.pluralRules)
+  let _context
   const getCoreContext = () => {
-    _isGlobal && setFallbackContext(null);
+    _isGlobal && setFallbackContext(null)
     const ctxOptions = {
       version: VERSION,
       locale: _locale.value,
@@ -1697,331 +1801,376 @@ function createComposer(options = {}, VueI18nLegacy) {
       escapeParameter: _escapeParameter,
       messageResolver: options.messageResolver,
       messageCompiler: options.messageCompiler,
-      __meta: { framework: "vue" }
-    };
-    {
-      ctxOptions.datetimeFormats = _datetimeFormats.value;
-      ctxOptions.numberFormats = _numberFormats.value;
-      ctxOptions.__datetimeFormatters = isPlainObject(_context) ? _context.__datetimeFormatters : void 0;
-      ctxOptions.__numberFormatters = isPlainObject(_context) ? _context.__numberFormatters : void 0;
+      __meta: { framework: 'vue' },
     }
-    const ctx = createCoreContext(ctxOptions);
-    _isGlobal && setFallbackContext(ctx);
-    return ctx;
-  };
-  _context = getCoreContext();
-  updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
+    {
+      ctxOptions.datetimeFormats = _datetimeFormats.value
+      ctxOptions.numberFormats = _numberFormats.value
+      ctxOptions.__datetimeFormatters = isPlainObject(_context)
+        ? _context.__datetimeFormatters
+        : void 0
+      ctxOptions.__numberFormatters = isPlainObject(_context) ? _context.__numberFormatters : void 0
+    }
+    const ctx = createCoreContext(ctxOptions)
+    _isGlobal && setFallbackContext(ctx)
+    return ctx
+  }
+  _context = getCoreContext()
+  updateFallbackLocale(_context, _locale.value, _fallbackLocale.value)
   function trackReactivityValues() {
     return [
       _locale.value,
       _fallbackLocale.value,
       _messages.value,
       _datetimeFormats.value,
-      _numberFormats.value
-    ];
+      _numberFormats.value,
+    ]
   }
   const locale = computed({
     get: () => _locale.value,
     set: (val) => {
-      _locale.value = val;
-      _context.locale = _locale.value;
-    }
-  });
+      _locale.value = val
+      _context.locale = _locale.value
+    },
+  })
   const fallbackLocale = computed({
     get: () => _fallbackLocale.value,
     set: (val) => {
-      _fallbackLocale.value = val;
-      _context.fallbackLocale = _fallbackLocale.value;
-      updateFallbackLocale(_context, _locale.value, val);
-    }
-  });
-  const messages2 = computed(() => _messages.value);
-  const datetimeFormats = /* @__PURE__ */ computed(() => _datetimeFormats.value);
-  const numberFormats = /* @__PURE__ */ computed(() => _numberFormats.value);
+      _fallbackLocale.value = val
+      _context.fallbackLocale = _fallbackLocale.value
+      updateFallbackLocale(_context, _locale.value, val)
+    },
+  })
+  const messages2 = computed(() => _messages.value)
+  const datetimeFormats = /* @__PURE__ */ computed(() => _datetimeFormats.value)
+  const numberFormats = /* @__PURE__ */ computed(() => _numberFormats.value)
   function getPostTranslationHandler() {
-    return isFunction(_postTranslation) ? _postTranslation : null;
+    return isFunction(_postTranslation) ? _postTranslation : null
   }
   function setPostTranslationHandler(handler) {
-    _postTranslation = handler;
-    _context.postTranslation = handler;
+    _postTranslation = handler
+    _context.postTranslation = handler
   }
   function getMissingHandler() {
-    return _missing;
+    return _missing
   }
   function setMissingHandler(handler) {
     if (handler !== null) {
-      _runtimeMissing = defineCoreMissingHandler(handler);
+      _runtimeMissing = defineCoreMissingHandler(handler)
     }
-    _missing = handler;
-    _context.missing = _runtimeMissing;
+    _missing = handler
+    _context.missing = _runtimeMissing
   }
-  const wrapWithDeps = (fn, argumentParser, warnType, fallbackSuccess, fallbackFail, successCondition) => {
-    trackReactivityValues();
-    let ret;
+  const wrapWithDeps = (
+    fn,
+    argumentParser,
+    warnType,
+    fallbackSuccess,
+    fallbackFail,
+    successCondition,
+  ) => {
+    trackReactivityValues()
+    let ret
     try {
-      if (false) ;
+      if (false);
       if (!_isGlobal) {
-        _context.fallbackContext = __root ? getFallbackContext() : void 0;
+        _context.fallbackContext = __root ? getFallbackContext() : void 0
       }
-      ret = fn(_context);
+      ret = fn(_context)
     } finally {
       if (!_isGlobal) {
-        _context.fallbackContext = void 0;
+        _context.fallbackContext = void 0
       }
     }
-    if (warnType !== "translate exists" && // for not `te` (e.g `t`)
-    isNumber(ret) && ret === NOT_REOSLVED || warnType === "translate exists" && !ret) {
-      const [key, arg2] = argumentParser();
-      return __root && _fallbackRoot ? fallbackSuccess(__root) : fallbackFail(key);
+    if (
+      (warnType !== 'translate exists' && // for not `te` (e.g `t`)
+        isNumber(ret) &&
+        ret === NOT_REOSLVED) ||
+      (warnType === 'translate exists' && !ret)
+    ) {
+      const [key, arg2] = argumentParser()
+      return __root && _fallbackRoot ? fallbackSuccess(__root) : fallbackFail(key)
     } else if (successCondition(ret)) {
-      return ret;
+      return ret
     } else {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_RETURN_TYPE);
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_RETURN_TYPE)
     }
-  };
+  }
   function t(...args) {
-    return wrapWithDeps((context) => Reflect.apply(translate, null, [context, ...args]), () => parseTranslateArgs(...args), "translate", (root) => Reflect.apply(root.t, root, [...args]), (key) => key, (val) => isString(val));
+    return wrapWithDeps(
+      (context) => Reflect.apply(translate, null, [context, ...args]),
+      () => parseTranslateArgs(...args),
+      'translate',
+      (root) => Reflect.apply(root.t, root, [...args]),
+      (key) => key,
+      (val) => isString(val),
+    )
   }
   function rt(...args) {
-    const [arg1, arg2, arg3] = args;
+    const [arg1, arg2, arg3] = args
     if (arg3 && !isObject$1(arg3)) {
-      throw createI18nError(I18nErrorCodes.INVALID_ARGUMENT);
+      throw createI18nError(I18nErrorCodes.INVALID_ARGUMENT)
     }
-    return t(...[arg1, arg2, assign({ resolvedMessage: true }, arg3 || {})]);
+    return t(...[arg1, arg2, assign({ resolvedMessage: true }, arg3 || {})])
   }
   function d(...args) {
-    return wrapWithDeps((context) => Reflect.apply(datetime, null, [context, ...args]), () => parseDateTimeArgs(...args), "datetime format", (root) => Reflect.apply(root.d, root, [...args]), () => MISSING_RESOLVE_VALUE, (val) => isString(val));
+    return wrapWithDeps(
+      (context) => Reflect.apply(datetime, null, [context, ...args]),
+      () => parseDateTimeArgs(...args),
+      'datetime format',
+      (root) => Reflect.apply(root.d, root, [...args]),
+      () => MISSING_RESOLVE_VALUE,
+      (val) => isString(val),
+    )
   }
   function n(...args) {
-    return wrapWithDeps((context) => Reflect.apply(number, null, [context, ...args]), () => parseNumberArgs(...args), "number format", (root) => Reflect.apply(root.n, root, [...args]), () => MISSING_RESOLVE_VALUE, (val) => isString(val));
+    return wrapWithDeps(
+      (context) => Reflect.apply(number, null, [context, ...args]),
+      () => parseNumberArgs(...args),
+      'number format',
+      (root) => Reflect.apply(root.n, root, [...args]),
+      () => MISSING_RESOLVE_VALUE,
+      (val) => isString(val),
+    )
   }
   function normalize(values) {
-    return values.map((val) => isString(val) || isNumber(val) || isBoolean(val) ? createTextNode(String(val)) : val);
+    return values.map((val) =>
+      isString(val) || isNumber(val) || isBoolean(val) ? createTextNode(String(val)) : val,
+    )
   }
-  const interpolate = (val) => val;
+  const interpolate = (val) => val
   const processor = {
     normalize,
     interpolate,
-    type: "vnode"
-  };
+    type: 'vnode',
+  }
   function translateVNode(...args) {
     return wrapWithDeps(
       (context) => {
-        let ret;
-        const _context2 = context;
+        let ret
+        const _context2 = context
         try {
-          _context2.processor = processor;
-          ret = Reflect.apply(translate, null, [_context2, ...args]);
+          _context2.processor = processor
+          ret = Reflect.apply(translate, null, [_context2, ...args])
         } finally {
-          _context2.processor = null;
+          _context2.processor = null
         }
-        return ret;
+        return ret
       },
       () => parseTranslateArgs(...args),
-      "translate",
+      'translate',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (root) => root[TranslateVNodeSymbol](...args),
       (key) => [createTextNode(key)],
-      (val) => isArray(val)
-    );
+      (val) => isArray(val),
+    )
   }
   function numberParts(...args) {
     return wrapWithDeps(
       (context) => Reflect.apply(number, null, [context, ...args]),
       () => parseNumberArgs(...args),
-      "number format",
+      'number format',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (root) => root[NumberPartsSymbol](...args),
       NOOP_RETURN_ARRAY,
-      (val) => isString(val) || isArray(val)
-    );
+      (val) => isString(val) || isArray(val),
+    )
   }
   function datetimeParts(...args) {
     return wrapWithDeps(
       (context) => Reflect.apply(datetime, null, [context, ...args]),
       () => parseDateTimeArgs(...args),
-      "datetime format",
+      'datetime format',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (root) => root[DatetimePartsSymbol](...args),
       NOOP_RETURN_ARRAY,
-      (val) => isString(val) || isArray(val)
-    );
+      (val) => isString(val) || isArray(val),
+    )
   }
   function setPluralRules(rules) {
-    _pluralRules = rules;
-    _context.pluralRules = _pluralRules;
+    _pluralRules = rules
+    _context.pluralRules = _pluralRules
   }
   function te(key, locale2) {
-    return wrapWithDeps(() => {
-      if (!key) {
-        return false;
-      }
-      const targetLocale = isString(locale2) ? locale2 : _locale.value;
-      const message = getLocaleMessage(targetLocale);
-      const resolved = _context.messageResolver(message, key);
-      return !translateExistCompatible ? isMessageAST(resolved) || isMessageFunction(resolved) || isString(resolved) : resolved != null;
-    }, () => [key], "translate exists", (root) => {
-      return Reflect.apply(root.te, root, [key, locale2]);
-    }, NOOP_RETURN_FALSE, (val) => isBoolean(val));
+    return wrapWithDeps(
+      () => {
+        if (!key) {
+          return false
+        }
+        const targetLocale = isString(locale2) ? locale2 : _locale.value
+        const message = getLocaleMessage(targetLocale)
+        const resolved = _context.messageResolver(message, key)
+        return !translateExistCompatible
+          ? isMessageAST(resolved) || isMessageFunction(resolved) || isString(resolved)
+          : resolved != null
+      },
+      () => [key],
+      'translate exists',
+      (root) => {
+        return Reflect.apply(root.te, root, [key, locale2])
+      },
+      NOOP_RETURN_FALSE,
+      (val) => isBoolean(val),
+    )
   }
   function resolveMessages(key) {
-    let messages22 = null;
-    const locales = fallbackWithLocaleChain(_context, _fallbackLocale.value, _locale.value);
+    let messages22 = null
+    const locales = fallbackWithLocaleChain(_context, _fallbackLocale.value, _locale.value)
     for (let i = 0; i < locales.length; i++) {
-      const targetLocaleMessages = _messages.value[locales[i]] || {};
-      const messageValue = _context.messageResolver(targetLocaleMessages, key);
+      const targetLocaleMessages = _messages.value[locales[i]] || {}
+      const messageValue = _context.messageResolver(targetLocaleMessages, key)
       if (messageValue != null) {
-        messages22 = messageValue;
-        break;
+        messages22 = messageValue
+        break
       }
     }
-    return messages22;
+    return messages22
   }
   function tm(key) {
-    const messages22 = resolveMessages(key);
-    return messages22 != null ? messages22 : __root ? __root.tm(key) || {} : {};
+    const messages22 = resolveMessages(key)
+    return messages22 != null ? messages22 : __root ? __root.tm(key) || {} : {}
   }
   function getLocaleMessage(locale2) {
-    return _messages.value[locale2] || {};
+    return _messages.value[locale2] || {}
   }
   function setLocaleMessage(locale2, message) {
     if (flatJson) {
-      const _message = { [locale2]: message };
+      const _message = { [locale2]: message }
       for (const key in _message) {
         if (hasOwn(_message, key)) {
-          handleFlatJson(_message[key]);
+          handleFlatJson(_message[key])
         }
       }
-      message = _message[locale2];
+      message = _message[locale2]
     }
-    _messages.value[locale2] = message;
-    _context.messages = _messages.value;
+    _messages.value[locale2] = message
+    _context.messages = _messages.value
   }
   function mergeLocaleMessage(locale2, message) {
-    _messages.value[locale2] = _messages.value[locale2] || {};
-    const _message = { [locale2]: message };
+    _messages.value[locale2] = _messages.value[locale2] || {}
+    const _message = { [locale2]: message }
     if (flatJson) {
       for (const key in _message) {
         if (hasOwn(_message, key)) {
-          handleFlatJson(_message[key]);
+          handleFlatJson(_message[key])
         }
       }
     }
-    message = _message[locale2];
-    deepCopy(message, _messages.value[locale2]);
-    _context.messages = _messages.value;
+    message = _message[locale2]
+    deepCopy(message, _messages.value[locale2])
+    _context.messages = _messages.value
   }
   function getDateTimeFormat(locale2) {
-    return _datetimeFormats.value[locale2] || {};
+    return _datetimeFormats.value[locale2] || {}
   }
   function setDateTimeFormat(locale2, format2) {
-    _datetimeFormats.value[locale2] = format2;
-    _context.datetimeFormats = _datetimeFormats.value;
-    clearDateTimeFormat(_context, locale2, format2);
+    _datetimeFormats.value[locale2] = format2
+    _context.datetimeFormats = _datetimeFormats.value
+    clearDateTimeFormat(_context, locale2, format2)
   }
   function mergeDateTimeFormat(locale2, format2) {
-    _datetimeFormats.value[locale2] = assign(_datetimeFormats.value[locale2] || {}, format2);
-    _context.datetimeFormats = _datetimeFormats.value;
-    clearDateTimeFormat(_context, locale2, format2);
+    _datetimeFormats.value[locale2] = assign(_datetimeFormats.value[locale2] || {}, format2)
+    _context.datetimeFormats = _datetimeFormats.value
+    clearDateTimeFormat(_context, locale2, format2)
   }
   function getNumberFormat(locale2) {
-    return _numberFormats.value[locale2] || {};
+    return _numberFormats.value[locale2] || {}
   }
   function setNumberFormat(locale2, format2) {
-    _numberFormats.value[locale2] = format2;
-    _context.numberFormats = _numberFormats.value;
-    clearNumberFormat(_context, locale2, format2);
+    _numberFormats.value[locale2] = format2
+    _context.numberFormats = _numberFormats.value
+    clearNumberFormat(_context, locale2, format2)
   }
   function mergeNumberFormat(locale2, format2) {
-    _numberFormats.value[locale2] = assign(_numberFormats.value[locale2] || {}, format2);
-    _context.numberFormats = _numberFormats.value;
-    clearNumberFormat(_context, locale2, format2);
+    _numberFormats.value[locale2] = assign(_numberFormats.value[locale2] || {}, format2)
+    _context.numberFormats = _numberFormats.value
+    clearNumberFormat(_context, locale2, format2)
   }
-  composerID++;
+  composerID++
   if (__root && inBrowser) {
     watch(__root.locale, (val) => {
       if (_inheritLocale) {
-        _locale.value = val;
-        _context.locale = val;
-        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
+        _locale.value = val
+        _context.locale = val
+        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value)
       }
-    });
+    })
     watch(__root.fallbackLocale, (val) => {
       if (_inheritLocale) {
-        _fallbackLocale.value = val;
-        _context.fallbackLocale = val;
-        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
+        _fallbackLocale.value = val
+        _context.fallbackLocale = val
+        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value)
       }
-    });
+    })
   }
   const composer = {
     id: composerID,
     locale,
     fallbackLocale,
     get inheritLocale() {
-      return _inheritLocale;
+      return _inheritLocale
     },
     set inheritLocale(val) {
-      _inheritLocale = val;
+      _inheritLocale = val
       if (val && __root) {
-        _locale.value = __root.locale.value;
-        _fallbackLocale.value = __root.fallbackLocale.value;
-        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value);
+        _locale.value = __root.locale.value
+        _fallbackLocale.value = __root.fallbackLocale.value
+        updateFallbackLocale(_context, _locale.value, _fallbackLocale.value)
       }
     },
     get availableLocales() {
-      return Object.keys(_messages.value).sort();
+      return Object.keys(_messages.value).sort()
     },
     messages: messages2,
     get modifiers() {
-      return _modifiers;
+      return _modifiers
     },
     get pluralRules() {
-      return _pluralRules || {};
+      return _pluralRules || {}
     },
     get isGlobal() {
-      return _isGlobal;
+      return _isGlobal
     },
     get missingWarn() {
-      return _missingWarn;
+      return _missingWarn
     },
     set missingWarn(val) {
-      _missingWarn = val;
-      _context.missingWarn = _missingWarn;
+      _missingWarn = val
+      _context.missingWarn = _missingWarn
     },
     get fallbackWarn() {
-      return _fallbackWarn;
+      return _fallbackWarn
     },
     set fallbackWarn(val) {
-      _fallbackWarn = val;
-      _context.fallbackWarn = _fallbackWarn;
+      _fallbackWarn = val
+      _context.fallbackWarn = _fallbackWarn
     },
     get fallbackRoot() {
-      return _fallbackRoot;
+      return _fallbackRoot
     },
     set fallbackRoot(val) {
-      _fallbackRoot = val;
+      _fallbackRoot = val
     },
     get fallbackFormat() {
-      return _fallbackFormat;
+      return _fallbackFormat
     },
     set fallbackFormat(val) {
-      _fallbackFormat = val;
-      _context.fallbackFormat = _fallbackFormat;
+      _fallbackFormat = val
+      _context.fallbackFormat = _fallbackFormat
     },
     get warnHtmlMessage() {
-      return _warnHtmlMessage;
+      return _warnHtmlMessage
     },
     set warnHtmlMessage(val) {
-      _warnHtmlMessage = val;
-      _context.warnHtmlMessage = val;
+      _warnHtmlMessage = val
+      _context.warnHtmlMessage = val
     },
     get escapeParameter() {
-      return _escapeParameter;
+      return _escapeParameter
     },
     set escapeParameter(val) {
-      _escapeParameter = val;
-      _context.escapeParameter = val;
+      _escapeParameter = val
+      _context.escapeParameter = val
     },
     t,
     getLocaleMessage,
@@ -2031,360 +2180,374 @@ function createComposer(options = {}, VueI18nLegacy) {
     setPostTranslationHandler,
     getMissingHandler,
     setMissingHandler,
-    [SetPluralRulesSymbol]: setPluralRules
-  };
-  {
-    composer.datetimeFormats = datetimeFormats;
-    composer.numberFormats = numberFormats;
-    composer.rt = rt;
-    composer.te = te;
-    composer.tm = tm;
-    composer.d = d;
-    composer.n = n;
-    composer.getDateTimeFormat = getDateTimeFormat;
-    composer.setDateTimeFormat = setDateTimeFormat;
-    composer.mergeDateTimeFormat = mergeDateTimeFormat;
-    composer.getNumberFormat = getNumberFormat;
-    composer.setNumberFormat = setNumberFormat;
-    composer.mergeNumberFormat = mergeNumberFormat;
-    composer[InejctWithOptionSymbol] = __injectWithOption;
-    composer[TranslateVNodeSymbol] = translateVNode;
-    composer[DatetimePartsSymbol] = datetimeParts;
-    composer[NumberPartsSymbol] = numberParts;
+    [SetPluralRulesSymbol]: setPluralRules,
   }
-  return composer;
+  {
+    composer.datetimeFormats = datetimeFormats
+    composer.numberFormats = numberFormats
+    composer.rt = rt
+    composer.te = te
+    composer.tm = tm
+    composer.d = d
+    composer.n = n
+    composer.getDateTimeFormat = getDateTimeFormat
+    composer.setDateTimeFormat = setDateTimeFormat
+    composer.mergeDateTimeFormat = mergeDateTimeFormat
+    composer.getNumberFormat = getNumberFormat
+    composer.setNumberFormat = setNumberFormat
+    composer.mergeNumberFormat = mergeNumberFormat
+    composer[InejctWithOptionSymbol] = __injectWithOption
+    composer[TranslateVNodeSymbol] = translateVNode
+    composer[DatetimePartsSymbol] = datetimeParts
+    composer[NumberPartsSymbol] = numberParts
+  }
+  return composer
 }
 const baseFormatProps = {
   tag: {
-    type: [String, Object]
+    type: [String, Object],
   },
   locale: {
-    type: String
+    type: String,
   },
   scope: {
     type: String,
     // NOTE: avoid https://github.com/microsoft/rushstack/issues/1050
-    validator: (val) => val === "parent" || val === "global",
-    default: "parent"
+    validator: (val) => val === 'parent' || val === 'global',
+    default: 'parent',
     /* ComponentI18nScope */
   },
   i18n: {
-    type: Object
-  }
-};
+    type: Object,
+  },
+}
 function getInterpolateArg({ slots }, keys) {
-  if (keys.length === 1 && keys[0] === "default") {
-    const ret = slots.default ? slots.default() : [];
+  if (keys.length === 1 && keys[0] === 'default') {
+    const ret = slots.default ? slots.default() : []
     return ret.reduce((slot, current) => {
       return [
         ...slot,
         // prettier-ignore
-        ...current.type === Fragment ? current.children : [current]
-      ];
-    }, []);
+        ...current.type === Fragment ? current.children : [current],
+      ]
+    }, [])
   } else {
     return keys.reduce((arg, key) => {
-      const slot = slots[key];
+      const slot = slots[key]
       if (slot) {
-        arg[key] = slot();
+        arg[key] = slot()
       }
-      return arg;
-    }, create());
+      return arg
+    }, create())
   }
 }
 function getFragmentableTag(tag) {
-  return Fragment;
+  return Fragment
 }
 const TranslationImpl = /* @__PURE__ */ defineComponent({
   /* eslint-disable */
-  name: "i18n-t",
-  props: assign({
-    keypath: {
-      type: String,
-      required: true
+  name: 'i18n-t',
+  props: assign(
+    {
+      keypath: {
+        type: String,
+        required: true,
+      },
+      plural: {
+        type: [Number, String],
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        validator: (val) => isNumber(val) || !isNaN(val),
+      },
     },
-    plural: {
-      type: [Number, String],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      validator: (val) => isNumber(val) || !isNaN(val)
-    }
-  }, baseFormatProps),
+    baseFormatProps,
+  ),
   /* eslint-enable */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props, context) {
-    const { slots, attrs } = context;
-    const i18n2 = props.i18n || useI18n({
-      useScope: props.scope,
-      __useComponent: true
-    });
+    const { slots, attrs } = context
+    const i18n2 =
+      props.i18n ||
+      useI18n({
+        useScope: props.scope,
+        __useComponent: true,
+      })
     return () => {
-      const keys = Object.keys(slots).filter((key) => key !== "_");
-      const options = create();
+      const keys = Object.keys(slots).filter((key) => key !== '_')
+      const options = create()
       if (props.locale) {
-        options.locale = props.locale;
+        options.locale = props.locale
       }
       if (props.plural !== void 0) {
-        options.plural = isString(props.plural) ? +props.plural : props.plural;
+        options.plural = isString(props.plural) ? +props.plural : props.plural
       }
-      const arg = getInterpolateArg(context, keys);
-      const children = i18n2[TranslateVNodeSymbol](props.keypath, arg, options);
-      const assignedAttrs = assign(create(), attrs);
-      const tag = isString(props.tag) || isObject$1(props.tag) ? props.tag : getFragmentableTag();
-      return h(tag, assignedAttrs, children);
-    };
-  }
-});
-const Translation = TranslationImpl;
+      const arg = getInterpolateArg(context, keys)
+      const children = i18n2[TranslateVNodeSymbol](props.keypath, arg, options)
+      const assignedAttrs = assign(create(), attrs)
+      const tag = isString(props.tag) || isObject$1(props.tag) ? props.tag : getFragmentableTag()
+      return h(tag, assignedAttrs, children)
+    }
+  },
+})
+const Translation = TranslationImpl
 function isVNode(target) {
-  return isArray(target) && !isString(target[0]);
+  return isArray(target) && !isString(target[0])
 }
 function renderFormatter(props, context, slotKeys, partFormatter) {
-  const { slots, attrs } = context;
+  const { slots, attrs } = context
   return () => {
-    const options = { part: true };
-    let overrides = create();
+    const options = { part: true }
+    let overrides = create()
     if (props.locale) {
-      options.locale = props.locale;
+      options.locale = props.locale
     }
     if (isString(props.format)) {
-      options.key = props.format;
+      options.key = props.format
     } else if (isObject$1(props.format)) {
       if (isString(props.format.key)) {
-        options.key = props.format.key;
+        options.key = props.format.key
       }
       overrides = Object.keys(props.format).reduce((options2, prop) => {
-        return slotKeys.includes(prop) ? assign(create(), options2, { [prop]: props.format[prop] }) : options2;
-      }, create());
+        return slotKeys.includes(prop)
+          ? assign(create(), options2, { [prop]: props.format[prop] })
+          : options2
+      }, create())
     }
-    const parts = partFormatter(...[props.value, options, overrides]);
-    let children = [options.key];
+    const parts = partFormatter(...[props.value, options, overrides])
+    let children = [options.key]
     if (isArray(parts)) {
       children = parts.map((part, index) => {
-        const slot = slots[part.type];
-        const node = slot ? slot({ [part.type]: part.value, index, parts }) : [part.value];
+        const slot = slots[part.type]
+        const node = slot ? slot({ [part.type]: part.value, index, parts }) : [part.value]
         if (isVNode(node)) {
-          node[0].key = `${part.type}-${index}`;
+          node[0].key = `${part.type}-${index}`
         }
-        return node;
-      });
+        return node
+      })
     } else if (isString(parts)) {
-      children = [parts];
+      children = [parts]
     }
-    const assignedAttrs = assign(create(), attrs);
-    const tag = isString(props.tag) || isObject$1(props.tag) ? props.tag : getFragmentableTag();
-    return h(tag, assignedAttrs, children);
-  };
+    const assignedAttrs = assign(create(), attrs)
+    const tag = isString(props.tag) || isObject$1(props.tag) ? props.tag : getFragmentableTag()
+    return h(tag, assignedAttrs, children)
+  }
 }
 const NumberFormatImpl = /* @__PURE__ */ defineComponent({
   /* eslint-disable */
-  name: "i18n-n",
-  props: assign({
-    value: {
-      type: Number,
-      required: true
+  name: 'i18n-n',
+  props: assign(
+    {
+      value: {
+        type: Number,
+        required: true,
+      },
+      format: {
+        type: [String, Object],
+      },
     },
-    format: {
-      type: [String, Object]
-    }
-  }, baseFormatProps),
+    baseFormatProps,
+  ),
   /* eslint-enable */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props, context) {
-    const i18n2 = props.i18n || useI18n({
-      useScope: props.scope,
-      __useComponent: true
-    });
-    return renderFormatter(props, context, NUMBER_FORMAT_OPTIONS_KEYS, (...args) => (
+    const i18n2 =
+      props.i18n ||
+      useI18n({
+        useScope: props.scope,
+        __useComponent: true,
+      })
+    return renderFormatter(props, context, NUMBER_FORMAT_OPTIONS_KEYS, (...args) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      i18n2[NumberPartsSymbol](...args)
-    ));
-  }
-});
-const NumberFormat = NumberFormatImpl;
+      i18n2[NumberPartsSymbol](...args),
+    )
+  },
+})
+const NumberFormat = NumberFormatImpl
 const DatetimeFormatImpl = /* @__PURE__ */ defineComponent({
   /* eslint-disable */
-  name: "i18n-d",
-  props: assign({
-    value: {
-      type: [Number, Date],
-      required: true
+  name: 'i18n-d',
+  props: assign(
+    {
+      value: {
+        type: [Number, Date],
+        required: true,
+      },
+      format: {
+        type: [String, Object],
+      },
     },
-    format: {
-      type: [String, Object]
-    }
-  }, baseFormatProps),
+    baseFormatProps,
+  ),
   /* eslint-enable */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props, context) {
-    const i18n2 = props.i18n || useI18n({
-      useScope: props.scope,
-      __useComponent: true
-    });
-    return renderFormatter(props, context, DATETIME_FORMAT_OPTIONS_KEYS, (...args) => (
+    const i18n2 =
+      props.i18n ||
+      useI18n({
+        useScope: props.scope,
+        __useComponent: true,
+      })
+    return renderFormatter(props, context, DATETIME_FORMAT_OPTIONS_KEYS, (...args) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      i18n2[DatetimePartsSymbol](...args)
-    ));
-  }
-});
-const DatetimeFormat = DatetimeFormatImpl;
+      i18n2[DatetimePartsSymbol](...args),
+    )
+  },
+})
+const DatetimeFormat = DatetimeFormatImpl
 function getComposer$2(i18n2, instance) {
-  const i18nInternal = i18n2;
-  if (i18n2.mode === "composition") {
-    return i18nInternal.__getInstance(instance) || i18n2.global;
+  const i18nInternal = i18n2
+  if (i18n2.mode === 'composition') {
+    return i18nInternal.__getInstance(instance) || i18n2.global
   } else {
-    const vueI18n = i18nInternal.__getInstance(instance);
-    return vueI18n != null ? vueI18n.__composer : i18n2.global.__composer;
+    const vueI18n = i18nInternal.__getInstance(instance)
+    return vueI18n != null ? vueI18n.__composer : i18n2.global.__composer
   }
 }
 function vTDirective(i18n2) {
   const _process = (binding) => {
-    const { instance, modifiers, value } = binding;
+    const { instance, modifiers, value } = binding
     if (!instance || !instance.$) {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR)
     }
-    const composer = getComposer$2(i18n2, instance.$);
-    const parsedValue = parseValue(value);
-    return [
-      Reflect.apply(composer.t, composer, [...makeParams(parsedValue)]),
-      composer
-    ];
-  };
+    const composer = getComposer$2(i18n2, instance.$)
+    const parsedValue = parseValue(value)
+    return [Reflect.apply(composer.t, composer, [...makeParams(parsedValue)]), composer]
+  }
   const register = (el, binding) => {
-    const [textContent, composer] = _process(binding);
+    const [textContent, composer] = _process(binding)
     if (inBrowser && i18n2.global === composer) {
       el.__i18nWatcher = watch(composer.locale, () => {
-        binding.instance && binding.instance.$forceUpdate();
-      });
+        binding.instance && binding.instance.$forceUpdate()
+      })
     }
-    el.__composer = composer;
-    el.textContent = textContent;
-  };
+    el.__composer = composer
+    el.textContent = textContent
+  }
   const unregister = (el) => {
     if (inBrowser && el.__i18nWatcher) {
-      el.__i18nWatcher();
-      el.__i18nWatcher = void 0;
-      delete el.__i18nWatcher;
+      el.__i18nWatcher()
+      el.__i18nWatcher = void 0
+      delete el.__i18nWatcher
     }
     if (el.__composer) {
-      el.__composer = void 0;
-      delete el.__composer;
+      el.__composer = void 0
+      delete el.__composer
     }
-  };
+  }
   const update = (el, { value }) => {
     if (el.__composer) {
-      const composer = el.__composer;
-      const parsedValue = parseValue(value);
-      el.textContent = Reflect.apply(composer.t, composer, [
-        ...makeParams(parsedValue)
-      ]);
+      const composer = el.__composer
+      const parsedValue = parseValue(value)
+      el.textContent = Reflect.apply(composer.t, composer, [...makeParams(parsedValue)])
     }
-  };
+  }
   const getSSRProps = (binding) => {
-    const [textContent] = _process(binding);
-    return { textContent };
-  };
+    const [textContent] = _process(binding)
+    return { textContent }
+  }
   return {
     created: register,
     unmounted: unregister,
     beforeUpdate: update,
-    getSSRProps
-  };
+    getSSRProps,
+  }
 }
 function parseValue(value) {
   if (isString(value)) {
-    return { path: value };
+    return { path: value }
   } else if (isPlainObject(value)) {
-    if (!("path" in value)) {
-      throw createI18nError(I18nErrorCodes.REQUIRED_VALUE, "path");
+    if (!('path' in value)) {
+      throw createI18nError(I18nErrorCodes.REQUIRED_VALUE, 'path')
     }
-    return value;
+    return value
   } else {
-    throw createI18nError(I18nErrorCodes.INVALID_VALUE);
+    throw createI18nError(I18nErrorCodes.INVALID_VALUE)
   }
 }
 function makeParams(value) {
-  const { path, locale, args, choice, plural } = value;
-  const options = {};
-  const named = args || {};
+  const { path, locale, args, choice, plural } = value
+  const options = {}
+  const named = args || {}
   if (isString(locale)) {
-    options.locale = locale;
+    options.locale = locale
   }
   if (isNumber(choice)) {
-    options.plural = choice;
+    options.plural = choice
   }
   if (isNumber(plural)) {
-    options.plural = plural;
+    options.plural = plural
   }
-  return [path, named, options];
+  return [path, named, options]
 }
 function apply(app, i18n2, ...options) {
-  const pluginOptions = isPlainObject(options[0]) ? options[0] : {};
-  const useI18nComponentName = !!pluginOptions.useI18nComponentName;
-  const globalInstall = isBoolean(pluginOptions.globalInstall) ? pluginOptions.globalInstall : true;
+  const pluginOptions = isPlainObject(options[0]) ? options[0] : {}
+  const useI18nComponentName = !!pluginOptions.useI18nComponentName
+  const globalInstall = isBoolean(pluginOptions.globalInstall) ? pluginOptions.globalInstall : true
   if (globalInstall) {
-    [!useI18nComponentName ? Translation.name : "i18n", "I18nT"].forEach((name) => app.component(name, Translation));
-    [NumberFormat.name, "I18nN"].forEach((name) => app.component(name, NumberFormat));
-    [DatetimeFormat.name, "I18nD"].forEach((name) => app.component(name, DatetimeFormat));
+    ;[!useI18nComponentName ? Translation.name : 'i18n', 'I18nT'].forEach((name) =>
+      app.component(name, Translation),
+    )
+    ;[NumberFormat.name, 'I18nN'].forEach((name) => app.component(name, NumberFormat))
+    ;[DatetimeFormat.name, 'I18nD'].forEach((name) => app.component(name, DatetimeFormat))
   }
   {
-    app.directive("t", vTDirective(i18n2));
+    app.directive('t', vTDirective(i18n2))
   }
 }
-const I18nInjectionKey = /* @__PURE__ */ makeSymbol("global-vue-i18n");
+const I18nInjectionKey = /* @__PURE__ */ makeSymbol('global-vue-i18n')
 function createI18n(options = {}, VueI18nLegacy) {
-  const __globalInjection = isBoolean(options.globalInjection) ? options.globalInjection : true;
-  const __allowComposition = true;
-  const __instances = /* @__PURE__ */ new Map();
-  const [globalScope, __global] = createGlobal(options);
-  const symbol = /* @__PURE__ */ makeSymbol("");
+  const __globalInjection = isBoolean(options.globalInjection) ? options.globalInjection : true
+  const __allowComposition = true
+  const __instances = /* @__PURE__ */ new Map()
+  const [globalScope, __global] = createGlobal(options)
+  const symbol = /* @__PURE__ */ makeSymbol('')
   function __getInstance(component) {
-    return __instances.get(component) || null;
+    return __instances.get(component) || null
   }
   function __setInstance(component, instance) {
-    __instances.set(component, instance);
+    __instances.set(component, instance)
   }
   function __deleteInstance(component) {
-    __instances.delete(component);
+    __instances.delete(component)
   }
   {
     const i18n2 = {
       // mode
       get mode() {
-        return "composition";
+        return 'composition'
       },
       // allowComposition
       get allowComposition() {
-        return __allowComposition;
+        return __allowComposition
       },
       // install plugin
       async install(app, ...options2) {
-        app.__VUE_I18N_SYMBOL__ = symbol;
-        app.provide(app.__VUE_I18N_SYMBOL__, i18n2);
+        app.__VUE_I18N_SYMBOL__ = symbol
+        app.provide(app.__VUE_I18N_SYMBOL__, i18n2)
         if (isPlainObject(options2[0])) {
-          const opts = options2[0];
-          i18n2.__composerExtend = opts.__composerExtend;
-          i18n2.__vueI18nExtend = opts.__vueI18nExtend;
+          const opts = options2[0]
+          i18n2.__composerExtend = opts.__composerExtend
+          i18n2.__vueI18nExtend = opts.__vueI18nExtend
         }
-        let globalReleaseHandler = null;
+        let globalReleaseHandler = null
         if (__globalInjection) {
-          globalReleaseHandler = injectGlobalFields(app, i18n2.global);
+          globalReleaseHandler = injectGlobalFields(app, i18n2.global)
         }
         {
-          apply(app, i18n2, ...options2);
+          apply(app, i18n2, ...options2)
         }
-        const unmountApp = app.unmount;
+        const unmountApp = app.unmount
         app.unmount = () => {
-          globalReleaseHandler && globalReleaseHandler();
-          i18n2.dispose();
-          unmountApp();
-        };
+          globalReleaseHandler && globalReleaseHandler()
+          i18n2.dispose()
+          unmountApp()
+        }
       },
       // global accessor
       get global() {
-        return __global;
+        return __global
       },
       dispose() {
-        globalScope.stop();
+        globalScope.stop()
       },
       // @internal
       __instances,
@@ -2393,181 +2556,192 @@ function createI18n(options = {}, VueI18nLegacy) {
       // @internal
       __setInstance,
       // @internal
-      __deleteInstance
-    };
-    return i18n2;
+      __deleteInstance,
+    }
+    return i18n2
   }
 }
 function useI18n(options = {}) {
-  const instance = getCurrentInstance();
+  const instance = getCurrentInstance()
   if (instance == null) {
-    throw createI18nError(I18nErrorCodes.MUST_BE_CALL_SETUP_TOP);
+    throw createI18nError(I18nErrorCodes.MUST_BE_CALL_SETUP_TOP)
   }
-  if (!instance.isCE && instance.appContext.app != null && !instance.appContext.app.__VUE_I18N_SYMBOL__) {
-    throw createI18nError(I18nErrorCodes.NOT_INSTALLED);
+  if (
+    !instance.isCE &&
+    instance.appContext.app != null &&
+    !instance.appContext.app.__VUE_I18N_SYMBOL__
+  ) {
+    throw createI18nError(I18nErrorCodes.NOT_INSTALLED)
   }
-  const i18n2 = getI18nInstance(instance);
-  const gl = getGlobalComposer(i18n2);
-  const componentOptions = getComponentOptions(instance);
-  const scope = getScope(options, componentOptions);
-  if (scope === "global") {
-    adjustI18nResources(gl, options, componentOptions);
-    return gl;
+  const i18n2 = getI18nInstance(instance)
+  const gl = getGlobalComposer(i18n2)
+  const componentOptions = getComponentOptions(instance)
+  const scope = getScope(options, componentOptions)
+  if (scope === 'global') {
+    adjustI18nResources(gl, options, componentOptions)
+    return gl
   }
-  if (scope === "parent") {
-    let composer2 = getComposer(i18n2, instance, options.__useComponent);
+  if (scope === 'parent') {
+    let composer2 = getComposer(i18n2, instance, options.__useComponent)
     if (composer2 == null) {
-      composer2 = gl;
+      composer2 = gl
     }
-    return composer2;
+    return composer2
   }
-  const i18nInternal = i18n2;
-  let composer = i18nInternal.__getInstance(instance);
+  const i18nInternal = i18n2
+  let composer = i18nInternal.__getInstance(instance)
   if (composer == null) {
-    const composerOptions = assign({}, options);
-    if ("__i18n" in componentOptions) {
-      composerOptions.__i18n = componentOptions.__i18n;
+    const composerOptions = assign({}, options)
+    if ('__i18n' in componentOptions) {
+      composerOptions.__i18n = componentOptions.__i18n
     }
     if (gl) {
-      composerOptions.__root = gl;
+      composerOptions.__root = gl
     }
-    composer = createComposer(composerOptions);
+    composer = createComposer(composerOptions)
     if (i18nInternal.__composerExtend) {
-      composer[DisposeSymbol] = i18nInternal.__composerExtend(composer);
+      composer[DisposeSymbol] = i18nInternal.__composerExtend(composer)
     }
-    setupLifeCycle(i18nInternal, instance, composer);
-    i18nInternal.__setInstance(instance, composer);
+    setupLifeCycle(i18nInternal, instance, composer)
+    i18nInternal.__setInstance(instance, composer)
   }
-  return composer;
+  return composer
 }
 function createGlobal(options, legacyMode, VueI18nLegacy) {
-  const scope = effectScope();
+  const scope = effectScope()
   {
-    const obj = scope.run(() => createComposer(options));
+    const obj = scope.run(() => createComposer(options))
     if (obj == null) {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR)
     }
-    return [scope, obj];
+    return [scope, obj]
   }
 }
 function getI18nInstance(instance) {
   {
-    const i18n2 = inject(!instance.isCE ? instance.appContext.app.__VUE_I18N_SYMBOL__ : I18nInjectionKey);
+    const i18n2 = inject(
+      !instance.isCE ? instance.appContext.app.__VUE_I18N_SYMBOL__ : I18nInjectionKey,
+    )
     if (!i18n2) {
-      throw createI18nError(!instance.isCE ? I18nErrorCodes.UNEXPECTED_ERROR : I18nErrorCodes.NOT_INSTALLED_WITH_PROVIDE);
+      throw createI18nError(
+        !instance.isCE
+          ? I18nErrorCodes.UNEXPECTED_ERROR
+          : I18nErrorCodes.NOT_INSTALLED_WITH_PROVIDE,
+      )
     }
-    return i18n2;
+    return i18n2
   }
 }
 function getScope(options, componentOptions) {
-  return isEmptyObject(options) ? "__i18n" in componentOptions ? "local" : "global" : !options.useScope ? "local" : options.useScope;
+  return isEmptyObject(options)
+    ? '__i18n' in componentOptions
+      ? 'local'
+      : 'global'
+    : !options.useScope
+      ? 'local'
+      : options.useScope
 }
 function getGlobalComposer(i18n2) {
-  return i18n2.mode === "composition" ? i18n2.global : i18n2.global.__composer;
+  return i18n2.mode === 'composition' ? i18n2.global : i18n2.global.__composer
 }
 function getComposer(i18n2, target, useComponent = false) {
-  let composer = null;
-  const root = target.root;
-  let current = getParentComponentInstance(target, useComponent);
+  let composer = null
+  const root = target.root
+  let current = getParentComponentInstance(target, useComponent)
   while (current != null) {
-    const i18nInternal = i18n2;
-    if (i18n2.mode === "composition") {
-      composer = i18nInternal.__getInstance(current);
+    const i18nInternal = i18n2
+    if (i18n2.mode === 'composition') {
+      composer = i18nInternal.__getInstance(current)
     }
     if (composer != null) {
-      break;
+      break
     }
     if (root === current) {
-      break;
+      break
     }
-    current = current.parent;
+    current = current.parent
   }
-  return composer;
+  return composer
 }
 function getParentComponentInstance(target, useComponent = false) {
   if (target == null) {
-    return null;
+    return null
   }
   {
-    return !useComponent ? target.parent : target.vnode.ctx || target.parent;
+    return !useComponent ? target.parent : target.vnode.ctx || target.parent
   }
 }
 function setupLifeCycle(i18n2, target, composer) {
   {
-    onMounted(() => {
-    }, target);
+    onMounted(() => {}, target)
     onUnmounted(() => {
-      const _composer = composer;
-      i18n2.__deleteInstance(target);
-      const dispose = _composer[DisposeSymbol];
+      const _composer = composer
+      i18n2.__deleteInstance(target)
+      const dispose = _composer[DisposeSymbol]
       if (dispose) {
-        dispose();
-        delete _composer[DisposeSymbol];
+        dispose()
+        delete _composer[DisposeSymbol]
       }
-    }, target);
+    }, target)
   }
 }
-const globalExportProps = [
-  "locale",
-  "fallbackLocale",
-  "availableLocales"
-];
-const globalExportMethods = ["t", "rt", "d", "n", "tm", "te"];
+const globalExportProps = ['locale', 'fallbackLocale', 'availableLocales']
+const globalExportMethods = ['t', 'rt', 'd', 'n', 'tm', 'te']
 function injectGlobalFields(app, composer) {
-  const i18n2 = /* @__PURE__ */ Object.create(null);
+  const i18n2 = /* @__PURE__ */ Object.create(null)
   globalExportProps.forEach((prop) => {
-    const desc = Object.getOwnPropertyDescriptor(composer, prop);
+    const desc = Object.getOwnPropertyDescriptor(composer, prop)
     if (!desc) {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR)
     }
-    const wrap = isRef(desc.value) ? {
-      get() {
-        return desc.value.value;
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      set(val) {
-        desc.value.value = val;
-      }
-    } : {
-      get() {
-        return desc.get && desc.get();
-      }
-    };
-    Object.defineProperty(i18n2, prop, wrap);
-  });
-  app.config.globalProperties.$i18n = i18n2;
+    const wrap = isRef(desc.value)
+      ? {
+          get() {
+            return desc.value.value
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          set(val) {
+            desc.value.value = val
+          },
+        }
+      : {
+          get() {
+            return desc.get && desc.get()
+          },
+        }
+    Object.defineProperty(i18n2, prop, wrap)
+  })
+  app.config.globalProperties.$i18n = i18n2
   globalExportMethods.forEach((method) => {
-    const desc = Object.getOwnPropertyDescriptor(composer, method);
+    const desc = Object.getOwnPropertyDescriptor(composer, method)
     if (!desc || !desc.value) {
-      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR);
+      throw createI18nError(I18nErrorCodes.UNEXPECTED_ERROR)
     }
-    Object.defineProperty(app.config.globalProperties, `$${method}`, desc);
-  });
+    Object.defineProperty(app.config.globalProperties, `$${method}`, desc)
+  })
   const dispose = () => {
-    delete app.config.globalProperties.$i18n;
+    delete app.config.globalProperties.$i18n
     globalExportMethods.forEach((method) => {
-      delete app.config.globalProperties[`$${method}`];
-    });
-  };
-  return dispose;
+      delete app.config.globalProperties[`$${method}`]
+    })
+  }
+  return dispose
 }
-registerMessageResolver(resolveValue);
-registerLocaleFallbacker(fallbackWithLocaleChain);
+registerMessageResolver(resolveValue)
+registerLocaleFallbacker(fallbackWithLocaleChain)
 const enUS = {
-  failed: "Action failed",
-  success: "Action was successful"
-};
+  failed: 'Action failed',
+  success: 'Action was successful',
+}
 const messages = {
-  "en-US": enUS
-};
+  'en-US': enUS,
+}
 const i18n = defineBoot(({ app }) => {
   const i18n2 = createI18n({
-    locale: "en-US",
+    locale: 'en-US',
     globalInjection: true,
-    messages
-  });
-  app.use(i18n2);
-});
-export {
-  i18n as default
-};
+    messages,
+  })
+  app.use(i18n2)
+})
+export { i18n as default }

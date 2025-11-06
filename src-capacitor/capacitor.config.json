@@ -16,11 +16,7 @@
     },
     "CapacitorPushNotifications": {
       "enabled": true,
-      "presentationOptions": [
-        "badge",
-        "sound",
-        "alert"
-      ]
+      "presentationOptions": ["badge", "sound", "alert"]
     },
     "CapacitorLocalNotifications": {
       "enabled": true,

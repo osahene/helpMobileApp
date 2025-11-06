@@ -31,7 +31,9 @@
                     min-width: 150px;
                   "
                 >
-                  <div class="w-auto font-bold"><span>{{ props.row.first_name }}</span> <span>{{ props.row.last_name }}</span></div>
+                  <div class="w-auto font-bold">
+                    <span>{{ props.row.first_name }}</span> <span>{{ props.row.last_name }}</span>
+                  </div>
                   <div class="w-auto">{{ props.row.email_address }}</div>
                 </div>
               </template>
@@ -72,7 +74,9 @@
                     min-width: 150px;
                   "
                 >
-                  <div class="w-auto font-bold"><span>{{ props.row.first_name }}</span> <span>{{ props.row.last_name }}</span></div>
+                  <div class="w-auto font-bold">
+                    <span>{{ props.row.first_name }}</span> <span>{{ props.row.last_name }}</span>
+                  </div>
                   <div class="w-auto">{{ props.row.email }}</div>
                 </div>
               </template>
@@ -81,33 +85,39 @@
         </div>
       </div>
     </div>
-    <EditInfo 
-    v-if="cardInfo" 
-    v-model="openEdit" 
-    :first_name="cardInfo.first_name" 
-    :last_name="cardInfo.last_name" 
-    :email_address="cardInfo.email_address" 
-    :phone_number="cardInfo.phone_number" 
-    :relation="cardInfo.relation" 
-    :buttons="buttonAction"
-    @update-field="editCardInfo"
+    <EditInfo
+      v-if="cardInfo"
+      v-model="openEdit"
+      :first_name="cardInfo.first_name"
+      :last_name="cardInfo.last_name"
+      :email_address="cardInfo.email_address"
+      :phone_number="cardInfo.phone_number"
+      :relation="cardInfo.relation"
+      :buttons="buttonAction"
+      @update-field="editCardInfo"
     />
     <MoreActions
-    v-if="cardInfo"
-    v-model="mainAction"
-    :action-icon="actionIcons"
-    :action-type="toDoTask"
-    :message="actionMessage"
-    :buttons="actionButtons"
+      v-if="cardInfo"
+      v-model="mainAction"
+      :action-icon="actionIcons"
+      :action-type="toDoTask"
+      :message="actionMessage"
+      :buttons="actionButtons"
     />
   </div>
 </template>
 <script setup>
 import { computed, ref } from 'vue'
-import { useOperations } from 'src/stores/ops';
+import { useOperations } from 'src/stores/ops'
 import EditInfo from 'src/components/EditInfo.vue'
-import MoreActions from 'src/components/moreActions.vue';
-import { farPenToSquare, fasXmark, fasCircleCheck, farTrashCan, farCircleXmark } from '@quasar/extras/fontawesome-v6';
+import MoreActions from 'src/components/moreActions.vue'
+import {
+  farPenToSquare,
+  fasXmark,
+  fasCircleCheck,
+  farTrashCan,
+  farCircleXmark,
+} from '@quasar/extras/fontawesome-v6'
 const cancel = fasXmark
 const edit = farPenToSquare
 const approve = fasCircleCheck
@@ -116,10 +126,8 @@ const rej = farCircleXmark
 const ops = useOperations()
 const toDoTask = ref('')
 const openEdit = ref(false)
-const mainAction =  ref(false)
+const mainAction = ref(false)
 const cardInfo = ref(null)
-
-
 
 const columns = [
   {
@@ -137,28 +145,28 @@ const columns = [
   { name: 'action', label: 'ACTION', align: 'center', field: 'action' },
 ]
 
-const contactsRows = computed(() => ops.myContacts || []);
-const dependantsRows = computed(() => ops.myDependants || []);
+const contactsRows = computed(() => ops.myContacts || [])
+const dependantsRows = computed(() => ops.myDependants || [])
 
 const actionMessage = computed(() => {
- if (!cardInfo.value) {
-    return { text: 'No action selected' };
+  if (!cardInfo.value) {
+    return { text: 'No action selected' }
   }
-  const name = `${cardInfo.value.first_name} ${cardInfo.value.last_name}`;
+  const name = `${cardInfo.value.first_name} ${cardInfo.value.last_name}`
   switch (toDoTask.value) {
     case 'delete':
-      return { text: `Do you want to delete ${name} from your emergency list?`, highlight: name };
+      return { text: `Do you want to delete ${name} from your emergency list?`, highlight: name }
     case 'approve':
-      return { text: `Do you want to approve ${name} as your dependant?`, highlight: name };
+      return { text: `Do you want to approve ${name} as your dependant?`, highlight: name }
     case 'reject':
-      return { text: `Do you want to reject ${name} as your dependant?`, highlight: name };
+      return { text: `Do you want to reject ${name} as your dependant?`, highlight: name }
     default:
-      return { text: 'No action selected' };
+      return { text: 'No action selected' }
   }
 })
 
 const actionButtons = computed(() => {
-   switch (toDoTask.value) {
+  switch (toDoTask.value) {
     case 'delete':
       return [
         { label: 'Delete', icon: del, color: 'deep-orange', action: deleteCardInfo },
@@ -180,7 +188,7 @@ const actionButtons = computed(() => {
 })
 
 const actionIcons = computed(() => {
- switch (toDoTask.value) {
+  switch (toDoTask.value) {
     case 'delete':
       return [{ name: del, color: 'deep-orange' }]
     case 'approve':
@@ -199,7 +207,8 @@ const onClose = () => {
 
 const buttonAction = computed(() => {
   return [
-    { label: 'Edit Info', icon: edit, action: editCardInfo }, { label: 'Cancel', icon: cancel, action: onClose }
+    { label: 'Edit Info', icon: edit, action: editCardInfo },
+    { label: 'Cancel', icon: cancel, action: onClose },
   ]
 })
 
@@ -211,19 +220,19 @@ const editCardInfo = async (updatedData) => {
   }
 }
 const deleteCardInfo = async () => {
-  const deleteForm = new FormData
+  const deleteForm = new FormData()
   deleteForm.append('pk', cardInfo.value.pk)
   await ops.contactDelete(deleteForm)
   mainAction.value = false
 }
 const approveCardInfo = async () => {
-  const approveForm = new FormData
+  const approveForm = new FormData()
   approveForm.append('id', cardInfo.value.pk)
   await ops.dependantApproval(approveForm)
   mainAction.value = false
 }
 const rejectCardInfo = async () => {
-  const rejectForm = new FormData
+  const rejectForm = new FormData()
   rejectForm.append('id', cardInfo.value.pk)
   await ops.dependantReject(rejectForm)
   mainAction.value = false
@@ -247,7 +256,7 @@ const acceptRow = (row) => {
 }
 
 const rejectRow = (row) => {
-  toDoTask.value= 'reject'
+  toDoTask.value = 'reject'
   mainAction.value = true
   cardInfo.value = row
 }

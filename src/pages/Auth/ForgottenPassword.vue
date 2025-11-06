@@ -7,8 +7,15 @@
 
       <q-card-section class="q-gutter-xs">
         <h6 class="q-ma-none q-mt-md text-weight-light">Enter your Email</h6>
-        <q-input class="custom-input" filled v-model.trim="$v.email_address.$model" placeholder="amahenewaa@example.com" type="email" :error="!$v.email_address.required && $v.email_address.$dirty"
-              :error-message="'Email is required'">
+        <q-input
+          class="custom-input"
+          filled
+          v-model.trim="$v.email_address.$model"
+          placeholder="amahenewaa@example.com"
+          type="email"
+          :error="!$v.email_address.required && $v.email_address.$dirty"
+          :error-message="'Email is required'"
+        >
           <template v-slot:before>
             <q-icon name="fa-regular fa-envelope" />
           </template>
@@ -32,31 +39,30 @@
 <script setup>
 import { ref } from 'vue'
 import { useAuthStore } from 'src/stores/auth.js'
-import useVuelidate from "@vuelidate/core";
-import { required, email } from "@vuelidate/validators";
-import { useQuasar } from "quasar";
+import useVuelidate from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
+import { useQuasar } from 'quasar'
 
 const ForgotEmail = useAuthStore()
 const email_address = ref('')
 const rules = {
-    email_address: { required, email },
-};
-const $q = useQuasar();
-const $v = useVuelidate(rules, { email_address });
+  email_address: { required, email },
+}
+const $q = useQuasar()
+const $v = useVuelidate(rules, { email_address })
 
 const onSubmit = async () => {
-  $v.value.$touch();
+  $v.value.$touch()
   if ($v.value.$invalid) {
     $q.notify({
-      type: "warning",
-      message: "Email is incorrect. Please check your inputs.",
-    });
-    return;
+      type: 'warning',
+      message: 'Email is incorrect. Please check your inputs.',
+    })
+    return
   }
 
-  const formData = new FormData();
-  formData.append("email", email_address.value?.toLowerCase());
-  await ForgotEmail.forgotEmail(formData);
-};
-
+  const formData = new FormData()
+  formData.append('email', email_address.value?.toLowerCase())
+  await ForgotEmail.forgotEmail(formData)
+}
 </script>

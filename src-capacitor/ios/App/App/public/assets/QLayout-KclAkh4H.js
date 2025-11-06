@@ -1,69 +1,106 @@
-import { I as createComponent, g as getCurrentInstance, a as inject, N as emptyRenderFn, O as layoutKey, c as computed, h, U as hSlot, aT as provide, aV as pageContainerKey, r as ref, an as getScrollbarWidth, P as isRuntimeSsrPreHydration, t as reactive, w as watch, b as onUnmounted, L as hMergeSlot } from "./index-Bs10UzzQ.js";
-import { Q as QScrollObserver } from "./QScrollObserver-DGHeo4nD.js";
-import { Q as QResizeObserver } from "./QResizeObserver-_Eg94i7m.js";
+import {
+  I as createComponent,
+  g as getCurrentInstance,
+  a as inject,
+  N as emptyRenderFn,
+  O as layoutKey,
+  c as computed,
+  h,
+  U as hSlot,
+  aT as provide,
+  aV as pageContainerKey,
+  r as ref,
+  an as getScrollbarWidth,
+  P as isRuntimeSsrPreHydration,
+  t as reactive,
+  w as watch,
+  b as onUnmounted,
+  L as hMergeSlot,
+} from './index-Bs10UzzQ.js'
+import { Q as QScrollObserver } from './QScrollObserver-DGHeo4nD.js'
+import { Q as QResizeObserver } from './QResizeObserver-_Eg94i7m.js'
 const QPageContainer = createComponent({
-  name: "QPageContainer",
+  name: 'QPageContainer',
   setup(_, { slots }) {
-    const { proxy: { $q } } = getCurrentInstance();
-    const $layout = inject(layoutKey, emptyRenderFn);
+    const {
+      proxy: { $q },
+    } = getCurrentInstance()
+    const $layout = inject(layoutKey, emptyRenderFn)
     if ($layout === emptyRenderFn) {
-      console.error("QPageContainer needs to be child of QLayout");
-      return emptyRenderFn;
+      console.error('QPageContainer needs to be child of QLayout')
+      return emptyRenderFn
     }
-    provide(pageContainerKey, true);
+    provide(pageContainerKey, true)
     const style = computed(() => {
-      const css = {};
+      const css = {}
       if ($layout.header.space === true) {
-        css.paddingTop = `${$layout.header.size}px`;
+        css.paddingTop = `${$layout.header.size}px`
       }
       if ($layout.right.space === true) {
-        css[`padding${$q.lang.rtl === true ? "Left" : "Right"}`] = `${$layout.right.size}px`;
+        css[`padding${$q.lang.rtl === true ? 'Left' : 'Right'}`] = `${$layout.right.size}px`
       }
       if ($layout.footer.space === true) {
-        css.paddingBottom = `${$layout.footer.size}px`;
+        css.paddingBottom = `${$layout.footer.size}px`
       }
       if ($layout.left.space === true) {
-        css[`padding${$q.lang.rtl === true ? "Right" : "Left"}`] = `${$layout.left.size}px`;
+        css[`padding${$q.lang.rtl === true ? 'Right' : 'Left'}`] = `${$layout.left.size}px`
       }
-      return css;
-    });
-    return () => h("div", {
-      class: "q-page-container",
-      style: style.value
-    }, hSlot(slots.default));
-  }
-});
+      return css
+    })
+    return () =>
+      h(
+        'div',
+        {
+          class: 'q-page-container',
+          style: style.value,
+        },
+        hSlot(slots.default),
+      )
+  },
+})
 const QLayout = createComponent({
-  name: "QLayout",
+  name: 'QLayout',
   props: {
     container: Boolean,
     view: {
       type: String,
-      default: "hhh lpr fff",
-      validator: (v) => /^(h|l)h(h|r) lpr (f|l)f(f|r)$/.test(v.toLowerCase())
+      default: 'hhh lpr fff',
+      validator: (v) => /^(h|l)h(h|r) lpr (f|l)f(f|r)$/.test(v.toLowerCase()),
     },
     onScroll: Function,
     onScrollHeight: Function,
-    onResize: Function
+    onResize: Function,
   },
   setup(props, { slots, emit }) {
-    const { proxy: { $q } } = getCurrentInstance();
-    const rootRef = ref(null);
-    const height = ref($q.screen.height);
-    const width = ref(props.container === true ? 0 : $q.screen.width);
-    const scroll = ref({ position: 0, direction: "down", inflectionPoint: 0 });
-    const containerHeight = ref(0);
-    const scrollbarWidth = ref(isRuntimeSsrPreHydration.value === true ? 0 : getScrollbarWidth());
+    const {
+      proxy: { $q },
+    } = getCurrentInstance()
+    const rootRef = ref(null)
+    const height = ref($q.screen.height)
+    const width = ref(props.container === true ? 0 : $q.screen.width)
+    const scroll = ref({ position: 0, direction: 'down', inflectionPoint: 0 })
+    const containerHeight = ref(0)
+    const scrollbarWidth = ref(isRuntimeSsrPreHydration.value === true ? 0 : getScrollbarWidth())
     const classes = computed(
-      () => "q-layout q-layout--" + (props.container === true ? "containerized" : "standard")
-    );
-    const style = computed(() => props.container === false ? { minHeight: $q.screen.height + "px" } : null);
-    const targetStyle = computed(() => scrollbarWidth.value !== 0 ? { [$q.lang.rtl === true ? "left" : "right"]: `${scrollbarWidth.value}px` } : null);
-    const targetChildStyle = computed(() => scrollbarWidth.value !== 0 ? {
-      [$q.lang.rtl === true ? "right" : "left"]: 0,
-      [$q.lang.rtl === true ? "left" : "right"]: `-${scrollbarWidth.value}px`,
-      width: `calc(100% + ${scrollbarWidth.value}px)`
-    } : null);
+      () => 'q-layout q-layout--' + (props.container === true ? 'containerized' : 'standard'),
+    )
+    const style = computed(() =>
+      props.container === false ? { minHeight: $q.screen.height + 'px' } : null,
+    )
+    const targetStyle = computed(() =>
+      scrollbarWidth.value !== 0
+        ? { [$q.lang.rtl === true ? 'left' : 'right']: `${scrollbarWidth.value}px` }
+        : null,
+    )
+    const targetChildStyle = computed(() =>
+      scrollbarWidth.value !== 0
+        ? {
+            [$q.lang.rtl === true ? 'right' : 'left']: 0,
+            [$q.lang.rtl === true ? 'left' : 'right']: `-${scrollbarWidth.value}px`,
+            width: `calc(100% + ${scrollbarWidth.value}px)`,
+          }
+        : null,
+    )
     function onPageScroll(data) {
       if (props.container === true || document.qScrollPrevented !== true) {
         const info = {
@@ -71,44 +108,44 @@ const QLayout = createComponent({
           direction: data.direction,
           directionChanged: data.directionChanged,
           inflectionPoint: data.inflectionPoint.top,
-          delta: data.delta.top
-        };
-        scroll.value = info;
-        props.onScroll !== void 0 && emit("scroll", info);
+          delta: data.delta.top,
+        }
+        scroll.value = info
+        props.onScroll !== void 0 && emit('scroll', info)
       }
     }
     function onPageResize(data) {
-      const { height: newHeight, width: newWidth } = data;
-      let resized = false;
+      const { height: newHeight, width: newWidth } = data
+      let resized = false
       if (height.value !== newHeight) {
-        resized = true;
-        height.value = newHeight;
-        props.onScrollHeight !== void 0 && emit("scrollHeight", newHeight);
-        updateScrollbarWidth();
+        resized = true
+        height.value = newHeight
+        props.onScrollHeight !== void 0 && emit('scrollHeight', newHeight)
+        updateScrollbarWidth()
       }
       if (width.value !== newWidth) {
-        resized = true;
-        width.value = newWidth;
+        resized = true
+        width.value = newWidth
       }
       if (resized === true && props.onResize !== void 0) {
-        emit("resize", data);
+        emit('resize', data)
       }
     }
     function onContainerResize({ height: height2 }) {
       if (containerHeight.value !== height2) {
-        containerHeight.value = height2;
-        updateScrollbarWidth();
+        containerHeight.value = height2
+        updateScrollbarWidth()
       }
     }
     function updateScrollbarWidth() {
       if (props.container === true) {
-        const width2 = height.value > containerHeight.value ? getScrollbarWidth() : 0;
+        const width2 = height.value > containerHeight.value ? getScrollbarWidth() : 0
         if (scrollbarWidth.value !== width2) {
-          scrollbarWidth.value = width2;
+          scrollbarWidth.value = width2
         }
       }
     }
-    let animateTimer = null;
+    let animateTimer = null
     const $layout = {
       instances: {},
       view: computed(() => props.view),
@@ -119,12 +156,12 @@ const QLayout = createComponent({
       scrollbarWidth,
       totalWidth: computed(() => width.value + scrollbarWidth.value),
       rows: computed(() => {
-        const rows = props.view.toLowerCase().split(" ");
+        const rows = props.view.toLowerCase().split(' ')
         return {
-          top: rows[0].split(""),
-          middle: rows[1].split(""),
-          bottom: rows[2].split("")
-        };
+          top: rows[0].split(''),
+          middle: rows[1].split(''),
+          bottom: rows[2].split(''),
+        }
       }),
       header: reactive({ size: 0, offset: 0, space: false }),
       right: reactive({ size: 300, offset: 0, space: false }),
@@ -133,83 +170,95 @@ const QLayout = createComponent({
       scroll,
       animate() {
         if (animateTimer !== null) {
-          clearTimeout(animateTimer);
+          clearTimeout(animateTimer)
         } else {
-          document.body.classList.add("q-body--layout-animate");
+          document.body.classList.add('q-body--layout-animate')
         }
         animateTimer = setTimeout(() => {
-          animateTimer = null;
-          document.body.classList.remove("q-body--layout-animate");
-        }, 155);
+          animateTimer = null
+          document.body.classList.remove('q-body--layout-animate')
+        }, 155)
       },
       update(part, prop, val) {
-        $layout[part][prop] = val;
-      }
-    };
-    provide(layoutKey, $layout);
+        $layout[part][prop] = val
+      },
+    }
+    provide(layoutKey, $layout)
     if (getScrollbarWidth() > 0) {
-      let restoreScrollbar = function() {
-        timer = null;
-        el.classList.remove("hide-scrollbar");
-      }, hideScrollbar = function() {
-        if (timer === null) {
-          if (el.scrollHeight > $q.screen.height) return;
-          el.classList.add("hide-scrollbar");
-        } else {
-          clearTimeout(timer);
+      let restoreScrollbar = function () {
+          timer = null
+          el.classList.remove('hide-scrollbar')
+        },
+        hideScrollbar = function () {
+          if (timer === null) {
+            if (el.scrollHeight > $q.screen.height) return
+            el.classList.add('hide-scrollbar')
+          } else {
+            clearTimeout(timer)
+          }
+          timer = setTimeout(restoreScrollbar, 300)
+        },
+        updateScrollEvent = function (action) {
+          if (timer !== null && action === 'remove') {
+            clearTimeout(timer)
+            restoreScrollbar()
+          }
+          window[`${action}EventListener`]('resize', hideScrollbar)
         }
-        timer = setTimeout(restoreScrollbar, 300);
-      }, updateScrollEvent = function(action) {
-        if (timer !== null && action === "remove") {
-          clearTimeout(timer);
-          restoreScrollbar();
-        }
-        window[`${action}EventListener`]("resize", hideScrollbar);
-      };
-      let timer = null;
-      const el = document.body;
-      watch(
-        () => props.container !== true ? "add" : "remove",
-        updateScrollEvent
-      );
-      props.container !== true && updateScrollEvent("add");
+      let timer = null
+      const el = document.body
+      watch(() => (props.container !== true ? 'add' : 'remove'), updateScrollEvent)
+      props.container !== true && updateScrollEvent('add')
       onUnmounted(() => {
-        updateScrollEvent("remove");
-      });
+        updateScrollEvent('remove')
+      })
     }
     return () => {
       const content = hMergeSlot(slots.default, [
         h(QScrollObserver, { onScroll: onPageScroll }),
-        h(QResizeObserver, { onResize: onPageResize })
-      ]);
-      const layout = h("div", {
-        class: classes.value,
-        style: style.value,
-        ref: props.container === true ? void 0 : rootRef,
-        tabindex: -1
-      }, content);
+        h(QResizeObserver, { onResize: onPageResize }),
+      ])
+      const layout = h(
+        'div',
+        {
+          class: classes.value,
+          style: style.value,
+          ref: props.container === true ? void 0 : rootRef,
+          tabindex: -1,
+        },
+        content,
+      )
       if (props.container === true) {
-        return h("div", {
-          class: "q-layout-container overflow-hidden",
-          ref: rootRef
-        }, [
-          h(QResizeObserver, { onResize: onContainerResize }),
-          h("div", {
-            class: "absolute-full",
-            style: targetStyle.value
-          }, [
-            h("div", {
-              class: "scroll",
-              style: targetChildStyle.value
-            }, [layout])
-          ])
-        ]);
+        return h(
+          'div',
+          {
+            class: 'q-layout-container overflow-hidden',
+            ref: rootRef,
+          },
+          [
+            h(QResizeObserver, { onResize: onContainerResize }),
+            h(
+              'div',
+              {
+                class: 'absolute-full',
+                style: targetStyle.value,
+              },
+              [
+                h(
+                  'div',
+                  {
+                    class: 'scroll',
+                    style: targetChildStyle.value,
+                  },
+                  [layout],
+                ),
+              ],
+            ),
+          ],
+        )
       }
-      return layout;
-    };
-  }
-});
-export {
-  QPageContainer as Q,
-  QLayout as a
-};
+      return layout
+    }
+  },
+})
+export { QPageContainer as Q, QLayout as a }

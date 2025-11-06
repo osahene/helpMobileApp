@@ -4,7 +4,9 @@
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs text-center">
-            <div class="mt-5 text-xl font-bold text-red-400"><span>Heads Up</span><q-icon :name="fasExclamation" /> </div>
+            <div class="mt-5 text-xl font-bold text-red-400">
+              <span>Heads Up</span><q-icon :name="fasExclamation" />
+            </div>
             <div class="text-h5 font-bold q-mt-sm q-mb-xs">
               <span class="px-4">{{ cardName1 }}</span
               ><span>{{ cardName2 }}</span>

@@ -7,25 +7,25 @@
       <div v-if="!isRecording && !audioBlob" class="text-center q-my-md">
         <q-btn round color="primary" icon="mic" @click="startRecording" />
       </div>
-      
+
       <!-- Recording state -->
       <div v-if="isRecording">
         <div ref="waveform" class="waveform-container"></div>
         <div class="text-center q-mt-sm">
-          Recording: {{ formatTime(recordingTime) }} 
+          Recording: {{ formatTime(recordingTime) }}
           <span v-if="isPaused" class="text-warning">(Paused)</span>
         </div>
         <div class="row justify-center q-mt-md q-gutter-md">
-          <q-btn 
-            round 
-            :color="isPaused ? 'positive' : 'warning'" 
-            :icon="isPaused ? 'play_arrow' : 'pause'" 
-            @click="togglePauseResumeRecording" 
+          <q-btn
+            round
+            :color="isPaused ? 'positive' : 'warning'"
+            :icon="isPaused ? 'play_arrow' : 'pause'"
+            @click="togglePauseResumeRecording"
           />
           <q-btn round color="negative" icon="stop" @click="stopRecording" />
         </div>
       </div>
-      
+
       <!-- Playback state -->
       <div v-if="audioBlob" class="q-mt-md">
         <div ref="waveformPlayback" class="waveform-container"></div>
@@ -34,18 +34,16 @@
           <q-btn round flat icon="fast_forward" @click="togglePlaybackRate" />
           <q-btn round flat icon="delete" color="negative" @click="deleteRecording" />
         </div>
-        <div class="text-center">
-          Playback speed: {{ playbackRate }}x
-        </div>
+        <div class="text-center">Playback speed: {{ playbackRate }}x</div>
       </div>
-      
+
       <!-- Linear progress bar during recording -->
-      <q-linear-progress 
+      <q-linear-progress
         v-if="isRecording"
         stripe
         rounded
         size="10px"
-        :value="recordingTime / maxDuration" 
+        :value="recordingTime / maxDuration"
         color="warning"
         class="q-mt-md"
       />
@@ -95,14 +93,14 @@ const startRecording = async () => {
       console.log('Starting recording...')
       await CapacitorVoiceRecorder.startRecording()
       isRecording.value = true
-      isPaused.value = false; // Ensure not paused when starting
-      audioBlob.value = null; // Clear previous recording
-      audioUrl.value = '';
+      isPaused.value = false // Ensure not paused when starting
+      audioBlob.value = null // Clear previous recording
+      audioUrl.value = ''
       recordingTime.value = 0
-      isPlaying.value = false; // Ensure playback state is false
+      isPlaying.value = false // Ensure playback state is false
 
-      await nextTick();
-      
+      await nextTick()
+
       // Start timer
       timer = setInterval(() => {
         recordingTime.value++
@@ -121,8 +119,8 @@ const startRecording = async () => {
 const togglePauseResumeRecording = async () => {
   try {
     if (isPaused.value) {
-      await CapacitorVoiceRecorder.resumeRecording();
-      isPaused.value = false;
+      await CapacitorVoiceRecorder.resumeRecording()
+      isPaused.value = false
       // Restart timer
       timer = setInterval(() => {
         recordingTime.value++
@@ -132,13 +130,16 @@ const togglePauseResumeRecording = async () => {
       }, 1000)
     } else {
       console.log('Pausing recording...')
-      await CapacitorVoiceRecorder.pauseRecording();
-      isPaused.value = true;
+      await CapacitorVoiceRecorder.pauseRecording()
+      isPaused.value = true
       // Clear timer when paused
-      clearInterval(timer);
+      clearInterval(timer)
     }
   } catch (error) {
-    $q.notify({ type: 'negative', message: `Failed to toggle recording pause/resume: ${error.message || error}` });
+    $q.notify({
+      type: 'negative',
+      message: `Failed to toggle recording pause/resume: ${error.message || error}`,
+    })
   }
 }
 
@@ -147,16 +148,16 @@ const stopRecording = async () => {
     if (typeof CapacitorVoiceRecorder !== 'undefined' && CapacitorVoiceRecorder.stopRecording) {
       const recording = await CapacitorVoiceRecorder.stopRecording()
       isRecording.value = false
-      isPaused.value = false; 
+      isPaused.value = false
       clearInterval(timer)
 
       if (recording && recording.base64) {
         audioBlob.value = recording.base64
         audioUrl.value = `data:audio/aac;base64,${audioBlob.value}`
-        
-        await nextTick();
 
-        if (wavesurferInstance) wavesurferInstance.destroy();
+        await nextTick()
+
+        if (wavesurferInstance) wavesurferInstance.destroy()
         wavesurferInstance = WaveSurfer.create({
           container: waveformPlayback.value,
           waveColor: '#1976D2',
@@ -167,27 +168,32 @@ const stopRecording = async () => {
           cursorWidth: 1,
           height: 100,
           barGap: 2,
-          responsive: true
-        });
+          responsive: true,
+        })
 
-        wavesurferInstance.load(audioUrl.value);
+        wavesurferInstance.load(audioUrl.value)
 
         wavesurferInstance.on('play', () => {
-          isPlaying.value = true;
-        });
+          isPlaying.value = true
+        })
         wavesurferInstance.on('pause', () => {
-          isPlaying.value = false;
-        });
+          isPlaying.value = false
+        })
         wavesurferInstance.on('finish', () => {
-          isPlaying.value = false;
-          wavesurferInstance.seekTo(0);
-        });
-
+          isPlaying.value = false
+          wavesurferInstance.seekTo(0)
+        })
       } else {
-        $q.notify({ type: 'negative', message: 'No valid audio data (base64) received from recording.' })
+        $q.notify({
+          type: 'negative',
+          message: 'No valid audio data (base64) received from recording.',
+        })
       }
     } else {
-      $q.notify({ type: 'negative', message: 'Voice Recorder plugin not available to stop recording.' })
+      $q.notify({
+        type: 'negative',
+        message: 'Voice Recorder plugin not available to stop recording.',
+      })
     }
   } catch (error) {
     $q.notify({ type: 'negative', message: `Recording failed to stop: ${error.message || error}` })
@@ -197,9 +203,9 @@ const stopRecording = async () => {
 const togglePlayPause = () => {
   if (wavesurferInstance) {
     if (isPlaying.value) {
-      wavesurferInstance.pause();
+      wavesurferInstance.pause()
     } else {
-      wavesurferInstance.play();
+      wavesurferInstance.play()
     }
   }
 }
@@ -207,17 +213,17 @@ const togglePlayPause = () => {
 const togglePlaybackRate = () => {
   playbackRate.value = playbackRate.value === 1 ? 1.5 : playbackRate.value === 1.5 ? 2 : 1
   if (wavesurferInstance) {
-    wavesurferInstance.setPlaybackRate(playbackRate.value);
+    wavesurferInstance.setPlaybackRate(playbackRate.value)
   }
 }
 
 const deleteRecording = () => {
   audioBlob.value = null
   audioUrl.value = ''
-  isPlaying.value = false;
+  isPlaying.value = false
   if (wavesurferInstance) {
     wavesurferInstance.destroy()
-    wavesurferInstance = null;
+    wavesurferInstance = null
   }
 }
 

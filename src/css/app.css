@@ -1,5 +1,9 @@
 /* app global css */
-
+body {
+  font-family: 'roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .my_card {
   width: 25rem;
   border-radius: 8px;
@@ -48,9 +52,9 @@ hr {
   flex: 1;
 }
 .card-img {
-  width: 8rem;
-  height: 8rem;
-  top: 2rem;
+  width: 6rem;
+  height: 6rem;
+  /* top: 2rem; */
   position: relative;
 }
 .title {
@@ -174,18 +178,31 @@ hr {
   color: #333;
 }
 
-
 .bg-cust-dark {
-  background-image: url("../assets/img/main/back.svg");
+  background-image: url('../assets/img/main/back.svg');
   min-height: 100vh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 .bg-cust-white {
-  background-image: url("../assets/img/main/back-light.svg");
+  background-color: rgb(212, 246, 255);
+  /* background-image: url('../assets/img/main/back-light.svg'); */
   min-height: 100vh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.bg-card1 {
+  background-color: rgba(41, 62, 109); /* Deep Royal Blue */
+}
+.bg-card2 {
+  background-color: #ffa065; /* Bright Red */
+}
+.bg-card3 {
+  background-color: #ffcc00; /* Warm Yellow */
+}
+.bg-card4 {
+  background-color: #365ea1; /* Vibrant Green */
 }

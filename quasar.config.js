@@ -12,7 +12,13 @@ export default defineConfig((ctx) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['guards', 'i18n', 'googleCred', 'axios'],
+    boot: [
+      // 'guards',
+      'i18n',
+      'googleCred',
+      'axios',
+      'capacitor-plugin',
+    ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: ['app.css', 'tailwind.min.css'],
@@ -27,7 +33,7 @@ export default defineConfig((ctx) => {
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      // 'roboto-font', // optional, you are not bound to it
+      'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
     ],
 

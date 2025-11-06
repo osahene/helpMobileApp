@@ -35,7 +35,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import {useAuthStore} from'src/stores/auth.js'
+import { useAuthStore } from 'src/stores/auth.js'
 import QOtp from 'src/components/QOtp.vue'
 const otpVal = ref(null)
 const timer = ref(30)
@@ -60,19 +60,18 @@ const startCountdown = () => {
 }
 
 const handleResend = async () => {
-  const formData = new FormData();
-  formData.append("email", email_address);
-  await EmailOTPAuth.OTPResend(formData);
+  const formData = new FormData()
+  formData.append('email', email_address)
+  await EmailOTPAuth.OTPResend(formData)
   startCountdown()
 }
 
 const onSubmit = async () => {
-    const formData = new FormData();
-    formData.append("email", email_address);
-    formData.append("otp", otpVal.value);
-    await EmailOTPAuth.EmailOTP(formData)
+  const formData = new FormData()
+  formData.append('email', email_address)
+  formData.append('otp', otpVal.value)
+  await EmailOTPAuth.EmailOTP(formData)
 }
-
 
 onMounted(() => {
   startCountdown()
