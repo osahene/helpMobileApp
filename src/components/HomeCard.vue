@@ -3,8 +3,8 @@
     class="flex flex-col w-full h-full  justify-between overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-150 ease-out border-2 border-gray-200 rounded-xl shadow shadow-2xl"
     :class="cardBgClass"
   >
-    <div class="flex flex-col py-8 justify-around items-start px-3">
-      <div class="">
+    <div class="flex flex-col py-8 justify-around px-3">
+      <div class="ml-3 relative flex xs:z-[2] justify-center items-center content-fit">
         <img class="card-img rounded-t-lg" :src="cardImg" />
       </div>
       <div class="py-3 flex flex-col justify-center content-fit">
