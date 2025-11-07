@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-col w-full h-full  justify-between overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-150 ease-out border-2 border-gray-200 rounded-xl shadow shadow-2xl"
+    class="flex flex-col w-full h-full  justify-between overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-150 ease-out border-2 border-gray-200 rounded-xl shadow shadow-2xl"
     :class="cardBgClass"
   >
-    <div class="flex flex-row my-14 w-full justify-around items-center px-8">
+    <div class="flex flex-row py-14 w-full justify-around items-center ">
       <div class="">
         <img class="card-img rounded-t-lg" :src="cardImg" />
       </div>
