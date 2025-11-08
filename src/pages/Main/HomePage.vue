@@ -1,11 +1,13 @@
 <template>
-  <q-page class="relative flex-1 flex-grow flex flex-col min-w-0 break-words w-full">
+  <!-- <q-page class="relative flex-1 flex-grow flex flex-col min-w-0 break-words w-full"> -->
+    <q-page class="relative flex-1 flex-grow flex flex-col min-w-0 break-words w-full pb-16">
     <RobberyCountdown
       ref="robberyCountdownRef"
       @complete="triggerRobberyAlert"
       @cancel="cancelRobberyAlert"
     />
-    <div class="m-5 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+    <!-- <div class="m-5 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3"> -->
+      <div class="m-4 grid grid-cols-2 gap-4" style="grid-auto-rows: minmax(200px, auto);">
       <div v-for="(item, key) in cardInfo" :key="key">
         <HomeCard
           :card-title="item.cardTitle"
@@ -37,7 +39,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          To enable the **Robbery Attack** feature to work even when your app is in the background,
+          To enable the <span><strong>Robbery Attack</strong></span>  feature to work even when your app is in the background,
           you must manually enable the "Emergency Alert Volume Button Listener" in your device's
           Accessibility settings.
           <br /><br />

@@ -4,7 +4,7 @@
   "webDir": "www",
   "server": {
     "androidScheme": "https",
-    "url": "http://192.168.52.1:9500",
+    "url": "http://192.168.43.1:9500",
     "cleartext": true
   },
   "plugins": {
@@ -16,7 +16,11 @@
     },
     "CapacitorPushNotifications": {
       "enabled": true,
-      "presentationOptions": ["badge", "sound", "alert"]
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
     },
     "CapacitorLocalNotifications": {
       "enabled": true,

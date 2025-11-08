@@ -7,6 +7,7 @@
       <div class="ml-3 relative flex xs:z-[2] justify-center items-center content-fit">
         <img class="card-img rounded-t-lg" :src="cardImg" />
       </div>
+     
       <div class="py-3 flex flex-col justify-center content-fit">
         <div class="ml-3 flex flex-col items-start">
           <p
@@ -28,9 +29,9 @@
 </template>
 
 <script setup>
-import { watchEffect } from 'vue'
+// import { watchEffect } from 'vue'
 
-const props = defineProps({
+defineProps({
   cardTitle: {
     type: String,
   },
@@ -51,7 +52,7 @@ const props = defineProps({
   },
 })
 
-watchEffect(() => props) // This line is not necessary for function but can remain
+// watchEffect(() => props) // This line is not necessary for function but can remain
 
 // You might not need watchEffect if you're just defining props
 </script>

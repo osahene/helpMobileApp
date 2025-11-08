@@ -97,15 +97,24 @@
         />
       </q-card-section>
       <q-card-section class="text-center">
+        <router-link to="/pages/home">
         <q-btn
+          flat
+          class="text-subtitle1 q-px-xl q-py-none q-ma-none shadow-2 text-weight-light"
+          
+          icon="fa-solid fa-arrow-right-to-bracket"
+          label="Sign In"
+        />
+        </router-link>
+        <!-- <q-btn
           :disable="$v.$invalid"
           :style="{ backgroundColor: !$v.$invalid ? '#b7d1ed' : '#d3d3d3' }"
           flat
           class="text-subtitle1 q-px-xl q-py-none q-ma-none shadow-2 text-weight-light"
           icon="fa-solid fa-arrow-right-to-bracket"
           label="Sign In"
-          @click="onSubmit"
-        />
+          @click.prevent="onSubmit"
+        /> -->
       </q-card-section>
       <q-card-section class="text-center q-pt-none">
         <div class="text-grey-8 text-weight-light text-h6">
@@ -126,7 +135,6 @@ import { useQuasar } from 'quasar'
 import { GoogleSignInButton } from 'vue3-google-signin'
 import { SocialLogin } from '@capgo/capacitor-social-login'
 import { Capacitor } from '@capacitor/core'
-
 const isNativeMobile = Capacitor.isNativePlatform()
 
 const isValidEmailOrPhone = (value) => {
@@ -152,28 +160,29 @@ const AuthStore = useAuthStore()
 const rem = ref(false)
 const isPwd = ref(true)
 const onSubmit = async () => {
-  $v.value.$touch()
-  if ($v.value.$invalid) {
-    $q.notify({
-      type: 'warning',
-      message: 'Validation error. Please check your inputs.',
-    })
-    return
-  }
-  const formData = new FormData()
-  formData.append(
-    'email',
-    typeof user.email_address === 'string' && user.email_address.includes('@')
-      ? user.email_address.toLowerCase()
-      : user.email_address,
-  )
-  formData.append('password', user.password)
-  localStorage.setItem('email_address', user.email_address)
-  if (rem.value) {
-    await AuthStore.loginsRem(formData)
-  } else {
-    await AuthStore.logins(formData)
-  }
+   
+  // $v.value.$touch()
+  // if ($v.value.$invalid) {
+  //   $q.notify({
+  //     type: 'warning',
+  //     message: 'Validation error. Please check your inputs.',
+  //   })
+  //   return
+  // }
+  // const formData = new FormData()
+  // formData.append(
+  //   'email',
+  //   typeof user.email_address === 'string' && user.email_address.includes('@')
+  //     ? user.email_address.toLowerCase()
+  //     : user.email_address,
+  // )
+  // formData.append('password', user.password)
+  // localStorage.setItem('email_address', user.email_address)
+  // if (rem.value) {
+  //   await AuthStore.loginsRem(formData)
+  // } else {
+  //   await AuthStore.logins(formData)
+  // }
 }
 
 const initiateGoogleSignInMobile = async () => {
